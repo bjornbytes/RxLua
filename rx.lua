@@ -1,5 +1,38 @@
-local path = (...):gsub('%.[^%.]+$', '')
-local Observer = require(path .. '.observer')
+local function noop() end
+
+local Observer = {}
+Observer.__index = Observer
+
+function Observer.create(onNext, onError, onCompleted)
+  local self = {
+    _onNext = onNext or noop,
+    _onError = onError or error,
+    _onCompleted = onCompleted or noop,
+    stopped = false
+  }
+
+  return setmetatable(self, Observer)
+end
+
+function Observer:onNext(value)
+  if not self.stopped then
+    self._onNext(value)
+  end
+end
+
+function Observer:onError(e)
+  if not self.stopped then
+    self.stopped = true
+    self._onError(e)
+  end
+end
+
+function Observer:onCompleted()
+  if not self.stopped then
+    self.stopped = true
+    self._onCompleted()
+  end
+end
 
 local Observable = {}
 Observable.__index = Observable
@@ -46,7 +79,6 @@ function Observable:dump(name)
 end
 
 -- Combinators
-
 function Observable:first()
   return Observable.create(function(observer)
     return self:subscribe(function(x)
@@ -61,6 +93,7 @@ function Observable:first()
     end)
   end)
 end
+
 
 function Observable:last()
   return Observable.create(function(observer)
@@ -160,4 +193,7 @@ function Observable:combineLatest(...)
   end)
 end
 
-return Observable
+return {
+  Observer = Observer,
+  Observable = Observable
+}

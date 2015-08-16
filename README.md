@@ -1,12 +1,15 @@
 RxLua
 ===
 
-How to use:
+[Reactive Extensions](http://reactivex.io) for Lua.
+
+Examples
+---
+
+Cheer someone on using functional reactive programming:
 
 ```lua
 local Rx = require 'rx'
-
--- Cheer someone on using functional reactive programming
 
 local observable = Rx.Observable.fromCoroutine(function()
   for i = 2, 8, 2 do

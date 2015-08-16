@@ -6,36 +6,33 @@ How to use:
 ```lua
 local Rx = require 'rx'
 
-local observable = Rx.Observable.create(function(observer)
-  observer.onNext(42)
+-- Cheer someone on using functional reactive programming
+
+local observable = Rx.Observable.fromCoroutine(function()
+  for i = 2, 8, 2 do
+    coroutine.yield(i)
+  end
+
+  return 'who do we appreciate'
 end)
 
-observable:subscribe(
-  function(x)
-    print('onNext: ' .. x)
-  end,
-  function(e)
-    print('onError: ' .. e)
-  end,
-  function()
-    print('Complete')
-  end
-)
+observable
+  :map(function(value) return value .. '!' end)
+  :subscribe(print)
+
+repeat
+  Rx.scheduler:update()
+until Rx.scheduler:isEmpty()
 ```
 
-See examples for more details.
+See [examples](examples) for more.
 
-Combinators
+Documentation
 ---
 
-- `first`
-- `last`
-- `map`
-- `reduce`
-- `sum`
-- `combineLatest`
+See [here](doc/README.md).
 
 License
 ---
 
-MIT, see `LICENSE` for details.
+MIT, see [`LICENSE`](LICENSE) for details.

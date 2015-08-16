@@ -1,3 +1,5 @@
+local rx
+
 local function noop() end
 
 ----
@@ -79,13 +81,23 @@ end
 -- @returns {Observable}
 function Observable.fromCoroutine(cr)
   return Observable.create(function(observer)
-    while true do
-      local success, value = coroutine.resume(cr)
-      observer:onNext(value)
-      if coroutine.status(cr) == 'dead' then break end
-    end
+    return rx.scheduler:schedule(function()
+      while not observer.stopped do
+        local success, value = coroutine.resume(cr)
 
-    observer:onComplete()
+        if success then
+          observer:onNext(value)
+        else
+          return observer:onError(value)
+        end
+
+        if coroutine.status(cr) == 'dead' then
+          return observer:onComplete()
+        end
+
+        coroutine.yield()
+      end
+    end)
   end)
 end
 
@@ -102,7 +114,7 @@ end
 function Observable:dump(name)
   name = name and (name .. ' ') or ''
 
-  local onNext = function(x) print(name .. 'onNext: ' .. x) end
+  local onNext = function(x) print(name .. 'onNext: ' .. (x or '')) end
   local onError = function(e) print(name .. 'onError: ' .. e) end
   local onComplete = function() print(name .. 'onComplete') end
 
@@ -281,12 +293,18 @@ end
 
 --
 function Cooperative:update(dt)
-  self.currentTime = self.currentTime + dt
+  self.currentTime = self.currentTime + (dt or 0)
   for i = #self.tasks, 1, -1 do
     local task = self.tasks[i]
     if self.currentTime >= task.due then
-      local _, delay = coroutine.resume(task.thread)
-      task.due = math.max(task.due + (delay or 0), self.currentTime)
+      local success, delay = coroutine.resume(task.thread)
+
+      if success then
+        task.due = math.max(task.due + (delay or 0), self.currentTime)
+      else
+        error(delay)
+      end
+
       if coroutine.status(task.thread) == 'dead' then
         table.remove(self.tasks, i)
       end
@@ -294,11 +312,18 @@ function Cooperative:update(dt)
   end
 end
 
+--
+function Cooperative:isEmpty()
+  return not next(self.tasks)
+end
+
 Scheduler.Cooperative = Cooperative
 
-return {
+rx = {
   Observer = Observer,
   Observable = Observable,
   Scheduler = Scheduler,
   scheduler = Scheduler.Cooperative.create()
 }
+
+return rx

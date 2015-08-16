@@ -275,16 +275,18 @@ function Observable:combineLatest(...)
   end)
 end
 
--- Scheduler
+--- Scheduler
 -- Schedulers manage groups of Observables.
 local Scheduler = {}
 
--- Cooperative Scheduler
+--- Cooperative Scheduler
 -- Manages Observables using coroutines and a virtual clock that must be updated manually.
 local Cooperative = {}
 Cooperative.__index = Cooperative
 
---
+--- Creates a new Cooperative Scheduler.
+-- @arg {number=0} currentTime - A time to start the scheduler at.
+-- @returns {Scheduler.Cooperative}
 function Cooperative.create(currentTime)
   local self = {
     tasks = {},
@@ -294,7 +296,11 @@ function Cooperative.create(currentTime)
   return setmetatable(self, Cooperative)
 end
 
---
+--- Schedules a function to be run after an optional delay.
+-- @arg {function} action - The function to execute. Will be converted into a coroutine. The
+--                          coroutine may yield execution back to the scheduler with an optional
+--                          number, which will put it to sleep for a time period.
+-- @arg {number=0} delay - Delay execution of the action by a time period.
 function Cooperative:schedule(action, delay)
   table.insert(self.tasks, {
     thread = coroutine.create(action),
@@ -302,9 +308,13 @@ function Cooperative:schedule(action, delay)
   })
 end
 
---
-function Cooperative:update(dt)
-  self.currentTime = self.currentTime + (dt or 0)
+--- Triggers an update of the Cooperative Scheduler. The clock will be advanced and the scheduler
+-- will run any coroutines that are due to be run.
+-- @arg {number=0} delta - An amount of time to advance the clock by. It is common to pass in the
+--                         time in seconds or milliseconds elapsed since this function was last
+--                         called.
+function Cooperative:update(delta)
+  self.currentTime = self.currentTime + (delta or 0)
 
   for i = #self.tasks, 1, -1 do
     local task = self.tasks[i]
@@ -325,7 +335,7 @@ function Cooperative:update(dt)
   end
 end
 
---
+--- Returns whether or not the Cooperative Scheduler's queue is empty.
 function Cooperative:isEmpty()
   return not next(self.tasks)
 end

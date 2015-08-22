@@ -8,9 +8,9 @@ Creates a new Observer.
 
 Arguments:
 
-- `[onNext=]` (`function`) - Called when the Observable produces a value.
-- `[onError=]` (`function`) - Called when the Observable terminates due to an error.
-- `[onComplete=]` (`function`) - Called when the Observable completes normally.
+- `[onNext]` (`function`) - Called when the Observable produces a value.
+- `[onError]` (`function`) - Called when the Observable terminates due to an error.
+- `[onComplete]` (`function`) - Called when the Observable completes normally.
 
 Returns:
 
@@ -30,7 +30,7 @@ Notify the Observer that an error has occurred.
 
 Arguments:
 
-- `[message=]` (`string`) - A string describing what went wrong.
+- `[message]` (`string`) - A string describing what went wrong.
 
 #### `:onComplete()`
 
@@ -92,7 +92,7 @@ Subscribes to this Observable and prints values it produces.
 
 Arguments:
 
-- `[name=]` (`string`) - Prefixes the printed messages with a name.
+- `[name]` (`string`) - Prefixes the printed messages with a name.
 
 #### `:first()`
 

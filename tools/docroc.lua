@@ -50,6 +50,7 @@ rocdoc.processors = {
     local type = body:match('^%s*(%b{})'):sub(2, -2):gsub('(%=)(.*)', function(_, value)
       optional = true
       default = value
+      if #default == 0 then default = nil end
       return ''
     end)
 

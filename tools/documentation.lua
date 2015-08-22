@@ -25,7 +25,7 @@ for _, comment in ipairs(docroc.process('rx.lua')) do
 
     end
 
-    io.write(('#### `%s`\n\n'):format(context))
+    io.write(('---\n\n#### `%s`\n\n'):format(context))
 
     if tags.description then
       io.write(('%s\n\n'):format(tags.description[1].text))

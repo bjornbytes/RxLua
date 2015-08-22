@@ -33,7 +33,7 @@ See [examples](examples) for more.
 Documentation
 ---
 
-See [here](doc/README.md).
+See [here](doc).
 
 License
 ---

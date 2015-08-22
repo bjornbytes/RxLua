@@ -2,6 +2,8 @@
 
 Observers are simple objects that receive values from Observables.
 
+---
+
 #### `.create(onNext, onError, onComplete)`
 
 Creates a new Observer.
@@ -16,6 +18,8 @@ Returns:
 
 - `Observer`
 
+---
+
 #### `:onNext(value)`
 
 Pushes a new value to the Observer.
@@ -23,6 +27,8 @@ Pushes a new value to the Observer.
 Arguments:
 
 - `value` (`*`)
+
+---
 
 #### `:onError(message)`
 
@@ -32,6 +38,8 @@ Arguments:
 
 - `[message]` (`string`) - A string describing what went wrong.
 
+---
+
 #### `:onComplete()`
 
 Notify the Observer that the sequence has completed and will produce no more values.
@@ -39,6 +47,8 @@ Notify the Observer that the sequence has completed and will produce no more val
 # Observable
 
 Observables push values to Observers.
+
+---
 
 #### `.create(subscribe)`
 
@@ -52,6 +62,8 @@ Returns:
 
 - `Observable`
 
+---
+
 #### `.fromValue(value)`
 
 Creates an Observable that produces a single value.
@@ -63,6 +75,8 @@ Arguments:
 Returns:
 
 - `Observable`
+
+---
 
 #### `.fromCoroutine(coroutine)`
 
@@ -76,6 +90,8 @@ Returns:
 
 - `Observable`
 
+---
+
 #### `:subscribe(onNext, onError, onComplete)`
 
 Shorthand for creating an Observer and passing it to this Observable's subscription function.
@@ -86,6 +102,8 @@ Arguments:
 - `onError` (`function`) - Called when the Observable terminates due to an error.
 - `onComplete` (`function`) - Called when the Observable completes normally.
 
+---
+
 #### `:dump(name)`
 
 Subscribes to this Observable and prints values it produces.
@@ -93,6 +111,8 @@ Subscribes to this Observable and prints values it produces.
 Arguments:
 
 - `[name]` (`string`) - Prefixes the printed messages with a name.
+
+---
 
 #### `:first()`
 
@@ -102,6 +122,8 @@ Returns:
 
 - `Observable`
 
+---
+
 #### `:last()`
 
 Returns a new Observable that only produces the last result of the original.
@@ -109,6 +131,8 @@ Returns a new Observable that only produces the last result of the original.
 Returns:
 
 - `Observable`
+
+---
 
 #### `:map(callback)`
 
@@ -121,6 +145,8 @@ Arguments:
 Returns:
 
 - `Observable`
+
+---
 
 #### `:reduce(accumulator, seed)`
 
@@ -135,6 +161,8 @@ Returns:
 
 - `Observable`
 
+---
+
 #### `:sum()`
 
 Returns a new Observable that produces the sum of the values of the original Observable as a single result.
@@ -142,6 +170,8 @@ Returns a new Observable that produces the sum of the values of the original Obs
 Returns:
 
 - `Observable`
+
+---
 
 #### `:combineLatest(observables, combinator)`
 
@@ -164,6 +194,8 @@ Schedulers manage groups of Observables.
 
 Manages Observables using coroutines and a virtual clock that must be updated manually.
 
+---
+
 #### `.create(currentTime)`
 
 Creates a new Cooperative Scheduler.
@@ -176,6 +208,8 @@ Returns:
 
 - `Scheduler.Cooperative`
 
+---
+
 #### `:schedule(action, delay)`
 
 Schedules a function to be run after an optional delay.
@@ -185,6 +219,8 @@ Arguments:
 - `action` (`function`) - The function to execute. Will be converted into a coroutine. The coroutine may yield execution back to the scheduler with an optional number, which will put it to sleep for a time period.
 - `[delay=0]` (`number`) - Delay execution of the action by a time period.
 
+---
+
 #### `:update(delta)`
 
 Triggers an update of the Cooperative Scheduler. The clock will be advanced and the scheduler will run any coroutines that are due to be run.
@@ -192,6 +228,8 @@ Triggers an update of the Cooperative Scheduler. The clock will be advanced and 
 Arguments:
 
 - `[delta=0]` (`number`) - An amount of time to advance the clock by. It is common to pass in the time in seconds or milliseconds elapsed since this function was last called.
+
+---
 
 #### `:isEmpty()`
 

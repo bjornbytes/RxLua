@@ -3,8 +3,8 @@ local rx
 local function noop() end
 local function identity(x) return x end
 
---- Observer
--- Observers are simple objects that receive values from Observables.
+--- @class Observer
+-- @description Observers are simple objects that receive values from Observables.
 local Observer = {}
 Observer.__index = Observer
 
@@ -49,8 +49,8 @@ function Observer:onComplete()
   end
 end
 
---- Observable
--- Observables push values to Observers.
+--- @class Observable
+-- @description Observables push values to Observers.
 local Observable = {}
 Observable.__index = Observable
 
@@ -275,12 +275,13 @@ function Observable:combineLatest(...)
   end)
 end
 
---- Scheduler
--- Schedulers manage groups of Observables.
+--- @class Scheduler
+-- @description Schedulers manage groups of Observables.
 local Scheduler = {}
 
---- Cooperative Scheduler
--- Manages Observables using coroutines and a virtual clock that must be updated manually.
+--- @class CooperativeScheduler
+-- @description Manages Observables using coroutines and a virtual clock that must be updated
+-- manually.
 local Cooperative = {}
 Cooperative.__index = Cooperative
 

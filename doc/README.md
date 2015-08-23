@@ -186,6 +186,16 @@ Returns:
 
 - `Observable`
 
+---
+
+#### `:distinct()`
+
+Returns a new Observable that produces the values from the original with duplicates removed.
+
+Returns:
+
+- `Observable`
+
 # Scheduler
 
 Schedulers manage groups of Observables.

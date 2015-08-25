@@ -369,11 +369,33 @@ end
 
 Scheduler.Cooperative = Cooperative
 
+local Subject = setmetatable({}, Observable)
+Subject.__index = Subject
+
+function Subject.create(initialValue)
+  local self = {
+    observers = {}
+  }
+
+  return setmetatable(self, Subject)
+end
+
+function Subject:subscribe(onNext, onError, onComplete)
+  table.insert(self.observers, Observer.create(onNext, onError, onComplete))
+end
+
+function Subject:onNext(value)
+  for i = 1, #self.observers do
+    self.observers[i]:onNext(value)
+  end
+end
+
 rx = {
   Observer = Observer,
   Observable = Observable,
   Scheduler = Scheduler,
-  scheduler = Scheduler.Cooperative.create()
+  scheduler = Scheduler.Cooperative.create(),
+  Subject = Subject
 }
 
 return rx

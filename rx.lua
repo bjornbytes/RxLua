@@ -390,6 +390,8 @@ function Subject:onNext(value)
   end
 end
 
+Subject.__call = Subject.onNext
+
 rx = {
   Observer = Observer,
   Observable = Observable,

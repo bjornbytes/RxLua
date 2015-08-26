@@ -11,5 +11,5 @@ subject:subscribe(function(x)
 end)
 
 subject:onNext(1)
-subject:onNext(2)
+subject(2)
 subject:onNext(3)

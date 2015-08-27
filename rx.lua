@@ -306,7 +306,6 @@ end
 -- @returns {Observable}
 function Observable:takeUntil(other)
   return Observable.create(function(observer)
-
     local function onNext(x)
       observer:onNext(x)
     end
@@ -324,6 +323,31 @@ function Observable:takeUntil(other)
     end
 
     other:subscribe(terminate, terminate, terminate)
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that only produces values of the first that satisfy a predicate.
+-- @arg {function} predicate - The predicate to filter values with.
+-- @returns {Observable}
+function Observable:filter(predicate)
+  predicate = predicate or identity
+
+  return Observable.create(function(observer)
+    local function onNext(x)
+      if predicate(x) then
+        observer:onNext(x)
+      end
+    end
+
+    local function onError(e)
+      observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onComplete(e)
+    end
 
     return self:subscribe(onNext, onError, onComplete)
   end)

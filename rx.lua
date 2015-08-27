@@ -130,15 +130,15 @@ function Observable:first()
   return Observable.create(function(observer)
     local function onNext(x)
       observer:onNext(x)
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)
@@ -156,12 +156,12 @@ function Observable:last()
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
       observer:onNext(value)
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)
@@ -180,11 +180,11 @@ function Observable:map(callback)
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)
@@ -208,12 +208,12 @@ function Observable:reduce(accumulator, seed)
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
       observer:onNext(result)
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)
@@ -256,7 +256,7 @@ function Observable:combineLatest(...)
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete(i)
@@ -290,11 +290,11 @@ function Observable:distinct()
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
-      observer:onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)
@@ -307,22 +307,18 @@ end
 function Observable:takeUntil(other)
   return Observable.create(function(observer)
     local function onNext(x)
-      observer:onNext(x)
+      return observer:onNext(x)
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
-      observer:onComplete()
+      return observer:onComplete()
     end
 
-    local terminate = function()
-      observer:onComplete()
-    end
-
-    other:subscribe(terminate, terminate, terminate)
+    other:subscribe(onComplete, onComplete, onComplete)
 
     return self:subscribe(onNext, onError, onComplete)
   end)
@@ -337,19 +333,39 @@ function Observable:filter(predicate)
   return Observable.create(function(observer)
     local function onNext(x)
       if predicate(x) then
-        observer:onNext(x)
+        return observer:onNext(x)
       end
     end
 
     local function onError(e)
-      observer:onError(e)
+      return observer:onError(e)
     end
 
     local function onComplete()
-      observer:onComplete(e)
+      return observer:onComplete(e)
     end
 
     return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that produces values computed by extracting the given key from the
+-- tables produced by the original.
+-- @arg {function} key - The key to extract from the table.
+-- @returns {Observable}
+function Observable:pluck(key)
+  return Observable.create(function(observer)
+    local function onNext(t)
+      return observer:onNext(t[key])
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
   end)
 end
 

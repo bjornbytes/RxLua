@@ -301,6 +301,34 @@ function Observable:distinct()
   end)
 end
 
+--- Returns a new Observable that completes when the specified Observable fires.
+-- @arg {Observable} other - The Observable that triggers completion of the original.
+-- @returns {Observable}
+function Observable:takeUntil(other)
+  return Observable.create(function(observer)
+
+    local function onNext(x)
+      observer:onNext(x)
+    end
+
+    local function onError(e)
+      observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onComplete()
+    end
+
+    local terminate = function()
+      observer:onComplete()
+    end
+
+    other:subscribe(terminate, terminate, terminate)
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- @class Scheduler
 -- @description Schedulers manage groups of Observables.
 local Scheduler = {}

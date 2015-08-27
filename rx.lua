@@ -366,6 +366,8 @@ function Observable:pluck(key)
     local function onComplete()
       return observer:onComplete()
     end
+
+    return self:subscribe(onNext, onError, onComplete)
   end)
 end
 

@@ -442,7 +442,7 @@ Scheduler.Cooperative = Cooperative
 local Subject = setmetatable({}, Observable)
 Subject.__index = Subject
 
-function Subject.create(initialValue)
+function Subject.create()
   local self = {
     observers = {}
   }
@@ -457,6 +457,18 @@ end
 function Subject:onNext(value)
   for i = 1, #self.observers do
     self.observers[i]:onNext(value)
+  end
+end
+
+function Subject:onError(message)
+  for i = 1, #self.observers do
+    self.observers[i]:onError(message)
+  end
+end
+
+function Subject:onComplete()
+  for i = 1, #self.observers do
+    self.observers[i]:onComplete()
   end
 end
 

@@ -196,6 +196,48 @@ Returns:
 
 - `Observable`
 
+---
+
+#### `:takeUntil(other)`
+
+Returns a new Observable that completes when the specified Observable fires.
+
+Arguments:
+
+- `other` (`Observable`) - The Observable that triggers completion of the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:filter(predicate)`
+
+Returns a new Observable that only produces values of the first that satisfy a predicate.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate to filter values with.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:pluck(key)`
+
+Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
+
+Arguments:
+
+- `key` (`function`) - The key to extract from the table.
+
+Returns:
+
+- `Observable`
+
 # Scheduler
 
 Schedulers manage groups of Observables.

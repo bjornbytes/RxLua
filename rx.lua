@@ -75,6 +75,43 @@ function Observable.fromValue(value)
   end)
 end
 
+--- Creates an Observable that produces a range of values in a manner similar to a Lua for loop.
+-- @arg {number} initial - The first value of the range, or the upper limit if no other arguments
+--                         are specified.
+-- @arg {number=} limit - The second value of the range.
+-- @arg {number=1} step - An amount to increment the value by each iteration.
+-- @returns {Observable}
+function Observable.fromRange(initial, limit, step)
+  if not limit and not step then
+    initial, limit = 1, initial
+  end
+
+  step = step or 1
+
+  return Observable.create(function(observer)
+    for i = initial, limit, step do
+      observer:onNext(i)
+    end
+
+    observer:onComplete()
+  end)
+end
+
+--- Creates an Observable that produces values from a table.
+-- @arg {table} table - The table used to create the Observable.
+-- @arg {function=pairs} iterator - An iterator used to iterate the table, e.g. pairs or ipairs.
+-- @returns {Observable}
+function Observable.fromTable(t, iterator)
+  iterator = iterator or pairs
+  return Observable.create(function(observer)
+    for key, value in iterator(t) do
+      observer:onNext(value, key)
+    end
+
+    observer:onComplete()
+  end)
+end
+
 --- Creates an Observable that produces values when the specified coroutine yields.
 -- @arg {thread} coroutine
 -- @returns {Observable}

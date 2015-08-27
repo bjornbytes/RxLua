@@ -78,6 +78,37 @@ Returns:
 
 ---
 
+#### `.fromRange(initial, limit, step)`
+
+Creates an Observable that produces a range of values in a manner similar to a Lua for loop.
+
+Arguments:
+
+- `initial` (`number`) - The first value of the range, or the upper limit if no other arguments are specified.
+- `[limit]` (`number`) - The second value of the range.
+- `[step=1]` (`number`) - An amount to increment the value by each iteration.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `.fromTable(table, iterator)`
+
+Creates an Observable that produces values from a table.
+
+Arguments:
+
+- `table` (`table`) - The table used to create the Observable.
+- `[iterator=pairs]` (`function`) - An iterator used to iterate the table, e.g. pairs or ipairs.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `.fromCoroutine(coroutine)`
 
 Creates an Observable that produces values when the specified coroutine yields.

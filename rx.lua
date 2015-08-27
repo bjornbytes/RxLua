@@ -124,109 +124,6 @@ end
 -- The functions below transform the values produced by an Observable and return a new Observable
 -- that produces these values.
 
---- Returns a new Observable that only produces the first result of the original.
--- @returns {Observable}
-function Observable:first()
-  return Observable.create(function(observer)
-    local function onNext(x)
-      observer:onNext(x)
-      return observer:onComplete()
-    end
-
-    local function onError(e)
-      return observer:onError(e)
-    end
-
-    local function onComplete()
-      return observer:onComplete()
-    end
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
---- Returns a new Observable that only produces the last result of the original.
--- @returns {Observable}
-function Observable:last()
-  return Observable.create(function(observer)
-    local value
-
-    local function onNext(x)
-      value = x
-    end
-
-    local function onError(e)
-      return observer:onError(e)
-    end
-
-    local function onComplete()
-      observer:onNext(value)
-      return observer:onComplete()
-    end
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
---- Returns a new Observable that produces the values of the original transformed by a function.
--- @arg {function} callback - The function to transform values from the original Observable.
--- @returns {Observable}
-function Observable:map(callback)
-  return Observable.create(function(observer)
-    callback = callback or identity
-
-    local function onNext(x)
-      return observer:onNext(callback(x))
-    end
-
-    local function onError(e)
-      return observer:onError(e)
-    end
-
-    local function onComplete()
-      return observer:onComplete()
-    end
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
---- Returns a new Observable that produces a single value computed by accumulating the results of
--- running a function on each value produced by the original Observable.
--- @arg {function} accumulator - Accumulates the values of the original Observable. Will be passed
---                               the return value of the last call as the first argument and the
---                               current value as the second.
--- @arg {*} seed - A value to pass to the accumulator the first time it is run.
--- @returns {Observable}
-function Observable:reduce(accumulator, seed)
-  return Observable.create(function(observer)
-    local result
-
-    local function onNext(x)
-      result = result or seed or x
-      result = accumulator(result, x)
-    end
-
-    local function onError(e)
-      return observer:onError(e)
-    end
-
-    local function onComplete()
-      observer:onNext(result)
-      return observer:onComplete()
-    end
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
---- Returns a new Observable that produces the sum of the values of the original Observable as a
--- single result.
--- @returns {Observable}
-function Observable:sum()
-  return self:reduce(function(x, y) return x + y end, 0)
-end
-
 --- Returns a new Observable that runs a combinator function on the most recent values from a set
 -- of Observables whenever any of them produce a new value. The results of the combinator function
 -- are produced by the new Observable.
@@ -301,29 +198,6 @@ function Observable:distinct()
   end)
 end
 
---- Returns a new Observable that completes when the specified Observable fires.
--- @arg {Observable} other - The Observable that triggers completion of the original.
--- @returns {Observable}
-function Observable:takeUntil(other)
-  return Observable.create(function(observer)
-    local function onNext(x)
-      return observer:onNext(x)
-    end
-
-    local function onError(e)
-      return observer:onError(e)
-    end
-
-    local function onComplete()
-      return observer:onComplete()
-    end
-
-    other:subscribe(onComplete, onComplete, onComplete)
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
 --- Returns a new Observable that only produces values of the first that satisfy a predicate.
 -- @arg {function} predicate - The predicate to filter values with.
 -- @returns {Observable}
@@ -349,6 +223,58 @@ function Observable:filter(predicate)
   end)
 end
 
+--- Returns a new Observable that only produces the first result of the original.
+-- @returns {Observable}
+function Observable:first()
+  return self:take(1)
+end
+
+--- Returns a new Observable that only produces the last result of the original.
+-- @returns {Observable}
+function Observable:last()
+  return Observable.create(function(observer)
+    local value
+
+    local function onNext(x)
+      value = x
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onNext(value)
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that produces the values of the original transformed by a function.
+-- @arg {function} callback - The function to transform values from the original Observable.
+-- @returns {Observable}
+function Observable:map(callback)
+  return Observable.create(function(observer)
+    callback = callback or identity
+
+    local function onNext(x)
+      return observer:onNext(callback(x))
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns a new Observable that produces values computed by extracting the given key from the
 -- tables produced by the original.
 -- @arg {function} key - The key to extract from the table.
@@ -366,6 +292,157 @@ function Observable:pluck(key)
     local function onComplete()
       return observer:onComplete()
     end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that produces a single value computed by accumulating the results of
+-- running a function on each value produced by the original Observable.
+-- @arg {function} accumulator - Accumulates the values of the original Observable. Will be passed
+--                               the return value of the last call as the first argument and the
+--                               current value as the second.
+-- @arg {*} seed - A value to pass to the accumulator the first time it is run.
+-- @returns {Observable}
+function Observable:reduce(accumulator, seed)
+  return Observable.create(function(observer)
+    local result
+
+    local function onNext(x)
+      result = result or seed or x
+      result = accumulator(result, x)
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onNext(result)
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that skips over a specified number of values produced by the original
+-- and produces the rest.
+-- @arg {number=1} n - The number of values to ignore.
+-- @returns {Observable}
+function Observable:skip(n)
+  n = n or 1
+
+  return Observable.create(function(observer)
+    local i = 1
+
+    local function onNext(x)
+      if i > n then
+        observer:onNext(x)
+      else
+        i = i + 1
+      end
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that skips over values produced by the original until the specified
+-- Observable produces a value.
+-- @arg {Observable} other - The Observable that triggers the production of values.
+-- @returns {Observable}
+function Observable:skipUntil(other)
+  return Observable.create(function(observer)
+    local function trigger()
+      local function onNext(value)
+        return observer:onNext(value)
+      end
+
+      local function onError(message)
+        return observer:onNext(message)
+      end
+
+      local function onComplete()
+        return observer:onComplete()
+      end
+
+      return self:subscribe(onNext, onError, onComplete)
+    end
+
+    other:subscribe(trigger, trigger, trigger)
+  end)
+end
+
+--- Returns a new Observable that produces the sum of the values of the original Observable as a
+-- single result.
+-- @returns {Observable}
+function Observable:sum()
+  return self:reduce(function(x, y) return x + y end, 0)
+end
+
+--- Returns a new Observable that only produces the first n results of the original.
+-- @arg {number=1} n - The number of elements to produce before completing.
+-- @returns {Observable}
+function Observable:take(n)
+  n = n or 1
+
+  return Observable.create(function(observer)
+    if n <= 0 then
+      observer:onComplete()
+      return
+    end
+
+    local i = 1
+
+    local function onNext(x)
+      observer:onNext(x)
+
+      i = i + 1
+
+      if i > n then
+        observer:onComplete()
+      end
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that completes when the specified Observable fires.
+-- @arg {Observable} other - The Observable that triggers completion of the original.
+-- @returns {Observable}
+function Observable:takeUntil(other)
+  return Observable.create(function(observer)
+    local function onNext(x)
+      return observer:onNext(x)
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    other:subscribe(onComplete, onComplete, onComplete)
 
     return self:subscribe(onNext, onError, onComplete)
   end)
@@ -439,9 +516,15 @@ end
 
 Scheduler.Cooperative = Cooperative
 
+--- @class Subject
+-- @description Subjects function both as an Observer and as an Observable. Subjects inherit all
+-- Observable functions, including subscribe. Values can also be pushed to the Subject, which will
+-- be broadcasted to any subscribed Observers.
 local Subject = setmetatable({}, Observable)
 Subject.__index = Subject
 
+--- Creates a new Subject.
+-- @returns {Subject}
 function Subject.create()
   local self = {
     observers = {}
@@ -450,22 +533,31 @@ function Subject.create()
   return setmetatable(self, Subject)
 end
 
+--- Creates a new Observer and attaches it to the Subject.
+-- @arg {function} onNext - Called when the Subject produces a value.
+-- @arg {function} onError - Called when the Subject terminates due to an error.
+-- @arg {function} onComplete - Called when the Subject completes normally.
 function Subject:subscribe(onNext, onError, onComplete)
   table.insert(self.observers, Observer.create(onNext, onError, onComplete))
 end
 
+--- Pushes a value to the Subject. It will be broadcasted to all Observers.
+-- @arg {*} value
 function Subject:onNext(value)
   for i = 1, #self.observers do
     self.observers[i]:onNext(value)
   end
 end
 
+--- Signal to all Observers that an error has occurred.
+-- @arg {string=} message - A string describing what went wrong.
 function Subject:onError(message)
   for i = 1, #self.observers do
     self.observers[i]:onError(message)
   end
 end
 
+--- Signal to all Observers that the Subject will not produce any more values.
 function Subject:onComplete()
   for i = 1, #self.observers do
     self.observers[i]:onComplete()

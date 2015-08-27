@@ -114,6 +114,45 @@ Arguments:
 
 ---
 
+#### `:combineLatest(observables, combinator)`
+
+Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
+
+Arguments:
+
+- `observables` (`Observable...`) - One or more Observables to combine.
+- `combinator` (`function`) - A function that combines the latest result from each Observable and returns a single value.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:distinct()`
+
+Returns a new Observable that produces the values from the original with duplicates removed.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:filter(predicate)`
+
+Returns a new Observable that only produces values of the first that satisfy a predicate.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate to filter values with.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:first()`
 
 Returns a new Observable that only produces the first result of the original.
@@ -148,6 +187,20 @@ Returns:
 
 ---
 
+#### `:pluck(key)`
+
+Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
+
+Arguments:
+
+- `key` (`function`) - The key to extract from the table.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:reduce(accumulator, seed)`
 
 Returns a new Observable that produces a single value computed by accumulating the results of running a function on each value produced by the original Observable.
@@ -156,6 +209,34 @@ Arguments:
 
 - `accumulator` (`function`) - Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current value as the second.
 - `seed` (`*`) - A value to pass to the accumulator the first time it is run.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:skip(n)`
+
+Returns a new Observable that skips over a specified number of values produced by the original and produces the rest.
+
+Arguments:
+
+- `[n=1]` (`number`) - The number of values to ignore.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:skipUntil(other)`
+
+Returns a new Observable that skips over values produced by the original until the specified Observable produces a value.
+
+Arguments:
+
+- `other` (`Observable`) - The Observable that triggers the production of values.
 
 Returns:
 
@@ -173,24 +254,13 @@ Returns:
 
 ---
 
-#### `:combineLatest(observables, combinator)`
+#### `:take(n)`
 
-Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
+Returns a new Observable that only produces the first n results of the original.
 
 Arguments:
 
-- `observables` (`Observable...`) - One or more Observables to combine.
-- `combinator` (`function`) - A function that combines the latest result from each Observable and returns a single value.
-
-Returns:
-
-- `Observable`
-
----
-
-#### `:distinct()`
-
-Returns a new Observable that produces the values from the original with duplicates removed.
+- `[n=1]` (`number`) - The number of elements to produce before completing.
 
 Returns:
 
@@ -205,34 +275,6 @@ Returns a new Observable that completes when the specified Observable fires.
 Arguments:
 
 - `other` (`Observable`) - The Observable that triggers completion of the original.
-
-Returns:
-
-- `Observable`
-
----
-
-#### `:filter(predicate)`
-
-Returns a new Observable that only produces values of the first that satisfy a predicate.
-
-Arguments:
-
-- `predicate` (`function`) - The predicate to filter values with.
-
-Returns:
-
-- `Observable`
-
----
-
-#### `:pluck(key)`
-
-Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
-
-Arguments:
-
-- `key` (`function`) - The key to extract from the table.
 
 Returns:
 
@@ -286,4 +328,56 @@ Arguments:
 #### `:isEmpty()`
 
 Returns whether or not the Cooperative Scheduler's queue is empty.
+
+# Subject
+
+Subjects function both as an Observer and as an Observable. Subjects inherit all Observable functions, including subscribe. Values can also be pushed to the Subject, which will be broadcasted to any subscribed Observers.
+
+---
+
+#### `.create()`
+
+Creates a new Subject.
+
+Returns:
+
+- `Subject`
+
+---
+
+#### `:subscribe(onNext, onError, onComplete)`
+
+Creates a new Observer and attaches it to the Subject.
+
+Arguments:
+
+- `onNext` (`function`) - Called when the Subject produces a value.
+- `onError` (`function`) - Called when the Subject terminates due to an error.
+- `onComplete` (`function`) - Called when the Subject completes normally.
+
+---
+
+#### `:onNext(value)`
+
+Pushes a value to the Subject. It will be broadcasted to all Observers.
+
+Arguments:
+
+- `value` (`*`)
+
+---
+
+#### `:onError(message)`
+
+Signal to all Observers that an error has occurred.
+
+Arguments:
+
+- `[message]` (`string`) - A string describing what went wrong.
+
+---
+
+#### `:onComplete()`
+
+Signal to all Observers that the Subject will not produce any more values.
 

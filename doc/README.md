@@ -20,13 +20,13 @@ Returns:
 
 ---
 
-#### `:onNext(value)`
+#### `:onNext(values)`
 
-Pushes a new value to the Observer.
+Pushes zero or more values to the Observer.
 
 Arguments:
 
-- `value` (`*`)
+- `values` (`*...`)
 
 ---
 
@@ -296,7 +296,7 @@ Returns a new Observable that produces a single value computed by accumulating t
 
 Arguments:
 
-- `accumulator` (`function`) - Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current value as the second.
+- `accumulator` (`function`) - Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current values as the rest of the arguments.
 - `seed` (`*`) - A value to pass to the accumulator the first time it is run.
 
 Returns:

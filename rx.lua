@@ -211,7 +211,7 @@ end
 
 --- Returns a new Observable that produces the values produced by all the specified Observables in
 -- the order they are specified.
--- @arg {Observable...} observables - The Observables to concatenate.
+-- @arg {Observable...} sources - The Observables to concatenate.
 -- @returns {Observable}
 function Observable:concat(other, ...)
   if not other then return self end
@@ -339,6 +339,39 @@ function Observable:map(callback)
     end
 
     return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that produces the values produced by all the specified Observables in
+-- the order they are produced.
+-- @arg {Observable...} sources - One or more Observables to merge.
+-- @returns {Observable}
+function Observable:merge(...)
+  local sources = {...}
+  table.insert(sources, 1, self)
+
+  return Observable.create(function(observer)
+    local function onNext(value)
+      return observer:onNext(value)
+    end
+
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onComplete(i)
+      return function()
+        sources[i] = nil
+
+        if not next(sources) then
+          observer:onComplete()
+        end
+      end
+    end
+
+    for i = 1, #sources do
+      sources[i]:subscribe(onNext, onError, onComplete(i))
+    end
   end)
 end
 

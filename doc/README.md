@@ -160,13 +160,13 @@ Returns:
 
 ---
 
-#### `:concat(observables)`
+#### `:concat(sources)`
 
 Returns a new Observable that produces the values produced by all the specified Observables in the order they are specified.
 
 Arguments:
 
-- `observables` (`Observable...`) - The Observables to concatenate.
+- `sources` (`Observable...`) - The Observables to concatenate.
 
 Returns:
 
@@ -225,6 +225,20 @@ Returns a new Observable that produces the values of the original transformed by
 Arguments:
 
 - `callback` (`function`) - The function to transform values from the original Observable.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:merge(sources)`
+
+Returns a new Observable that produces the values produced by all the specified Observables in the order they are produced.
+
+Arguments:
+
+- `sources` (`Observable...`) - One or more Observables to merge.
 
 Returns:
 

@@ -662,11 +662,11 @@ local Subject = setmetatable({}, Observable)
 Subject.__index = Subject
 
 --- Creates a new Subject.
--- @arg {*} value - The initial value.
+-- @arg {*...} value - The initial values.
 -- @returns {Subject}
-function Subject.create(value)
+function Subject.create(...)
   local self = {
-    value = value,
+    value = {...},
     observers = {}
   }
 
@@ -681,13 +681,13 @@ function Subject:subscribe(onNext, onError, onComplete)
   table.insert(self.observers, Observer.create(onNext, onError, onComplete))
 end
 
---- Pushes a value to the Subject. It will be broadcasted to all Observers.
--- @arg {*} value
-function Subject:onNext(value)
-  self.value = value
+--- Pushes zero or more values to the Subject. It will be broadcasted to all Observers.
+-- @arg {*...} values
+function Subject:onNext(...)
+  self.value = {...}
 
   for i = 1, #self.observers do
-    self.observers[i]:onNext(value)
+    self.observers[i]:onNext(...)
   end
 end
 
@@ -704,6 +704,13 @@ function Subject:onComplete()
   for i = 1, #self.observers do
     self.observers[i]:onComplete()
   end
+end
+
+--- Returns the last value emitted by the Subject, or the initial value passed to the constructor
+-- if nothing has been emitted yet.
+-- @returns {*...}
+function Subject:getValue()
+  return unpack(self.value or {})
 end
 
 Subject.__call = Subject.onNext

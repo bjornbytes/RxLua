@@ -1,5 +1,7 @@
 local rx
 
+local pack = table.pack or function(...) return {...} end
+local unpack = table.unpack or unpack
 local function noop() end
 local function identity(x) return x end
 
@@ -438,6 +440,12 @@ function Observable:merge(...)
   end)
 end
 
+--- Returns an Observable that produces the values of the original inside tables.
+-- @returns {Observable}
+function Observable:pack()
+  return self:map(pack)
+end
+
 --- Returns a new Observable that produces values computed by extracting the given key from the
 -- tables produced by the original.
 -- @arg {function} key - The key to extract from the table.
@@ -606,6 +614,36 @@ function Observable:takeUntil(other)
     end
 
     other:subscribe(onComplete, onComplete, onComplete)
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns an Observable that unpacks the tables produced by the original.
+-- @returns {Observable}
+function Observable:unpack()
+  return self:map(unpack)
+end
+
+--- Returns an Observable that takes any values produced by the original that consist of multiple
+-- return values and produces each value individually.
+-- @returns {Observable}
+function Observable:unwrap()
+  return Observable.create(function(observer)
+    local function onNext(...)
+      local values = {...}
+      for i = 1, #values do
+        observer:onNext(values[i])
+      end
+    end
+
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
 
     return self:subscribe(onNext, onError, onComplete)
   end)

@@ -286,6 +286,16 @@ Returns:
 
 ---
 
+#### `:pack()`
+
+Returns an Observable that produces the values of the original inside tables.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:pluck(key)`
 
 Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
@@ -374,6 +384,26 @@ Returns a new Observable that completes when the specified Observable fires.
 Arguments:
 
 - `other` (`Observable`) - The Observable that triggers completion of the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:unpack()`
+
+Returns an Observable that unpacks the tables produced by the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:unwrap()`
+
+Returns an Observable that takes any values produced by the original that consist of multiple return values and produces each value individually.
 
 Returns:
 

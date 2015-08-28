@@ -424,9 +424,13 @@ Subjects function both as an Observer and as an Observable. Subjects inherit all
 
 ---
 
-#### `.create()`
+#### `.create(value)`
 
 Creates a new Subject.
+
+Arguments:
+
+- `value` (`*`) - The initial value.
 
 Returns:
 

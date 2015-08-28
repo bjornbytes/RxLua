@@ -662,9 +662,11 @@ local Subject = setmetatable({}, Observable)
 Subject.__index = Subject
 
 --- Creates a new Subject.
+-- @arg {*} value - The initial value.
 -- @returns {Subject}
-function Subject.create()
+function Subject.create(value)
   local self = {
+    value = value,
     observers = {}
   }
 
@@ -682,6 +684,8 @@ end
 --- Pushes a value to the Subject. It will be broadcasted to all Observers.
 -- @arg {*} value
 function Subject:onNext(value)
+  self.value = value
+
   for i = 1, #self.observers do
     self.observers[i]:onNext(value)
   end

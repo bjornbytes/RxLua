@@ -342,6 +342,18 @@ function Observable:map(callback)
   end)
 end
 
+--- Returns a new Observable that produces the maximum value produced by the original.
+-- @returns {Observable}
+function Observable:max()
+  return self:reduce(math.max)
+end
+
+--- Returns a new Observable that produces the minimum value produced by the original.
+-- @returns {Observable}
+function Observable:min()
+  return self:reduce(math.min)
+end
+
 --- Returns a new Observable that produces the values produced by all the specified Observables in
 -- the order they are produced.
 -- @arg {Observable...} sources - One or more Observables to merge.

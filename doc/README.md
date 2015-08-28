@@ -232,6 +232,26 @@ Returns:
 
 ---
 
+#### `:max()`
+
+Returns a new Observable that produces the maximum value produced by the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:min()`
+
+Returns a new Observable that produces the minimum value produced by the original.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:merge(sources)`
 
 Returns a new Observable that produces the values produced by all the specified Observables in the order they are produced.

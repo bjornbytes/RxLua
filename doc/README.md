@@ -430,7 +430,7 @@ Creates a new Subject.
 
 Arguments:
 
-- `value` (`*`) - The initial value.
+- `value` (`*...`) - The initial values.
 
 Returns:
 
@@ -450,13 +450,13 @@ Arguments:
 
 ---
 
-#### `:onNext(value)`
+#### `:onNext(values)`
 
-Pushes a value to the Subject. It will be broadcasted to all Observers.
+Pushes zero or more values to the Subject. It will be broadcasted to all Observers.
 
 Arguments:
 
-- `value` (`*`)
+- `values` (`*...`)
 
 ---
 
@@ -473,4 +473,14 @@ Arguments:
 #### `:onComplete()`
 
 Signal to all Observers that the Subject will not produce any more values.
+
+---
+
+#### `:getValue()`
+
+Returns the last value emitted by the Subject, or the initial value passed to the constructor if nothing has been emitted yet.
+
+Returns:
+
+- `*...`
 

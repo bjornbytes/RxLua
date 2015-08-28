@@ -266,7 +266,7 @@ function Observable:distinct()
 end
 
 --- Returns a new Observable that only produces values of the first that satisfy a predicate.
--- @arg {function} predicate - The predicate to filter values with.
+-- @arg {function} predicate - The predicate used to filter values.
 -- @returns {Observable}
 function Observable:filter(predicate)
   predicate = predicate or identity
@@ -284,6 +284,32 @@ function Observable:filter(predicate)
 
     local function onComplete()
       return observer:onComplete(e)
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns a new Observable that produces the first value of the original that satisfies a
+-- predicate.
+-- @arg {function} predicate - The predicate used to find a value.
+function Observable:find(predicate)
+  predicate = predicate or identity
+
+  return Observable.create(function(observer)
+    local function onNext(x)
+      if predicate(x) then
+        observer:onNext(x)
+        return observer:onComplete()
+      end
+    end
+
+    local function onError(message)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
     end
 
     return self:subscribe(onNext, onError, onComplete)

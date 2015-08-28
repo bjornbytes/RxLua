@@ -190,11 +190,21 @@ Returns a new Observable that only produces values of the first that satisfy a p
 
 Arguments:
 
-- `predicate` (`function`) - The predicate to filter values with.
+- `predicate` (`function`) - The predicate used to filter values.
 
 Returns:
 
 - `Observable`
+
+---
+
+#### `:find(predicate)`
+
+Returns a new Observable that produces the first value of the original that satisfies a predicate.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate used to find a value.
 
 ---
 

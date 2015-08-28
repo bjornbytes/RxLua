@@ -218,6 +218,16 @@ Returns:
 
 ---
 
+#### `:flatten()`
+
+Returns a new Observable that subscribes to the Observables produced by the original and produces their values.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:last()`
 
 Returns a new Observable that only produces the last result of the original.

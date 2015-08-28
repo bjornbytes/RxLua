@@ -322,6 +322,31 @@ function Observable:first()
   return self:take(1)
 end
 
+--- Returns a new Observable that subscribes to the Observables produced by the original and
+-- produces their values.
+-- @returns {Observable}
+function Observable:flatten()
+  return Observable.create(function(observer)
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onNext(observable)
+      local function innerOnNext(...)
+        observer:onNext(...)
+      end
+
+      observable:subscribe(innerOnNext, onError, noop)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns a new Observable that only produces the last result of the original.
 -- @returns {Observable}
 function Observable:last()

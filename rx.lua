@@ -209,6 +209,36 @@ function Observable:combineLatest(...)
   end)
 end
 
+--- Returns a new Observable that produces the values produced by all the specified Observables in
+-- the order they are specified.
+-- @arg {Observable...} observables - The Observables to concatenate.
+-- @returns {Observable}
+function Observable:concat(other, ...)
+  if not other then return self end
+
+  local others = {...}
+
+  return Observable.create(function(observer)
+    local function onNext(value)
+      return observer:onNext(value)
+    end
+
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    local function chain()
+      return other:concat(unpack(others)):subscribe(onNext, onError, onComplete)
+    end
+
+    return self:subscribe(onNext, onError, chain)
+  end)
+end
+
 --- Returns a new Observable that produces the values from the original with duplicates removed.
 -- @returns {Observable}
 function Observable:distinct()

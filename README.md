@@ -11,21 +11,10 @@ Cheer someone on using functional reactive programming:
 ```lua
 local Rx = require 'rx'
 
-local observable = Rx.Observable.fromCoroutine(function()
-  for i = 2, 8, 2 do
-    coroutine.yield(i)
-  end
-
-  return 'who do we appreciate'
-end)
-
-observable
+Rx.Observable.fromRange(2, 8, 2)
+  :concat(Rx.Observable.fromValue('who do we appreciate'))
   :map(function(value) return value .. '!' end)
   :subscribe(print)
-
-repeat
-  Rx.scheduler:update()
-until Rx.scheduler:isEmpty()
 ```
 
 See [examples](examples) for more.

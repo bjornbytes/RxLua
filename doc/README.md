@@ -160,6 +160,20 @@ Returns:
 
 ---
 
+#### `:concat(observables)`
+
+Returns a new Observable that produces the values produced by all the specified Observables in the order they are specified.
+
+Arguments:
+
+- `observables` (`Observable...`) - The Observables to concatenate.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:distinct()`
 
 Returns a new Observable that produces the values from the original with duplicates removed.

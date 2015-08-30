@@ -11,6 +11,7 @@
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [dump](#dumpname)
+  - [changes](#changescomparator)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -193,6 +194,20 @@ Subscribes to this Observable and prints values it produces.
 Arguments:
 
 - `[name]` (`string`) - Prefixes the printed messages with a name.
+
+---
+
+#### `:changes(comparator)`
+
+Returns an Observable that only produces values from the original if they are different from the previous value.
+
+Arguments:
+
+- `comparator` (`function`) - A function used to compare 2 values. If unspecified, == is used.
+
+Returns:
+
+- `Observable`
 
 ---
 

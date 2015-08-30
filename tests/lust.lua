@@ -10,9 +10,10 @@ lust.errors = 0
 local red = string.char(27) .. '[31m'
 local green = string.char(27) .. '[32m'
 local normal = string.char(27) .. '[0m'
+local function indent(level) return string.rep('\t', level or lust.level) end
 
 function lust.describe(name, fn)
-  print(string.rep('\t', lust.level) .. name)
+  print(indent() .. name)
   lust.level = lust.level + 1
   fn()
   lust.level = lust.level - 1
@@ -25,7 +26,10 @@ function lust.it(name, fn)
   else lust.errors = lust.errors + 1 end
   local color = success and green or red
   local label = success and 'PASS' or 'FAIL'
-  print(string.rep('\t', lust.level) .. color .. label .. normal .. ' ' .. name)
+  print(indent() .. color .. label .. normal .. ' ' .. name)
+  if err then
+    print(indent(lust.level + 1) .. red .. err .. normal)
+  end
   if type(lust.onafter) == 'function' then lust.onafter(name) end
 end
 

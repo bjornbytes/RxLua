@@ -2,7 +2,39 @@ local docroc = require 'tools/docroc'
 
 io.output('doc/README.md')
 
-for _, comment in ipairs(docroc.process('rx.lua')) do
+local comments = docroc.process('rx.lua')
+
+-- Generate table of contents
+for _, comment in ipairs(comments) do
+  local tags = comment.tags
+
+  if tags.class then
+    local class = tags.class[1].name
+    io.write('- [' .. class .. '](#' .. class .. ')\n')
+  else
+    local context = comment.context:match('function.-([:%.].+)')
+    if tags.arg then
+      context = context:gsub('%b()', function(signature)
+        local args = {}
+
+        for _, arg in ipairs(tags.arg) do
+          table.insert(args, arg.name)
+        end
+
+        return '(' .. table.concat(args, ', ') .. ')'
+      end)
+    end
+
+    local name = comment.context:match('function.-[:%.]([^%(]+)')
+
+    io.write('  - [' .. name .. '](#`' .. context:gsub(' ', '-') .. '`)\n')
+  end
+end
+
+io.write('\n')
+
+-- Generate content
+for _, comment in ipairs(comments) do
   local tags = comment.tags
 
   if tags.class then

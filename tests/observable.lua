@@ -89,19 +89,27 @@ describe('Observable', function()
     end)
 
     describe('with one argument', function()
-      it('returns an Observable that produces value-key pairs by iterating the table using pairs', function()
+      it('returns an Observable that produces values by iterating the table using pairs', function()
         local input = {foo = 'bar', 1, 2, 3}
         local observable = Rx.Observable.fromTable(input)
         local result = {}
-        for key, value in pairs(input) do table.insert(result, {value, key}) end
+        for key, value in pairs(input) do table.insert(result, {value}) end
         expect(observable).to.produce(result)
       end)
     end)
 
     describe('with two arguments', function()
-      it('returns an Observable that produces value-key pairs by iterating the table using the second argument', function()
+      it('returns an Observable that produces values by iterating the table using the second argument', function()
         local input = {foo = 'bar', 3, 4, 5}
         local observable = Rx.Observable.fromTable(input, ipairs)
+        expect(observable).to.produce(3, 4, 5)
+      end)
+    end)
+
+    describe('with three arguments', function()
+      it('returns an Observable that produces value-key pairs by iterating the table if the third argument is true', function()
+        local input = {foo = 'bar', 3, 4, 5}
+        local observable = Rx.Observable.fromTable(input, ipairs, true)
         expect(observable).to.produce({{3, 1}, {4, 2}, {5, 3}})
       end)
     end)
@@ -139,4 +147,6 @@ describe('Observable', function()
 
   describe('dump', function()
   end)
+
+  dofile('tests/changes.lua')
 end)

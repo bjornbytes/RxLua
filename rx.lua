@@ -115,12 +115,13 @@ end
 --- Creates an Observable that produces values from a table.
 -- @arg {table} table - The table used to create the Observable.
 -- @arg {function=pairs} iterator - An iterator used to iterate the table, e.g. pairs or ipairs.
+-- @arg {boolean} keys - Whether or not to also emit the keys of the table.
 -- @returns {Observable}
-function Observable.fromTable(t, iterator)
+function Observable.fromTable(t, iterator, keys)
   iterator = iterator or pairs
   return Observable.create(function(observer)
     for key, value in iterator(t) do
-      observer:onNext(value, key)
+      observer:onNext(value, keys and key or nil)
     end
 
     observer:onComplete()
@@ -179,9 +180,9 @@ function Observable:changes(comparator)
     local first = true
     local currentValue = nil
 
-    local function onNext(value)
+    local function onNext(value, ...)
       if first or not comparator(value, currentValue) then
-        observer:onNext(value)
+        observer:onNext(value, ...)
         currentValue = value
         first = false
       end

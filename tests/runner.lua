@@ -51,7 +51,7 @@ lust.paths['nothing'] = {
 table.insert(lust.paths['to'], 'produce')
 
 if arg[1] then
-  arg[1] = arg[1]:gsub('^(tests/).+', ''):gsub('%.lua$', '')
+  arg[1] = arg[1]:gsub('^(tests/)', ''):gsub('%.lua$', '')
   dofile('tests/' .. arg[1] .. '.lua')
 else
   local files = {

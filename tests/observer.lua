@@ -1,5 +1,5 @@
 describe('Observer', function()
-  describe('.create', function()
+  describe('create', function()
     it('returns an Observer', function()
       expect(Rx.Observer.create()).to.be.an(Rx.Observer)
     end)

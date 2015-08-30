@@ -8,11 +8,11 @@ RxLua
   - [onComplete](#oncomplete)
 - [Observable](#observable)
   - [create](#createsubscribe)
+  - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [fromValue](#fromvaluevalue)
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator)
   - [fromCoroutine](#fromcoroutinecoroutine)
-  - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [dump](#dumpname)
   - [changes](#changescomparator)
   - [combineLatest](#combinelatestobservables-combinator)
@@ -120,6 +120,18 @@ Returns:
 
 ---
 
+#### `:subscribe(onNext, onError, onComplete)`
+
+Shorthand for creating an Observer and passing it to this Observable's subscription function.
+
+Arguments:
+
+- `onNext` (`function`) - Called when the Observable produces a value.
+- `onError` (`function`) - Called when the Observable terminates due to an error.
+- `onComplete` (`function`) - Called when the Observable completes normally.
+
+---
+
 #### `.fromValue(value)`
 
 Creates an Observable that produces a single value.
@@ -176,18 +188,6 @@ Arguments:
 Returns:
 
 - `Observable`
-
----
-
-#### `:subscribe(onNext, onError, onComplete)`
-
-Shorthand for creating an Observer and passing it to this Observable's subscription function.
-
-Arguments:
-
-- `onNext` (`function`) - Called when the Observable produces a value.
-- `onError` (`function`) - Called when the Observable terminates due to an error.
-- `onComplete` (`function`) - Called when the Observable completes normally.
 
 ---
 

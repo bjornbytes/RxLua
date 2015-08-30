@@ -2,9 +2,9 @@
 -- https://github.com/bjornbytes/docroc
 -- License - MIT, see LICENSE for details.
 
-local rocdoc = {}
+local docroc = {}
 
-function rocdoc.process(filename)
+function docroc.process(filename)
   local file = io.open(filename, 'r')
   local text = file:read('*a')
   file:close()
@@ -18,7 +18,7 @@ function rocdoc.process(filename)
     local tags = {}
     chunk:gsub('@(%w+)%s?([^@]*)', function(name, body)
       body = body:gsub('(%s+)$', '')
-      local processor = rocdoc.processors[name]
+      local processor = docroc.processors[name]
       local tag = processor and processor(body) or {}
       tag.tag = name
       tag.raw = body
@@ -36,7 +36,7 @@ function rocdoc.process(filename)
   return comments
 end
 
-rocdoc.processors = {
+docroc.processors = {
   description = function(body)
     return {
       text = body
@@ -84,4 +84,4 @@ rocdoc.processors = {
   end
 }
 
-return rocdoc
+return docroc

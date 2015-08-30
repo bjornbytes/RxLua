@@ -503,6 +503,32 @@ function Observable:reduce(accumulator, seed)
   end)
 end
 
+--- Returns a new Observable that produces values from the original which do not satisfy a
+-- predicate.
+-- @arg {function} predicate - The predicate used to reject values.
+-- @returns {Observable}
+function Observable:reject(predicate)
+  predicate = predicate or identity
+
+  return Observable.create(function(observer)
+    local function onNext(...)
+      if not predicate(...) then
+        return observer:onNext(...)
+      end
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete(e)
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns a new Observable that skips over a specified number of values produced by the original
 -- and produces the rest.
 -- @arg {number=1} n - The number of values to ignore.

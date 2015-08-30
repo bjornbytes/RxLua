@@ -27,6 +27,7 @@
   - [pack](#pack)
   - [pluck](#pluckkey)
   - [reduce](#reduceaccumulator-seed)
+  - [reject](#rejectpredicate)
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
   - [sum](#sum)
@@ -378,6 +379,20 @@ Arguments:
 
 - `accumulator` (`function`) - Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current values as the rest of the arguments.
 - `seed` (`*`) - A value to pass to the accumulator the first time it is run.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:reject(predicate)`
+
+Returns a new Observable that produces values from the original which do not satisfy a predicate.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate used to reject values.
 
 Returns:
 

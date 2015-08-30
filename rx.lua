@@ -713,6 +713,44 @@ function Observable:unwrap()
   end)
 end
 
+--- Returns an Observable that buffers values from the original and produces them as multiple
+-- values.
+-- @arg {number} size - The size of the buffer.
+function Observable:wrap(size)
+  return Observable.create(function(observer)
+    local buffer = {}
+
+    local function emit()
+      if #buffer > 0 then
+        observer:onNext(unpack(buffer))
+        buffer = {}
+      end
+    end
+
+    local function onNext(...)
+      local values = {...}
+      for i = 1, #values do
+        table.insert(buffer, values[i])
+        if #buffer >= size then
+          return emit()
+        end
+      end
+    end
+
+    local function onError(message)
+      emit()
+      return observer:onError(message)
+    end
+
+    local function onComplete()
+      emit()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- @class Scheduler
 -- @description Schedulers manage groups of Observables.
 local Scheduler = {}

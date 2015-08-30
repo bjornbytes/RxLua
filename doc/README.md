@@ -36,6 +36,7 @@
   - [takeUntil](#takeuntilother)
   - [unpack](#unpack)
   - [unwrap](#unwrap)
+  - [wrap](#wrapsize)
 - [Scheduler](#scheduler)
 - [CooperativeScheduler](#cooperativescheduler)
   - [create](#createcurrenttime)
@@ -498,6 +499,16 @@ Returns an Observable that takes any values produced by the original that consis
 Returns:
 
 - `Observable`
+
+---
+
+#### `:wrap(size)`
+
+Returns an Observable that buffers values from the original and produces them as multiple values.
+
+Arguments:
+
+- `size` (`number`) - The size of the buffer.
 
 # Scheduler
 

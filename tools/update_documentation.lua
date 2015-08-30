@@ -10,7 +10,7 @@ for _, comment in ipairs(comments) do
 
   if tags.class then
     local class = tags.class[1].name
-    io.write('- [' .. class .. '](#' .. class .. ')\n')
+    io.write('- [' .. class .. '](#' .. class:lower() .. ')\n')
   else
     local context = comment.context:match('function.-([:%.].+)')
     if tags.arg then

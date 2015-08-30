@@ -146,7 +146,11 @@ end
 -- @arg {function} onError - Called when the Observable terminates due to an error.
 -- @arg {function} onComplete - Called when the Observable completes normally.
 function Observable:subscribe(onNext, onError, onComplete)
-  return self._subscribe(Observer.create(onNext, onError, onComplete))
+  if type(onNext) == 'table' then
+    return self._subscribe(onNext)
+  else
+    return self._subscribe(Observer.create(onNext, onError, onComplete))
+  end
 end
 
 --- Subscribes to this Observable and prints values it produces.

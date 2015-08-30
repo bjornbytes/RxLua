@@ -1,7 +1,7 @@
 lust = require 'tests/lust'
 Rx = require 'rx'
 
-for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy'}) do
+for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy', 'before', 'after'}) do
   _G[fn] = lust[fn]
 end
 

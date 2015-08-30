@@ -21,37 +21,71 @@ describe('Observer', function()
     end)
   end)
 
-  describe('.onNext', function()
+  describe('onNext', function()
     it('calls _onNext', function()
       local observer = Rx.Observer.create()
       local function run() observer:onNext() end
-      local calls = spy(observer, '_onNext', run)
-      expect(#calls).to.equal(1)
+      expect(#spy(observer, '_onNext', run)).to.equal(1)
     end)
 
     it('passes all arguments to _onNext', function()
       local observer = Rx.Observer.create()
       local function run() observer:onNext(1, '2', 3, nil, 5) end
-      local calls = spy(observer, '_onNext', run)
-      expect(calls).to.equal({{1, '2', 3, nil, 5}})
+      expect(spy(observer, '_onNext', run)).to.equal({{1, '2', 3, nil, 5}})
     end)
 
-    it('does not call _onNext if onComplete has been called', function()
+    it('does not call _onNext if stopped is true', function()
       local observer = Rx.Observer.create()
-      local function run()
-        observer:onComplete()
-        observer:onNext()
-      end
+      observer.stopped = true
+      local function run() observer:onNext() end
       expect(#spy(observer, '_onNext', run)).to.equal(0)
     end)
+  end)
 
-    it('does not call _onNext if onError has been called', function()
+  describe('onError', function()
+    it('calls _onError with the first argument it was passed', function()
       local observer = Rx.Observer.create(_, function() end, _)
-      local function run()
-        observer:onError()
-        observer:onNext()
-      end
-      expect(#spy(observer, '_onNext', run)).to.equal(0)
+      local function run() observer:onError('sheeit', 1) end
+      expect(spy(observer, '_onError', run)).to.equal({{'sheeit'}})
+    end)
+
+    it('sets stopped to true', function()
+      local observer = Rx.Observer.create(_, function() end, _)
+      observer:onError()
+      expect(observer.stopped).to.equal(true)
+    end)
+
+    it('does not call _onError if stopped is already true', function()
+      local observer = Rx.Observer.create(_, function() end, _)
+      observer.stopped = true
+      local function run() observer:onError() end
+      expect(#spy(observer, '_onError', run)).to.equal(0)
+    end)
+
+    it('causes an error by default', function()
+      local observer = Rx.Observer.create()
+      expect(observer.onError).to.fail()
+    end)
+  end)
+
+  describe('onComplete', function()
+    it('calls _onComplete with no arguments', function()
+      local observer = Rx.Observer.create()
+      local function run() observer:onComplete(1, 2, 3) end
+      expect(spy(observer, '_onComplete', run)).to.equal({{}})
+    end)
+
+    it('sets stopped to true', function()
+      local observer = Rx.Observer.create()
+      observer:onComplete()
+      expect(observer.stopped).to.equal(true)
+    end)
+
+    it('does not call _onComplete if stopped is already true', function()
+      local observer = Rx.Observer.create()
+      observer.stopped = true
+      local function run() observer:onComplete() end
+      expect(#spy(observer, '_onComplete', run)).to.equal(0)
     end)
   end)
 end)

@@ -78,14 +78,14 @@ end
 
 local paths = {
   [''] = {'to', 'to_not'},
-  to = {'have', 'equal', 'be', 'exist'},
-  to_not = {'have', 'equal', 'be', 'exist', chain = function(a) a.negate = not a.negate end},
+  to = {'have', 'equal', 'be', 'exist', 'fail'},
+  to_not = {'have', 'equal', 'be', 'exist', 'fail', chain = function(a) a.negate = not a.negate end},
   be = {'a', 'an', 'truthy', 'falsy', f = function(v, x)
     return v == x, tostring(v) .. ' and ' .. tostring(x) .. ' are not equal'
   end},
   a = {f = isa},
   an = {f = isa},
-  exist = {f = function(v) return v == nil, tostring(v) .. ' is nil' end},
+  exist = {f = function(v) return v ~= nil, tostring(v) .. ' is nil' end},
   truthy = {f = function(v) return v, tostring(v) .. ' is not truthy' end},
   falsy = {f = function(v) return not v, tostring(v) .. ' is not falsy' end},
   equal = {f = function(v, x) return strict_eq(v, x), tostring(v) .. ' and ' .. tostring(x) .. ' are not strictly equal' end},
@@ -94,7 +94,8 @@ local paths = {
       if type(v) ~= 'table' then return false, 'table "' .. tostring(v) .. '" is not a table' end
       return has(v, x), 'table "' .. tostring(v) .. '" does not have ' .. tostring(x)
     end
-  }
+  },
+  fail = {f = function(v) return not pcall(v), tostring(v) .. ' did not fail' end}
 }
 
 function lust.expect(v)

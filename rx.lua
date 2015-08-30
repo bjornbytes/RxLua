@@ -68,6 +68,18 @@ function Observable.create(subscribe)
   return setmetatable(self, Observable)
 end
 
+--- Shorthand for creating an Observer and passing it to this Observable's subscription function.
+-- @arg {function} onNext - Called when the Observable produces a value.
+-- @arg {function} onError - Called when the Observable terminates due to an error.
+-- @arg {function} onComplete - Called when the Observable completes normally.
+function Observable:subscribe(onNext, onError, onComplete)
+  if type(onNext) == 'table' then
+    return self._subscribe(onNext)
+  else
+    return self._subscribe(Observer.create(onNext, onError, onComplete))
+  end
+end
+
 --- Creates an Observable that produces a single value.
 -- @arg {*} value
 -- @returns {Observable}
@@ -139,18 +151,6 @@ function Observable.fromCoroutine(thread)
       end
     end)
   end)
-end
-
---- Shorthand for creating an Observer and passing it to this Observable's subscription function.
--- @arg {function} onNext - Called when the Observable produces a value.
--- @arg {function} onError - Called when the Observable terminates due to an error.
--- @arg {function} onComplete - Called when the Observable completes normally.
-function Observable:subscribe(onNext, onError, onComplete)
-  if type(onNext) == 'table' then
-    return self._subscribe(onNext)
-  else
-    return self._subscribe(Observer.create(onNext, onError, onComplete))
-  end
 end
 
 --- Subscribes to this Observable and prints values it produces.

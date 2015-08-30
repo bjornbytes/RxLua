@@ -1,7 +1,5 @@
-RxLua
+RxLua [![Build Status](https://travis-ci.org/bjornbytes/RxLua.svg)](https://travis-ci.org/bjornbytes/RxLua)
 ===
-
-[![Build Status](https://travis-ci.org/bjornbytes/RxLua.svg)](https://travis-ci.org/bjornbytes/RxLua)
 
 [Reactive Extensions](http://reactivex.io) for Lua.
 

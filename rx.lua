@@ -211,6 +211,12 @@ function Observable:combineLatest(...)
   end)
 end
 
+--- Returns a new Observable that produces the values of the first with falsy values removed.
+-- @returns {Observable}
+function Observable:compact()
+  return self:filter(identity)
+end
+
 --- Returns a new Observable that produces the values produced by all the specified Observables in
 -- the order they are specified.
 -- @arg {Observable...} sources - The Observables to concatenate.

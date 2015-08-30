@@ -12,6 +12,7 @@
   - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [dump](#dumpname)
   - [combineLatest](#combinelatestobservables-combinator)
+  - [compact](#compact)
   - [concat](#concatsources)
   - [distinct](#distinct)
   - [filter](#filterpredicate)
@@ -202,6 +203,16 @@ Arguments:
 
 - `observables` (`Observable...`) - One or more Observables to combine.
 - `combinator` (`function`) - A function that combines the latest result from each Observable and returns a single value.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:compact()`
+
+Returns a new Observable that produces the values of the first with falsy values removed.
 
 Returns:
 

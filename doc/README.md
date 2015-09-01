@@ -41,6 +41,9 @@ RxLua
   - [unwrap](#unwrap)
   - [wrap](#wrapsize)
 - [Scheduler](#scheduler)
+- [ImmediateScheduler](#immediatescheduler)
+  - [create](#create)
+  - [schedule](#scheduleaction)
 - [CooperativeScheduler](#cooperativescheduler)
   - [create](#createcurrenttime)
   - [schedule](#scheduleaction-delay)
@@ -517,6 +520,30 @@ Arguments:
 # Scheduler
 
 Schedulers manage groups of Observables.
+
+# ImmediateScheduler
+
+Schedules Observables by running all operations immediately.
+
+---
+
+#### `.create()`
+
+Creates a new Immediate Scheduler.
+
+Returns:
+
+- `Scheduler.Immediate`
+
+---
+
+#### `:schedule(action)`
+
+Schedules a function to be run on the scheduler. It is executed immediately.
+
+Arguments:
+
+- `action` (`function`) - The function to execute.
 
 # CooperativeScheduler
 

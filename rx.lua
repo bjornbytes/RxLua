@@ -760,6 +760,25 @@ end
 -- @description Schedulers manage groups of Observables.
 local Scheduler = {}
 
+--- @class ImmediateScheduler
+-- @description Schedules Observables by running all operations immediately.
+local Immediate = {}
+Immediate.__index = Immediate
+
+--- Creates a new Immediate Scheduler.
+-- @returns {Scheduler.Immediate}
+function Immediate.create()
+  return setmetatable({}, Immediate)
+end
+
+--- Schedules a function to be run on the scheduler. It is executed immediately.
+-- @arg {function} action - The function to execute.
+function Immediate:schedule(action)
+  action()
+end
+
+Scheduler.Immediate = Immediate
+
 --- @class CooperativeScheduler
 -- @description Manages Observables using coroutines and a virtual clock that must be updated
 -- manually.
@@ -889,7 +908,7 @@ rx = {
   Observer = Observer,
   Observable = Observable,
   Scheduler = Scheduler,
-  scheduler = Scheduler.Cooperative.create(),
+  scheduler = Scheduler.Immediate.create(),
   Subject = Subject
 }
 

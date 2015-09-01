@@ -123,6 +123,7 @@ describe('Observable', function()
         return 3
       end)
 
+      Rx.scheduler = Rx.Scheduler.Cooperative.create()
       local observable = Rx.Observable.fromCoroutine(coroutine)
       local onNext, onError, onComplete = observableSpy(observable)
       repeat Rx.scheduler:update()
@@ -137,6 +138,7 @@ describe('Observable', function()
         return 3
       end
 
+      Rx.scheduler = Rx.Scheduler.Cooperative.create()
       local observable = Rx.Observable.fromCoroutine(coroutine)
       local onNext, onError, onComplete = observableSpy(observable)
       repeat Rx.scheduler:update()

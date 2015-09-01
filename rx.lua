@@ -207,7 +207,7 @@ end
 -- @arg {function} combinator - A function that combines the latest result from each Observable and
 --                              returns a single value.
 -- @returns {Observable}
-function Observable:combineLatest(...)
+function Observable:combine(...)
   local sources = {...}
   local combinator = table.remove(sources)
   table.insert(sources, 1, self)

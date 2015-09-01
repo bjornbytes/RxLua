@@ -11,11 +11,11 @@ RxLua
   - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [fromValue](#fromvaluevalue)
   - [fromRange](#fromrangeinitial-limit-step)
-  - [fromTable](#fromtabletable-iterator)
+  - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname)
   - [changes](#changescomparator)
-  - [combineLatest](#combinelatestobservables-combinator)
+  - [combine](#combineobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
   - [distinct](#distinct)
@@ -162,7 +162,7 @@ Returns:
 
 ---
 
-#### `.fromTable(table, iterator)`
+#### `.fromTable(table, iterator, keys)`
 
 Creates an Observable that produces values from a table.
 
@@ -170,6 +170,7 @@ Arguments:
 
 - `table` (`table`) - The table used to create the Observable.
 - `[iterator=pairs]` (`function`) - An iterator used to iterate the table, e.g. pairs or ipairs.
+- `keys` (`boolean`) - Whether or not to also emit the keys of the table.
 
 Returns:
 
@@ -215,7 +216,7 @@ Returns:
 
 ---
 
-#### `:combineLatest(observables, combinator)`
+#### `:combine(observables, combinator)`
 
 Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
 

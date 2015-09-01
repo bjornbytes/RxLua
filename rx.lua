@@ -622,13 +622,6 @@ function Observable:skipUntil(other)
   end)
 end
 
---- Returns a new Observable that produces the sum of the values of the original Observable as a
--- single result.
--- @returns {Observable}
-function Observable:sum()
-  return self:reduce(function(x, y) return x + y end, 0)
-end
-
 --- Returns a new Observable that only produces the first n results of the original.
 -- @arg {number=1} n - The number of elements to produce before completing.
 -- @returns {Observable}

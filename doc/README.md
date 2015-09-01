@@ -34,7 +34,6 @@ RxLua
   - [reject](#rejectpredicate)
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
-  - [sum](#sum)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
   - [unpack](#unpack)
@@ -444,16 +443,6 @@ Returns a new Observable that skips over values produced by the original until t
 Arguments:
 
 - `other` (`Observable`) - The Observable that triggers the production of values.
-
-Returns:
-
-- `Observable`
-
----
-
-#### `:sum()`
-
-Returns a new Observable that produces the sum of the values of the original Observable as a single result.
 
 Returns:
 

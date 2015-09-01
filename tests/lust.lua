@@ -132,15 +132,24 @@ function lust.expect(v)
   return assertion
 end
 
-function lust.spy(subject, name, run)
+function lust.spy(target, name, run)
   local spy = {}
-  local original = subject[name]
-  subject[name] = function(...)
+  local subject
+
+  local function capture(...)
     table.insert(spy, {...})
-    return original(...)
+    return subject(...)
   end
 
-  setmetatable(spy, {__call = function(_, fn) fn() return spy end})
+  if type(target) == 'table' then
+    subject = target[name]
+    target[name] = capture
+  else
+    run = name
+    subject = target or function() end
+  end
+
+  setmetatable(spy, {__call = function(_, ...) return capture(...) end})
 
   if run then run() end
 

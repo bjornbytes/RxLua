@@ -1,4 +1,10 @@
 describe('changes', function()
+  it('produces an error if its parent errors', function()
+    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:changes().subscribe).to.fail()
+  end)
+
   describe('with the default comparator', function()
     it('produces a value if it is the first value or different from the previous', function()
       local observable = Rx.Observable.fromTable({1, 1, 3, 1, 4, 5, 5, 5}, ipairs):changes()

@@ -150,4 +150,5 @@ describe('Observable', function()
 
   dofile('tests/changes.lua')
   dofile('tests/combineLatest.lua')
+  dofile('tests/compact.lua')
 end)

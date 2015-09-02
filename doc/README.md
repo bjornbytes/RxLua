@@ -38,6 +38,7 @@ RxLua
   - [takeUntil](#takeuntilother)
   - [unpack](#unpack)
   - [unwrap](#unwrap)
+  - [window](#windowsize)
   - [wrap](#wrapsize)
 - [Scheduler](#scheduler)
 - [ImmediateScheduler](#immediatescheduler)
@@ -491,6 +492,20 @@ Returns:
 #### `:unwrap()`
 
 Returns an Observable that takes any values produced by the original that consist of multiple return values and produces each value individually.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:window(size)`
+
+Returns an Observable that produces a sliding window of the values produced by the original.
+
+Arguments:
+
+- `size` (`number`) - The size of the window. The returned observable will produce this number of the most recent values as multiple arguments to onNext.
 
 Returns:
 

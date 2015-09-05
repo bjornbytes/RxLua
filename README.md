@@ -11,7 +11,8 @@ Cheer someone on using functional reactive programming:
 ```lua
 local Rx = require 'rx'
 
-Rx.Observable.fromRange(2, 8, 2)
+Rx.Observable.fromRange(1, 4)
+  :map(function(x) return x * 2 end)
   :concat(Rx.Observable.fromValue('who do we appreciate'))
   :map(function(value) return value .. '!' end)
   :subscribe(print)

@@ -29,6 +29,7 @@ RxLua
   - [min](#min)
   - [merge](#mergesources)
   - [pack](#pack)
+  - [partition](#partitionpredicate)
   - [pluck](#pluckkey)
   - [reduce](#reduceaccumulator-seed)
   - [reject](#rejectpredicate)
@@ -376,6 +377,21 @@ Returns an Observable that produces the values of the original inside tables.
 
 Returns:
 
+- `Observable`
+
+---
+
+#### `:partition(predicate)`
+
+Returns two Observables: one that produces values for which the predicate returns truthy for, and another that produces values for which the predicate returns falsy.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate used to partition the values.
+
+Returns:
+
+- `Observable`
 - `Observable`
 
 ---

@@ -1,0 +1,15 @@
+describe('flatten', function()
+  it('produces an error if its parent errors', function()
+    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:flatten().subscribe).to.fail()
+  end)
+
+  it('produces all values produced by the observables produced by its parent', function()
+    local observable = Rx.Observable.fromRange(3):map(function(i)
+      return Rx.Observable.fromRange(i, 3)
+    end):flatten()
+
+    expect(observable).to.produce(1, 2, 3, 2, 3, 3)
+  end)
+end)

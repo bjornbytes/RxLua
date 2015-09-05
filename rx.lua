@@ -397,9 +397,11 @@ end
 function Observable:last()
   return Observable.create(function(observer)
     local value
+    local empty = true
 
     local function onNext(...)
       value = {...}
+      empty = false
     end
 
     local function onError(e)
@@ -407,7 +409,10 @@ function Observable:last()
     end
 
     local function onComplete()
-      observer:onNext(unpack(value or {}))
+      if not empty then
+        observer:onNext(unpack(value or {}))
+      end
+
       return observer:onComplete()
     end
 

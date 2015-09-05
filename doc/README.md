@@ -37,6 +37,7 @@ RxLua
   - [skipUntil](#skipuntilother)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
+  - [tap](#taponnext-onerror-oncomplete)
   - [unpack](#unpack)
   - [unwrap](#unwrap)
   - [window](#windowsize)
@@ -488,6 +489,22 @@ Returns a new Observable that completes when the specified Observable fires.
 Arguments:
 
 - `other` (`Observable`) - The Observable that triggers completion of the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:tap(onNext, onError, onComplete)`
+
+Runs a function each time this Observable has activity. Similar to subscribe but does not create a subscription.
+
+Arguments:
+
+- `[onNext]` (`function`) - Run when the Observable produces values.
+- `[onError]` (`function`) - Run when the Observable encounters a problem.
+- `[onComplete]` (`function`) - Run when the Observable completes.
 
 Returns:
 

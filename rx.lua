@@ -690,6 +690,35 @@ function Observable:takeUntil(other)
   end)
 end
 
+--- Runs a function each time this Observable has activity. Similar to subscribe but does not
+-- create a subscription.
+-- @arg {function=} onNext - Run when the Observable produces values.
+-- @arg {function=} onError - Run when the Observable encounters a problem.
+-- @arg {function=} onComplete - Run when the Observable completes.
+-- @returns {Observable}
+function Observable:tap(_onNext, _onError, _onComplete)
+  _onNext, _onError, _onComplete = _onNext or noop, _onError or noop, _onComplete or noop
+
+  return Observable.create(function(observer)
+    local function onNext(...)
+      _onNext(...)
+      return observer:onNext(...)
+    end
+
+    local function onError(message)
+      _onError(message)
+      return observer:onError(message)
+    end
+
+    local function onComplete()
+      _onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns an Observable that unpacks the tables produced by the original.
 -- @returns {Observable}
 function Observable:unpack()

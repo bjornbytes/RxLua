@@ -35,8 +35,10 @@ RxLua
   - [reject](#rejectpredicate)
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
+  - [skipWhile](#skipwhilepredicate)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
+  - [takeWhile](#takewhilepredicate)
   - [tap](#taponnext-onerror-oncomplete)
   - [unpack](#unpack)
   - [unwrap](#unwrap)
@@ -469,6 +471,20 @@ Returns:
 
 ---
 
+#### `:skipWhile(predicate)`
+
+Returns a new Observable that skips elements until the predicate returns falsy for one of them.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate used to continue skipping values.
+
+Returns:
+
+- `Observable`
+
+---
+
 #### `:take(n)`
 
 Returns a new Observable that only produces the first n results of the original.
@@ -490,6 +506,20 @@ Returns a new Observable that completes when the specified Observable fires.
 Arguments:
 
 - `other` (`Observable`) - The Observable that triggers completion of the original.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:takeWhile(predicate)`
+
+Returns a new Observable that produces elements until the predicate returns falsy.
+
+Arguments:
+
+- `predicate` (`function`) - The predicate used to continue production of values.
 
 Returns:
 

@@ -41,6 +41,7 @@ RxLua
   - [unpack](#unpack)
   - [unwrap](#unwrap)
   - [window](#windowsize)
+  - [with](#withsources)
   - [wrap](#wrapsize)
 - [Scheduler](#scheduler)
 - [ImmediateScheduler](#immediatescheduler)
@@ -539,6 +540,20 @@ Returns an Observable that produces a sliding window of the values produced by t
 Arguments:
 
 - `size` (`number`) - The size of the window. The returned observable will produce this number of the most recent values as multiple arguments to onNext.
+
+Returns:
+
+- `Observable`
+
+---
+
+#### `:with(sources)`
+
+Returns an Observable that produces values from the original along with the most recently produced value from all other specified Observables. Note that only the first argument from each source Observable is used.
+
+Arguments:
+
+- `sources` (`Observable...`) - The Observables to include the most recent values from.
 
 Returns:
 

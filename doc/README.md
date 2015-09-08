@@ -72,15 +72,11 @@ Observers are simple objects that receive values from Observables.
 
 Creates a new Observer.
 
-Arguments:
-
-- `[onNext]` (`function`) - Called when the Observable produces a value.
-- `[onError]` (`function`) - Called when the Observable terminates due to an error.
-- `[onComplete]` (`function`) - Called when the Observable completes normally.
-
-Returns:
-
-- `Observer`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function (optional) |  | Called when the Observable produces a value. |
+| `onError` | function (optional) |  | Called when the Observable terminates due to an error. |
+| `onComplete` | function (optional) |  | Called when the Observable completes normally. |
 
 ---
 
@@ -88,9 +84,9 @@ Returns:
 
 Pushes zero or more values to the Observer.
 
-Arguments:
-
-- `values` (`*...`)
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  |  |
 
 ---
 
@@ -98,9 +94,9 @@ Arguments:
 
 Notify the Observer that an error has occurred.
 
-Arguments:
-
-- `[message]` (`string`) - A string describing what went wrong.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `message` | string (optional) |  | A string describing what went wrong. |
 
 ---
 
@@ -118,13 +114,9 @@ Observables push values to Observers.
 
 Creates a new Observable.
 
-Arguments:
-
-- `subscribe` (`function`) - The subscription function that produces values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `subscribe` | function |  | The subscription function that produces values. |
 
 ---
 
@@ -132,11 +124,11 @@ Returns:
 
 Shorthand for creating an Observer and passing it to this Observable's subscription function.
 
-Arguments:
-
-- `onNext` (`function`) - Called when the Observable produces a value.
-- `onError` (`function`) - Called when the Observable terminates due to an error.
-- `onComplete` (`function`) - Called when the Observable completes normally.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function |  | Called when the Observable produces a value. |
+| `onError` | function |  | Called when the Observable terminates due to an error. |
+| `onComplete` | function |  | Called when the Observable completes normally. |
 
 ---
 
@@ -144,13 +136,9 @@ Arguments:
 
 Creates an Observable that produces a single value.
 
-Arguments:
-
-- `value` (`*`)
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | * |  |  |
 
 ---
 
@@ -158,15 +146,11 @@ Returns:
 
 Creates an Observable that produces a range of values in a manner similar to a Lua for loop.
 
-Arguments:
-
-- `initial` (`number`) - The first value of the range, or the upper limit if no other arguments are specified.
-- `[limit]` (`number`) - The second value of the range.
-- `[step=1]` (`number`) - An amount to increment the value by each iteration.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `initial` | number |  | The first value of the range, or the upper limit if no other arguments are specified. |
+| `limit` | number (optional) |  | The second value of the range. |
+| `step` | number (optional) | 1 | An amount to increment the value by each iteration. |
 
 ---
 
@@ -174,15 +158,11 @@ Returns:
 
 Creates an Observable that produces values from a table.
 
-Arguments:
-
-- `table` (`table`) - The table used to create the Observable.
-- `[iterator=pairs]` (`function`) - An iterator used to iterate the table, e.g. pairs or ipairs.
-- `keys` (`boolean`) - Whether or not to also emit the keys of the table.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `table` | table |  | The table used to create the Observable. |
+| `iterator` | function (optional) | pairs | An iterator used to iterate the table, e.g. pairs or ipairs. |
+| `keys` | boolean |  | Whether or not to also emit the keys of the table. |
 
 ---
 
@@ -190,13 +170,9 @@ Returns:
 
 Creates an Observable that produces values when the specified coroutine yields.
 
-Arguments:
-
-- `coroutine` (`thread`)
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `coroutine` | thread |  |  |
 
 ---
 
@@ -204,9 +180,9 @@ Returns:
 
 Subscribes to this Observable and prints values it produces.
 
-Arguments:
-
-- `[name]` (`string`) - Prefixes the printed messages with a name.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | string (optional) |  | Prefixes the printed messages with a name. |
 
 ---
 
@@ -214,13 +190,9 @@ Arguments:
 
 Returns an Observable that only produces values from the original if they are different from the previous value.
 
-Arguments:
-
-- `comparator` (`function`) - A function used to compare 2 values. If unspecified, == is used.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `comparator` | function |  | A function used to compare 2 values. If unspecified, == is used. |
 
 ---
 
@@ -228,14 +200,10 @@ Returns:
 
 Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
 
-Arguments:
-
-- `observables` (`Observable...`) - One or more Observables to combine.
-- `combinator` (`function`) - A function that combines the latest result from each Observable and returns a single value.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `observables` | Observable... |  | One or more Observables to combine. |
+| `combinator` | function |  | A function that combines the latest result from each Observable and returns a single value. |
 
 ---
 
@@ -243,23 +211,15 @@ Returns:
 
 Returns a new Observable that produces the values of the first with falsy values removed.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:concat(sources)`
 
 Returns a new Observable that produces the values produced by all the specified Observables in the order they are specified.
 
-Arguments:
-
-- `sources` (`Observable...`) - The Observables to concatenate.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `sources` | Observable... |  | The Observables to concatenate. |
 
 ---
 
@@ -267,23 +227,15 @@ Returns:
 
 Returns a new Observable that produces the values from the original with duplicates removed.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:filter(predicate)`
 
 Returns a new Observable that only produces values of the first that satisfy a predicate.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to filter values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to filter values. |
 
 ---
 
@@ -291,9 +243,9 @@ Returns:
 
 Returns a new Observable that produces the first value of the original that satisfies a predicate.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to find a value.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to find a value. |
 
 ---
 
@@ -301,19 +253,11 @@ Arguments:
 
 Returns a new Observable that only produces the first result of the original.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:flatten()`
 
 Returns a new Observable that subscribes to the Observables produced by the original and produces their values.
-
-Returns:
-
-- `Observable`
 
 ---
 
@@ -321,23 +265,15 @@ Returns:
 
 Returns a new Observable that only produces the last result of the original.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:map(callback)`
 
 Returns a new Observable that produces the values of the original transformed by a function.
 
-Arguments:
-
-- `callback` (`function`) - The function to transform values from the original Observable.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `callback` | function |  | The function to transform values from the original Observable. |
 
 ---
 
@@ -345,19 +281,11 @@ Returns:
 
 Returns a new Observable that produces the maximum value produced by the original.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:min()`
 
 Returns a new Observable that produces the minimum value produced by the original.
-
-Returns:
-
-- `Observable`
 
 ---
 
@@ -365,13 +293,9 @@ Returns:
 
 Returns a new Observable that produces the values produced by all the specified Observables in the order they are produced.
 
-Arguments:
-
-- `sources` (`Observable...`) - One or more Observables to merge.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `sources` | Observable... |  | One or more Observables to merge. |
 
 ---
 
@@ -379,24 +303,15 @@ Returns:
 
 Returns an Observable that produces the values of the original inside tables.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:partition(predicate)`
 
 Returns two Observables: one that produces values for which the predicate returns truthy for, and another that produces values for which the predicate returns falsy.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to partition the values.
-
-Returns:
-
-- `Observable`
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to partition the values. |
 
 ---
 
@@ -404,13 +319,9 @@ Returns:
 
 Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
 
-Arguments:
-
-- `key` (`function`) - The key to extract from the table.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `key` | function |  | The key to extract from the table. |
 
 ---
 
@@ -418,14 +329,10 @@ Returns:
 
 Returns a new Observable that produces a single value computed by accumulating the results of running a function on each value produced by the original Observable.
 
-Arguments:
-
-- `accumulator` (`function`) - Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current values as the rest of the arguments.
-- `seed` (`*`) - A value to pass to the accumulator the first time it is run.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `accumulator` | function |  | Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current values as the rest of the arguments. |
+| `seed` | * |  | A value to pass to the accumulator the first time it is run. |
 
 ---
 
@@ -433,13 +340,9 @@ Returns:
 
 Returns a new Observable that produces values from the original which do not satisfy a predicate.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to reject values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to reject values. |
 
 ---
 
@@ -447,13 +350,9 @@ Returns:
 
 Returns a new Observable that skips over a specified number of values produced by the original and produces the rest.
 
-Arguments:
-
-- `[n=1]` (`number`) - The number of values to ignore.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `n` | number (optional) | 1 | The number of values to ignore. |
 
 ---
 
@@ -461,13 +360,9 @@ Returns:
 
 Returns a new Observable that skips over values produced by the original until the specified Observable produces a value.
 
-Arguments:
-
-- `other` (`Observable`) - The Observable that triggers the production of values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `other` | Observable |  | The Observable that triggers the production of values. |
 
 ---
 
@@ -475,13 +370,9 @@ Returns:
 
 Returns a new Observable that skips elements until the predicate returns falsy for one of them.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to continue skipping values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to continue skipping values. |
 
 ---
 
@@ -489,13 +380,9 @@ Returns:
 
 Returns a new Observable that only produces the first n results of the original.
 
-Arguments:
-
-- `[n=1]` (`number`) - The number of elements to produce before completing.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `n` | number (optional) | 1 | The number of elements to produce before completing. |
 
 ---
 
@@ -503,13 +390,9 @@ Returns:
 
 Returns a new Observable that completes when the specified Observable fires.
 
-Arguments:
-
-- `other` (`Observable`) - The Observable that triggers completion of the original.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `other` | Observable |  | The Observable that triggers completion of the original. |
 
 ---
 
@@ -517,13 +400,9 @@ Returns:
 
 Returns a new Observable that produces elements until the predicate returns falsy.
 
-Arguments:
-
-- `predicate` (`function`) - The predicate used to continue production of values.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function |  | The predicate used to continue production of values. |
 
 ---
 
@@ -531,15 +410,11 @@ Returns:
 
 Runs a function each time this Observable has activity. Similar to subscribe but does not create a subscription.
 
-Arguments:
-
-- `[onNext]` (`function`) - Run when the Observable produces values.
-- `[onError]` (`function`) - Run when the Observable encounters a problem.
-- `[onComplete]` (`function`) - Run when the Observable completes.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function (optional) |  | Run when the Observable produces values. |
+| `onError` | function (optional) |  | Run when the Observable encounters a problem. |
+| `onComplete` | function (optional) |  | Run when the Observable completes. |
 
 ---
 
@@ -547,19 +422,11 @@ Returns:
 
 Returns an Observable that unpacks the tables produced by the original.
 
-Returns:
-
-- `Observable`
-
 ---
 
 #### `:unwrap()`
 
 Returns an Observable that takes any values produced by the original that consist of multiple return values and produces each value individually.
-
-Returns:
-
-- `Observable`
 
 ---
 
@@ -567,13 +434,9 @@ Returns:
 
 Returns an Observable that produces a sliding window of the values produced by the original.
 
-Arguments:
-
-- `size` (`number`) - The size of the window. The returned observable will produce this number of the most recent values as multiple arguments to onNext.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | number |  | The size of the window. The returned observable will produce this number of the most recent values as multiple arguments to onNext. |
 
 ---
 
@@ -581,13 +444,9 @@ Returns:
 
 Returns an Observable that produces values from the original along with the most recently produced value from all other specified Observables. Note that only the first argument from each source Observable is used.
 
-Arguments:
-
-- `sources` (`Observable...`) - The Observables to include the most recent values from.
-
-Returns:
-
-- `Observable`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `sources` | Observable... |  | The Observables to include the most recent values from. |
 
 ---
 
@@ -595,9 +454,9 @@ Returns:
 
 Returns an Observable that buffers values from the original and produces them as multiple values.
 
-Arguments:
-
-- `size` (`number`) - The size of the buffer.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | number |  | The size of the buffer. |
 
 # Scheduler
 
@@ -613,19 +472,15 @@ Schedules Observables by running all operations immediately.
 
 Creates a new Immediate Scheduler.
 
-Returns:
-
-- `Scheduler.Immediate`
-
 ---
 
 #### `:schedule(action)`
 
 Schedules a function to be run on the scheduler. It is executed immediately.
 
-Arguments:
-
-- `action` (`function`) - The function to execute.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `action` | function |  | The function to execute. |
 
 # CooperativeScheduler
 
@@ -637,13 +492,9 @@ Manages Observables using coroutines and a virtual clock that must be updated ma
 
 Creates a new Cooperative Scheduler.
 
-Arguments:
-
-- `[currentTime=0]` (`number`) - A time to start the scheduler at.
-
-Returns:
-
-- `Scheduler.Cooperative`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `currentTime` | number (optional) | 0 | A time to start the scheduler at. |
 
 ---
 
@@ -651,10 +502,10 @@ Returns:
 
 Schedules a function to be run after an optional delay.
 
-Arguments:
-
-- `action` (`function`) - The function to execute. Will be converted into a coroutine. The coroutine may yield execution back to the scheduler with an optional number, which will put it to sleep for a time period.
-- `[delay=0]` (`number`) - Delay execution of the action by a time period.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `action` | function |  | The function to execute. Will be converted into a coroutine. The coroutine may yield execution back to the scheduler with an optional number, which will put it to sleep for a time period. |
+| `delay` | number (optional) | 0 | Delay execution of the action by a time period. |
 
 ---
 
@@ -662,9 +513,9 @@ Arguments:
 
 Triggers an update of the Cooperative Scheduler. The clock will be advanced and the scheduler will run any coroutines that are due to be run.
 
-Arguments:
-
-- `[delta=0]` (`number`) - An amount of time to advance the clock by. It is common to pass in the time in seconds or milliseconds elapsed since this function was last called.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `delta` | number (optional) | 0 | An amount of time to advance the clock by. It is common to pass in the time in seconds or milliseconds elapsed since this function was last called. |
 
 ---
 
@@ -682,13 +533,9 @@ Subjects function both as an Observer and as an Observable. Subjects inherit all
 
 Creates a new Subject.
 
-Arguments:
-
-- `value` (`*...`) - The initial values.
-
-Returns:
-
-- `Subject`
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | *... |  | The initial values. |
 
 ---
 
@@ -696,11 +543,11 @@ Returns:
 
 Creates a new Observer and attaches it to the Subject.
 
-Arguments:
-
-- `onNext` (`function`) - Called when the Subject produces a value.
-- `onError` (`function`) - Called when the Subject terminates due to an error.
-- `onComplete` (`function`) - Called when the Subject completes normally.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function |  | Called when the Subject produces a value. |
+| `onError` | function |  | Called when the Subject terminates due to an error. |
+| `onComplete` | function |  | Called when the Subject completes normally. |
 
 ---
 
@@ -708,9 +555,9 @@ Arguments:
 
 Pushes zero or more values to the Subject. It will be broadcasted to all Observers.
 
-Arguments:
-
-- `values` (`*...`)
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  |  |
 
 ---
 
@@ -718,9 +565,9 @@ Arguments:
 
 Signal to all Observers that an error has occurred.
 
-Arguments:
-
-- `[message]` (`string`) - A string describing what went wrong.
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `message` | string (optional) |  | A string describing what went wrong. |
 
 ---
 
@@ -733,8 +580,4 @@ Signal to all Observers that the Subject will not produce any more values.
 #### `:getValue()`
 
 Returns the last value emitted by the Subject, or the initial value passed to the constructor if nothing has been emitted yet.
-
-Returns:
-
-- `*...`
 

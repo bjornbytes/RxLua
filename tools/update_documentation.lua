@@ -66,32 +66,21 @@ for _, comment in ipairs(comments) do
     end
 
     if tags.arg then
-      io.write('Arguments:\n\n')
+      io.write('| Name | Type | Default | Description |\n')
+      io.write('|------|------|---------|-------------|\n')
 
       for _, arg in ipairs(tags.arg) do
         local name = arg.name
-        if arg.optional then
-          if arg.default then
-            name = '[' .. name .. '=' .. arg.default .. ']'
-          else
-            name = '[' .. name .. ']'
-          end
-        end
         name = '`' .. name .. '`'
-        local description = arg.description and (' - ' .. arg.description) or ''
-        local type = ' (`' .. arg.type .. '`)'
-        local line = '- ' .. name .. type .. description
+        local description = arg.description or ''
+        local type = arg.type
+        local default = ''
+        if arg.optional then
+          type = type .. ' (optional)'
+          default = arg.default or default
+        end
+        local line = '| ' .. name .. ' | ' .. type .. ' | ' .. default .. ' | ' .. description .. ' |'
         io.write(line .. '\n')
-      end
-
-      io.write('\n')
-    end
-
-    if tags.returns then
-      io.write('Returns:\n\n')
-
-      for _, result in ipairs(tags.returns) do
-        io.write('- `' .. result.type .. '`\n')
       end
 
       io.write('\n')

@@ -5,11 +5,13 @@ local unpack = table.unpack or unpack
 local function eq(x, y) return x == y end
 local function noop() end
 local function identity(x) return x end
+local function constant(x) return function() return x end end
 
 --- @class Observer
 -- @description Observers are simple objects that receive values from Observables.
 local Observer = {}
 Observer.__index = Observer
+Observer.__tostring = constant('Observer')
 
 --- Creates a new Observer.
 -- @arg {function=} onNext - Called when the Observable produces a value.
@@ -56,6 +58,7 @@ end
 -- @description Observables push values to Observers.
 local Observable = {}
 Observable.__index = Observable
+Observable.__tostring = constant('Observable')
 
 --- Creates a new Observable.
 -- @arg {function} subscribe - The subscription function that produces values.
@@ -930,6 +933,7 @@ local Scheduler = {}
 -- @description Schedules Observables by running all operations immediately.
 local Immediate = {}
 Immediate.__index = Immediate
+Immediate.__tostring = constant('ImmediateScheduler')
 
 --- Creates a new Immediate Scheduler.
 -- @returns {Scheduler.Immediate}
@@ -950,6 +954,7 @@ Scheduler.Immediate = Immediate
 -- manually.
 local Cooperative = {}
 Cooperative.__index = Cooperative
+Cooperative.__tostring = constant('CooperativeScheduler')
 
 --- Creates a new Cooperative Scheduler.
 -- @arg {number=0} currentTime - A time to start the scheduler at.
@@ -1015,6 +1020,7 @@ Scheduler.Cooperative = Cooperative
 -- be broadcasted to any subscribed Observers.
 local Subject = setmetatable({}, Observable)
 Subject.__index = Subject
+Subject.__tostring = constant('Subject')
 
 --- Creates a new Subject.
 -- @arg {*...} value - The initial values.

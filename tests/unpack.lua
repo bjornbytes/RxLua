@@ -1,0 +1,16 @@
+describe('unpack', function()
+  it('produces an error if its parent errors', function()
+    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:unpack().subscribe).to.fail()
+  end)
+
+  it('fails if the observable produces an element that is not a table', function()
+    expect(Rx.Observable.fromValue(3):unpack().subscribe).to.fail()
+  end)
+
+  it('produces all elements in the tables produced as multiple values', function()
+    local observable = Rx.Observable.fromTable({{1, 2, 3}, {4, 5, 6}}, ipairs):unpack()
+    expect(observable).to.produce({{1, 2, 3}, {4, 5, 6}})
+  end)
+end)

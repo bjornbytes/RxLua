@@ -21,7 +21,7 @@ describe('take', function()
   end)
 
   it('produces all values if it takes all of the values of the original', function()
-    local observable = Rx.Observable.fromTable({1, 2}):take(2)
+    local observable = Rx.Observable.fromTable({1, 2}, ipairs):take(2)
     expect(observable).to.produce(1, 2)
   end)
 

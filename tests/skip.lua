@@ -6,12 +6,12 @@ describe('skip', function()
   end)
 
   it('produces all values if the count is zero', function()
-    local observable = Rx.Observable.fromTable({2, 3, 4}):skip(0)
+    local observable = Rx.Observable.fromTable({2, 3, 4}, ipairs):skip(0)
     expect(observable).to.produce(2, 3, 4)
   end)
 
   it('produces all values if the count is less than zero', function()
-    local observable = Rx.Observable.fromTable({2, 3, 4}):skip(-3)
+    local observable = Rx.Observable.fromTable({2, 3, 4}, ipairs):skip(-3)
     expect(observable).to.produce(2, 3, 4)
   end)
 
@@ -21,7 +21,7 @@ describe('skip', function()
   end)
 
   it('produces no values if it skips over all of the values of the original', function()
-    local observable = Rx.Observable.fromTable({1, 2}):skip(2)
+    local observable = Rx.Observable.fromTable({1, 2}, ipairs):skip(2)
     expect(observable).to.produce({})
   end)
 

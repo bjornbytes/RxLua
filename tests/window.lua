@@ -1,0 +1,16 @@
+describe('window', function()
+  it('produces an error if its parent errors', function()
+    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:window().subscribe).to.fail()
+  end)
+
+  it('fails if size is not specified', function()
+    expect(Rx.Observable.fromRange(5):window().subscribe).to.fail()
+  end)
+
+  it('produces a specified number of the most recent values', function()
+    expect(Rx.Observable.fromRange(3):window(2)).to.produce({{1, 2}, {2, 3}})
+    expect(Rx.Observable.fromRange(3):window(3)).to.produce({{1, 2, 3}})
+  end)
+end)

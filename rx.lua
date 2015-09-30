@@ -849,9 +849,9 @@ function Observable:window(size)
     local function onNext(value)
       table.insert(window, value)
 
-      if #window > size then
-        table.remove(window, 1)
+      if #window >= size then
         observer:onNext(unpack(window))
+        table.remove(window, 1)
       end
     end
 

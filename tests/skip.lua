@@ -5,6 +5,16 @@ describe('skip', function()
     expect(observable:skip(1).subscribe).to.fail()
   end)
 
+  it('produces all values if the count is zero', function()
+    local observable = Rx.Observable.fromTable({2, 3, 4}):skip(0)
+    expect(observable).to.produce(2, 3, 4)
+  end)
+
+  it('produces all values if the count is less than zero', function()
+    local observable = Rx.Observable.fromTable({2, 3, 4}):skip(-3)
+    expect(observable).to.produce(2, 3, 4)
+  end)
+
   it('skips one element if no count is specified', function()
     local observable = Rx.Observable.fromTable({2, 3, 4}, ipairs):skip()
     expect(observable).to.produce(3, 4)

@@ -159,10 +159,12 @@ end
 
 --- Subscribes to this Observable and prints values it produces.
 -- @arg {string=} name - Prefixes the printed messages with a name.
-function Observable:dump(name)
+-- @arg {function=tostring} formatter - A function that formats one or more values to be printed.
+function Observable:dump(name, formatter)
   name = name and (name .. ' ') or ''
+  formatter = formatter or tostring
 
-  local onNext = function(...) print(name .. 'onNext: ' .. table.concat({...}, ', ')) end
+  local onNext = function(...) print(name .. 'onNext: ' .. formatter(...)) end
   local onError = function(e) print(name .. 'onError: ' .. e) end
   local onComplete = function() print(name .. 'onComplete') end
 

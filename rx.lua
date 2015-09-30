@@ -876,7 +876,7 @@ function Observable:with(...)
   local sources = {...}
 
   return Observable.create(function(observer)
-    local latest = {}
+    local latest = setmetatable({}, {__len = constant(#sources)})
 
     local function setLatest(i)
       return function(value)

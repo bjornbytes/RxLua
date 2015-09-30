@@ -627,23 +627,32 @@ end
 -- @returns {Observable}
 function Observable:skipUntil(other)
   return Observable.create(function(observer)
+    local triggered = false
     local function trigger()
-      local function onNext(...)
-        return observer:onNext(...)
-      end
-
-      local function onError(message)
-        return observer:onNext(message)
-      end
-
-      local function onComplete()
-        return observer:onComplete()
-      end
-
-      return self:subscribe(onNext, onError, onComplete)
+      triggered = true
     end
 
     other:subscribe(trigger, trigger, trigger)
+
+    local function onNext(...)
+      if triggered then
+        observer:onNext(...)
+      end
+    end
+
+    local function onError()
+      if triggered then
+        observer:onError()
+      end
+    end
+
+    local function onComplete()
+      if triggered then
+        observer:onComplete()
+      end
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
   end)
 end
 

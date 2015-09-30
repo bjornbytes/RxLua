@@ -506,11 +506,14 @@ function Observable:partition(predicate)
   return self:filter(predicate), self:reject(predicate)
 end
 
---- Returns a new Observable that produces values computed by extracting the given key from the
+--- Returns a new Observable that produces values computed by extracting the given keys from the
 -- tables produced by the original.
--- @arg {function} key - The key to extract from the table.
+-- @arg {string...} keys - The key to extract from the table. Multiple keys can be specified to
+--                         recursively pluck values from nested tables.
 -- @returns {Observable}
-function Observable:pluck(key)
+function Observable:pluck(key, ...)
+  if not key then return self end
+
   return Observable.create(function(observer)
     local function onNext(t)
       return observer:onNext(t[key])
@@ -525,7 +528,7 @@ function Observable:pluck(key)
     end
 
     return self:subscribe(onNext, onError, onComplete)
-  end)
+  end):pluck(...)
 end
 
 --- Returns a new Observable that produces a single value computed by accumulating the results of

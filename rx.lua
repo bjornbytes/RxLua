@@ -452,12 +452,6 @@ function Observable:max()
   return self:reduce(math.max)
 end
 
---- Returns a new Observable that produces the minimum value produced by the original.
--- @returns {Observable}
-function Observable:min()
-  return self:reduce(math.min)
-end
-
 --- Returns a new Observable that produces the values produced by all the specified Observables in
 -- the order they are produced.
 -- @arg {Observable...} sources - One or more Observables to merge.
@@ -489,6 +483,12 @@ function Observable:merge(...)
       sources[i]:subscribe(onNext, onError, onComplete(i))
     end
   end)
+end
+
+--- Returns a new Observable that produces the minimum value produced by the original.
+-- @returns {Observable}
+function Observable:min()
+  return self:reduce(math.min)
 end
 
 --- Returns an Observable that produces the values of the original inside tables.

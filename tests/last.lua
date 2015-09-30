@@ -15,5 +15,3 @@ describe('last', function()
     expect(observable).to.produce(5)
   end)
 end)
-
-

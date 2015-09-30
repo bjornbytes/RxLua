@@ -15,5 +15,3 @@ describe('first', function()
     expect(observable).to.produce(1)
   end)
 end)
-
-

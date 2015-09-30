@@ -670,7 +670,7 @@ function Observable:skipWhile(predicate)
         skipping = predicate(...)
       end
 
-      if not skipipng then
+      if not skipping then
         return observer:onNext(...)
       end
     end

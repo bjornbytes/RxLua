@@ -25,6 +25,21 @@ Documentation
 
 See [here](doc).
 
+Tests
+---
+
+Uses [lust](https://github.com/bjornbytes/lust). Run with:
+
+```
+lua tests/runner.lua
+```
+
+or, to run a specific test:
+
+```
+lua tests/runner.lua skipUntil
+```
+
 Related
 ---
 

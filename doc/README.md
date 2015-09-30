@@ -13,7 +13,7 @@ RxLua
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
-  - [dump](#dumpname)
+  - [dump](#dumpname-formatter)
   - [changes](#changescomparator)
   - [combine](#combineobservables-combinator)
   - [compact](#compact)
@@ -26,11 +26,11 @@ RxLua
   - [last](#last)
   - [map](#mapcallback)
   - [max](#max)
-  - [min](#min)
   - [merge](#mergesources)
+  - [min](#min)
   - [pack](#pack)
   - [partition](#partitionpredicate)
-  - [pluck](#pluckkey)
+  - [pluck](#pluckkeys)
   - [reduce](#reduceaccumulator-seed)
   - [reject](#rejectpredicate)
   - [skip](#skipn)
@@ -176,13 +176,14 @@ Creates an Observable that produces values when the specified coroutine yields.
 
 ---
 
-#### `:dump(name)`
+#### `:dump(name, formatter)`
 
 Subscribes to this Observable and prints values it produces.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `name` | string (optional) |  | Prefixes the printed messages with a name. |
+| `formatter` | function (optional) | tostring | A function that formats one or more values to be printed. |
 
 ---
 
@@ -283,12 +284,6 @@ Returns a new Observable that produces the maximum value produced by the origina
 
 ---
 
-#### `:min()`
-
-Returns a new Observable that produces the minimum value produced by the original.
-
----
-
 #### `:merge(sources)`
 
 Returns a new Observable that produces the values produced by all the specified Observables in the order they are produced.
@@ -296,6 +291,12 @@ Returns a new Observable that produces the values produced by all the specified 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `sources` | Observable... |  | One or more Observables to merge. |
+
+---
+
+#### `:min()`
+
+Returns a new Observable that produces the minimum value produced by the original.
 
 ---
 
@@ -315,13 +316,13 @@ Returns two Observables: one that produces values for which the predicate return
 
 ---
 
-#### `:pluck(key)`
+#### `:pluck(keys)`
 
-Returns a new Observable that produces values computed by extracting the given key from the tables produced by the original.
+Returns a new Observable that produces values computed by extracting the given keys from the tables produced by the original.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `key` | function |  | The key to extract from the table. |
+| `keys` | string... |  | The key to extract from the table. Multiple keys can be specified to recursively pluck values from nested tables. |
 
 ---
 

@@ -540,11 +540,16 @@ end
 -- @returns {Observable}
 function Observable:reduce(accumulator, seed)
   return Observable.create(function(observer)
-    local result
+    local result = seed
+    local first = true
 
     local function onNext(...)
-      result = result or seed or (...)
-      result = accumulator(result, ...)
+      if first and seed == nil then
+        result = ...
+        first = false
+      else
+        result = accumulator(result, ...)
+      end
     end
 
     local function onError(e)

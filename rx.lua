@@ -923,7 +923,7 @@ function Observable:wrap(size)
       for i = 1, #values do
         table.insert(buffer, values[i])
         if #buffer >= size then
-          return emit()
+          emit()
         end
       end
     end

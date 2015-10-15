@@ -43,6 +43,7 @@ lua tests/runner.lua skipUntil
 Related
 ---
 
+- [Trello board](https://trello.com/b/Q9dJicKK) for project roadmap and discussion.
 - [RxLove](https://github.com/bjornbytes/RxLove)
 
 License

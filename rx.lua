@@ -1,6 +1,6 @@
 local rx
 
-local pack = function(...) return {...} end
+local pack = table.pack or function(...) return { n = select('#', ...), ... } end
 local unpack = table.unpack or unpack
 local function eq(x, y) return x == y end
 local function noop() end

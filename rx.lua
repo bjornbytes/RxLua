@@ -1083,58 +1083,110 @@ Subject.__index = Subject
 Subject.__tostring = constant('Subject')
 
 --- Creates a new Subject.
--- @arg {*...} value - The initial values.
 -- @returns {Subject}
-function Subject.create(...)
+function Subject.create()
   local self = {
-    value = {...},
-    observers = {}
+    observers = {},
+    stopped = false
   }
 
   return setmetatable(self, Subject)
 end
 
 --- Creates a new Observer and attaches it to the Subject.
--- @arg {function} onNext - Called when the Subject produces a value.
+-- @arg {function|table} onNext|observer - A function called when the Subject produces a value or
+--                                         an existing Observer to attach to the Subject.
 -- @arg {function} onError - Called when the Subject terminates due to an error.
 -- @arg {function} onComplete - Called when the Subject completes normally.
 function Subject:subscribe(onNext, onError, onComplete)
-  table.insert(self.observers, Observer.create(onNext, onError, onComplete))
+  local observer
+
+  if type(onNext) == 'table' then
+    observer = onNext
+  else
+    observer = Observer.create(onNext, onError, onComplete)
+  end
+
+  table.insert(self.observers, observer)
 end
 
---- Pushes zero or more values to the Subject. It will be broadcasted to all Observers.
+--- Pushes zero or more values to the Subject. They will be broadcasted to all Observers.
 -- @arg {*...} values
 function Subject:onNext(...)
-  self.value = {...}
-
-  for i = 1, #self.observers do
-    self.observers[i]:onNext(...)
+  if not self.stopped then
+    for i = 1, #self.observers do
+      self.observers[i]:onNext(...)
+    end
   end
 end
 
 --- Signal to all Observers that an error has occurred.
 -- @arg {string=} message - A string describing what went wrong.
 function Subject:onError(message)
-  for i = 1, #self.observers do
-    self.observers[i]:onError(message)
+  if not self.stopped then
+    for i = 1, #self.observers do
+      self.observers[i]:onError(message)
+    end
+
+    self.stopped = true
   end
 end
 
 --- Signal to all Observers that the Subject will not produce any more values.
 function Subject:onComplete()
-  for i = 1, #self.observers do
-    self.observers[i]:onComplete()
+  if not self.stopped then
+    for i = 1, #self.observers do
+      self.observers[i]:onComplete()
+    end
+
+    self.stopped = true
   end
 end
 
---- Returns the last value emitted by the Subject, or the initial value passed to the constructor
--- if nothing has been emitted yet.
--- @returns {*...}
-function Subject:getValue()
-  return unpack(self.value or {})
+Subject.__call = Subject.onNext
+
+--- @class BehaviorSubject
+-- @description A Subject that tracks its current value. Provides an accessor to retrieve the most
+-- recent pushed value, and all subscribers immediately receive the latest value.
+local BehaviorSubject = setmetatable({}, Subject)
+BehaviorSubject.__index = BehaviorSubject
+BehaviorSubject.__tostring = constant('BehaviorSubject')
+
+--- Creates a new BehaviorSubject.
+-- @arg {*...} value - The initial values.
+-- @returns {Subject}
+function BehaviorSubject.create(...)
+  local self = {
+    observers = {},
+    stopped = false
+  }
+
+  if select('#', ...) > 0 then
+    self.value = pack(...)
+  end
+
+  return setmetatable(self, BehaviorSubject)
 end
 
-Subject.__call = Subject.onNext
+--- Creates a new Observer and attaches it to the Subject. Immediately broadcasts the most recent
+-- value to the Observer.
+-- @arg {function} onNext - Called when the Subject produces a value.
+-- @arg {function} onError - Called when the Subject terminates due to an error.
+-- @arg {function} onComplete - Called when the Subject completes normally.
+function BehaviorSubject:subscribe(onNext, onError, onComplete)
+  local observer = Observer.create(onNext, onError, onComplete)
+  Subject.subscribe(self, observer)
+  if self.value then
+    observer:onNext(unpack(self.value))
+  end
+end
+
+--- Pushes zero or more values to the BehaviorSubject. They will be broadcasted to all Observers.
+-- @arg {*...} values
+function BehaviorSubject:onNext(...)
+  self.value = pack(...)
+  return Subject.onNext(self, ...)
+end
 
 rx = {
   Subscription = Subscription,
@@ -1142,7 +1194,8 @@ rx = {
   Observable = Observable,
   Scheduler = Scheduler,
   scheduler = Scheduler.Immediate.create(),
-  Subject = Subject
+  Subject = Subject,
+  BehaviorSubject = BehaviorSubject
 }
 
 return rx

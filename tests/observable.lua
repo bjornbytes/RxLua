@@ -123,8 +123,8 @@ describe('Observable', function()
         return 3
       end)
 
-      Rx.scheduler = Rx.Scheduler.Cooperative.create()
-      local observable = Rx.Observable.fromCoroutine(coroutine)
+      Rx.scheduler = Rx.CooperativeScheduler.create()
+      local observable = Rx.Observable.fromCoroutine(coroutine, Rx.scheduler)
       local onNext, onError, onComplete = observableSpy(observable)
       repeat Rx.scheduler:update()
       until Rx.scheduler:isEmpty()
@@ -138,8 +138,8 @@ describe('Observable', function()
         return 3
       end
 
-      Rx.scheduler = Rx.Scheduler.Cooperative.create()
-      local observable = Rx.Observable.fromCoroutine(coroutine)
+      Rx.scheduler = Rx.CooperativeScheduler.create()
+      local observable = Rx.Observable.fromCoroutine(coroutine, Rx.scheduler)
       local onNext, onError, onComplete = observableSpy(observable)
       repeat Rx.scheduler:update()
       until Rx.scheduler:isEmpty()

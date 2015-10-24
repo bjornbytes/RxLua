@@ -9,7 +9,7 @@ describe('combine', function()
     local observableB = Rx.Observable.fromValue('b')
     local observableC = Rx.Observable.fromValue('c')
     local combinator = spy()
-    Rx.Observable.combine(observableA, observableB, observableC, combinator):subscribe()
+    Rx.Observable.combine(observableA, observableB, observableC, function(...) combinator(...) end):subscribe()
     expect(combinator).to.equal({{'a', 'b', 'c'}})
   end)
 

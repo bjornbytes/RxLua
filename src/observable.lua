@@ -117,37 +117,6 @@ function Observable:dump(name, formatter)
   return self:subscribe(onNext, onError, onComplete)
 end
 
---- Returns an Observable that only produces values from the original if they are different from
--- the previous value.
--- @arg {function} comparator - A function used to compare 2 values. If unspecified, == is used.
--- @returns {Observable}
-function Observable:distinctUntilChanged(comparator)
-  comparator = comparator or util.eq
-
-  return Observable.create(function(observer)
-    local first = true
-    local currentValue = nil
-
-    local function onNext(value, ...)
-      if first or not comparator(value, currentValue) then
-        observer:onNext(value, ...)
-        currentValue = value
-        first = false
-      end
-    end
-
-    local function onError(message)
-      return observer:onError(onError)
-    end
-
-    local function onComplete()
-      return observer:onComplete()
-    end
-
-    return self:subscribe(onNext, onError, onComplete)
-  end)
-end
-
 --- Returns a new Observable that runs a combinator function on the most recent values from a set
 -- of Observables whenever any of them produce a new value. The results of the combinator function
 -- are produced by the new Observable.
@@ -252,6 +221,37 @@ function Observable:distinct()
 
     local function onError(e)
       return observer:onError(e)
+    end
+
+    local function onComplete()
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
+--- Returns an Observable that only produces values from the original if they are different from
+-- the previous value.
+-- @arg {function} comparator - A function used to compare 2 values. If unspecified, == is used.
+-- @returns {Observable}
+function Observable:distinctUntilChanged(comparator)
+  comparator = comparator or util.eq
+
+  return Observable.create(function(observer)
+    local first = true
+    local currentValue = nil
+
+    local function onNext(value, ...)
+      if first or not comparator(value, currentValue) then
+        observer:onNext(value, ...)
+        currentValue = value
+        first = false
+      end
+    end
+
+    local function onError(message)
+      return observer:onError(onError)
     end
 
     local function onComplete()

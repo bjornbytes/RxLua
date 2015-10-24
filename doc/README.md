@@ -17,11 +17,11 @@ RxLua
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname-formatter)
-  - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
   - [distinct](#distinct)
+  - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [filter](#filterpredicate)
   - [find](#findpredicate)
   - [first](#first)
@@ -213,16 +213,6 @@ Subscribes to this Observable and prints values it produces.
 
 ---
 
-#### `:distinctUntilChanged(comparator)`
-
-Returns an Observable that only produces values from the original if they are different from the previous value.
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `comparator` | function |  | A function used to compare 2 values. If unspecified, == is used. |
-
----
-
 #### `:combineLatest(observables, combinator)`
 
 Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
@@ -253,6 +243,16 @@ Returns a new Observable that produces the values produced by all the specified 
 #### `:distinct()`
 
 Returns a new Observable that produces the values from the original with duplicates removed.
+
+---
+
+#### `:distinctUntilChanged(comparator)`
+
+Returns an Observable that only produces values from the original if they are different from the previous value.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `comparator` | function |  | A function used to compare 2 values. If unspecified, == is used. |
 
 ---
 

@@ -150,6 +150,7 @@ describe('Observable', function()
   describe('dump', function()
   end)
 
+  dofile('tests/all.lua')
   dofile('tests/combineLatest.lua')
   dofile('tests/compact.lua')
   dofile('tests/concat.lua')

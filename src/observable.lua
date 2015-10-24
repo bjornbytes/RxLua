@@ -117,6 +117,32 @@ function Observable:dump(name, formatter)
   return self:subscribe(onNext, onError, onComplete)
 end
 
+--- Determine whether all items emitted by an Observable meet some criteria.
+-- @arg {function=identity} predicate - The predicate used to evaluate objects.
+function Observable:all(predicate)
+  predicate = predicate or util.identity
+
+  return Observable.create(function(observer)
+    local function onNext(...)
+      if not predicate(...) then
+        observer:onNext(false)
+        observer:onComplete()
+      end
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onNext(true)
+      return observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns a new Observable that runs a combinator function on the most recent values from a set
 -- of Observables whenever any of them produce a new value. The results of the combinator function
 -- are produced by the new Observable.

@@ -17,6 +17,7 @@ RxLua
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname-formatter)
+  - [all](#allpredicate)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -210,6 +211,16 @@ Subscribes to this Observable and prints values it produces.
 |------|------|---------|-------------|
 | `name` | string (optional) |  | Prefixes the printed messages with a name. |
 | `formatter` | function (optional) | tostring | A function that formats one or more values to be printed. |
+
+---
+
+#### `:all(predicate)`
+
+Determine whether all items emitted by an Observable meet some criteria.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function (optional) | identity | The predicate used to evaluate objects. |
 
 ---
 

@@ -1,0 +1,25 @@
+describe('all', function()
+  it('passes through errors', function()
+    local observable = Rx.Observable.create(function(observer) observer:onError() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:all().subscribe).to.fail()
+  end)
+
+  it('produces true if all elements satisfy the predicate', function()
+    local observable = Rx.Observable.fromRange(5):all(function(x) return x < 10 end)
+    expect(observable).to.produce({{true}})
+  end)
+
+  it('produces false if one element does not satisfy the predicate', function()
+    local observable = Rx.Observable.fromRange(5):all(function(x) return x ~= 3 end)
+    expect(observable).to.produce({{false}})
+  end)
+
+  it('uses the identity function as a predicate if none is specified', function()
+    local observable = Rx.Observable.fromValue(false):all()
+    expect(observable).to.produce({{false}})
+
+    observable = Rx.Observable.fromValue(true):all()
+    expect(observable).to.produce({{true}})
+  end)
+end)

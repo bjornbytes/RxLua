@@ -12,6 +12,9 @@ RxLua
 - [Observable](#observable)
   - [create](#createsubscribe)
   - [subscribe](#subscribeonnext-onerror-oncomplete)
+  - [empty](#empty)
+  - [never](#never)
+  - [throw](#throwmessage)
   - [fromValue](#fromvaluevalue)
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
@@ -156,6 +159,24 @@ Shorthand for creating an Observer and passing it to this Observable's subscript
 | `onNext` | function |  | Called when the Observable produces a value. |
 | `onError` | function |  | Called when the Observable terminates due to an error. |
 | `onComplete` | function |  | Called when the Observable completes normally. |
+
+---
+
+#### `:empty()`
+
+Returns an Observable that immediately completes without producing a value.
+
+---
+
+#### `:never()`
+
+Returns an Observable that never produces values and never completes.
+
+---
+
+#### `:throw(message)`
+
+Returns an Observable that immediately produces an error.
 
 ---
 

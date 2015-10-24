@@ -29,6 +29,25 @@ function Observable:subscribe(onNext, onError, onComplete)
   end
 end
 
+--- Returns an Observable that immediately completes without producing a value.
+function Observable:empty()
+  return Observable.create(function(observer)
+    observer:onComplete()
+  end)
+end
+
+--- Returns an Observable that never produces values and never completes.
+function Observable:never()
+  return Observable.create(function(observer) end)
+end
+
+--- Returns an Observable that immediately produces an error.
+function Observable:throw(message)
+  return Observable.create(function(observer)
+    observer:onError(message)
+  end)
+end
+
 --- Creates an Observable that produces a single value.
 -- @arg {*} value
 -- @returns {Observable}

@@ -18,7 +18,7 @@ RxLua
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname-formatter)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
-  - [combine](#combineobservables-combinator)
+  - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
   - [distinct](#distinct)
@@ -223,7 +223,7 @@ Returns an Observable that only produces values from the original if they are di
 
 ---
 
-#### `:combine(observables, combinator)`
+#### `:combineLatest(observables, combinator)`
 
 Returns a new Observable that runs a combinator function on the most recent values from a set of Observables whenever any of them produce a new value. The results of the combinator function are produced by the new Observable.
 

@@ -206,7 +206,7 @@ end
 -- the previous value.
 -- @arg {function} comparator - A function used to compare 2 values. If unspecified, == is used.
 -- @returns {Observable}
-function Observable:changes(comparator)
+function Observable:distinctUntilChanged(comparator)
   comparator = comparator or util.eq
 
   return Observable.create(function(observer)

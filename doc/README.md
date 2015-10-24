@@ -17,7 +17,7 @@ RxLua
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname-formatter)
-  - [changes](#changescomparator)
+  - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [combine](#combineobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -213,7 +213,7 @@ Subscribes to this Observable and prints values it produces.
 
 ---
 
-#### `:changes(comparator)`
+#### `:distinctUntilChanged(comparator)`
 
 Returns an Observable that only produces values from the original if they are different from the previous value.
 

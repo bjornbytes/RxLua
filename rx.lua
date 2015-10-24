@@ -844,7 +844,7 @@ function Observable:tap(_onNext, _onError, _onComplete)
   end)
 end
 
---- Returns an Observable that util.unpacks the tables produced by the original.
+--- Returns an Observable that unpacks the tables produced by the original.
 -- @returns {Observable}
 function Observable:unpack()
   return self:map(util.unpack)

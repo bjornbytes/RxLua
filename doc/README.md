@@ -1,6 +1,9 @@
 RxLua
 ===
 
+- [Subscription](#subscription)
+  - [create](#createaction)
+  - [unsubscribe](#unsubscribe)
 - [Observer](#observer)
   - [create](#createonnext-onerror-oncomplete)
   - [onNext](#onnextvalues)
@@ -45,7 +48,6 @@ RxLua
   - [window](#windowsize)
   - [with](#withsources)
   - [wrap](#wrapsize)
-- [Scheduler](#scheduler)
 - [ImmediateScheduler](#immediatescheduler)
   - [create](#create)
   - [schedule](#scheduleaction)
@@ -55,12 +57,36 @@ RxLua
   - [update](#updatedelta)
   - [isEmpty](#isempty)
 - [Subject](#subject)
-  - [create](#createvalue)
+  - [create](#create)
   - [subscribe](#subscribeonnext-onerror-oncomplete)
   - [onNext](#onnextvalues)
   - [onError](#onerrormessage)
   - [onComplete](#oncomplete)
+- [BehaviorSubject](#behaviorsubject)
+  - [create](#createvalue)
+  - [subscribe](#subscribeonnext-onerror-oncomplete)
+  - [onNext](#onnextvalues)
   - [getValue](#getvalue)
+
+# Subscription
+
+A handle representing the link between an Observer and an Observable, as well as any work required to clean up after the Observable completes or the Observer unsubscribes.
+
+---
+
+#### `.create(action)`
+
+Creates a new Subscription.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `action` | function (optional) |  | The action to run when the subscription is unsubscribed. It will only be run once. |
+
+---
+
+#### `:unsubscribe()`
+
+Unsubscribes the subscription, performing any necessary cleanup work.
 
 # Observer
 
@@ -459,10 +485,6 @@ Returns an Observable that buffers values from the original and produces them as
 |------|------|---------|-------------|
 | `size` | number |  | The size of the buffer. |
 
-# Scheduler
-
-Schedulers manage groups of Observables.
-
 # ImmediateScheduler
 
 Schedules Observables by running all operations immediately.
@@ -471,7 +493,7 @@ Schedules Observables by running all operations immediately.
 
 #### `.create()`
 
-Creates a new Immediate Scheduler.
+Creates a new ImmediateScheduler.
 
 ---
 
@@ -491,7 +513,7 @@ Manages Observables using coroutines and a virtual clock that must be updated ma
 
 #### `.create(currentTime)`
 
-Creates a new Cooperative Scheduler.
+Creates a new CooperativeScheduler.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -512,7 +534,7 @@ Schedules a function to be run after an optional delay.
 
 #### `:update(delta)`
 
-Triggers an update of the Cooperative Scheduler. The clock will be advanced and the scheduler will run any coroutines that are due to be run.
+Triggers an update of the CooperativeScheduler. The clock will be advanced and the scheduler will run any coroutines that are due to be run.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -522,7 +544,7 @@ Triggers an update of the Cooperative Scheduler. The clock will be advanced and 
 
 #### `:isEmpty()`
 
-Returns whether or not the Cooperative Scheduler's queue is empty.
+Returns whether or not the CooperativeScheduler's queue is empty.
 
 # Subject
 
@@ -530,13 +552,9 @@ Subjects function both as an Observer and as an Observable. Subjects inherit all
 
 ---
 
-#### `.create(value)`
+#### `.create()`
 
 Creates a new Subject.
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | *... |  | The initial values. |
 
 ---
 
@@ -546,7 +564,7 @@ Creates a new Observer and attaches it to the Subject.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `onNext` | function |  | Called when the Subject produces a value. |
+| `onNext` | function|table |  | A function called when the Subject produces a value or an existing Observer to attach to the Subject. |
 | `onError` | function |  | Called when the Subject terminates due to an error. |
 | `onComplete` | function |  | Called when the Subject completes normally. |
 
@@ -554,7 +572,7 @@ Creates a new Observer and attaches it to the Subject.
 
 #### `:onNext(values)`
 
-Pushes zero or more values to the Subject. It will be broadcasted to all Observers.
+Pushes zero or more values to the Subject. They will be broadcasted to all Observers.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
@@ -575,6 +593,42 @@ Signal to all Observers that an error has occurred.
 #### `:onComplete()`
 
 Signal to all Observers that the Subject will not produce any more values.
+
+# BehaviorSubject
+
+A Subject that tracks its current value. Provides an accessor to retrieve the most recent pushed value, and all subscribers immediately receive the latest value.
+
+---
+
+#### `.create(value)`
+
+Creates a new BehaviorSubject.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | *... |  | The initial values. |
+
+---
+
+#### `:subscribe(onNext, onError, onComplete)`
+
+Creates a new Observer and attaches it to the Subject. Immediately broadcasts the most recent value to the Observer.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function |  | Called when the Subject produces a value. |
+| `onError` | function |  | Called when the Subject terminates due to an error. |
+| `onComplete` | function |  | Called when the Subject completes normally. |
+
+---
+
+#### `:onNext(values)`
+
+Pushes zero or more values to the BehaviorSubject. They will be broadcasted to all Observers.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  |  |
 
 ---
 

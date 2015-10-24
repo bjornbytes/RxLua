@@ -250,6 +250,34 @@ function Observable:concat(other, ...)
   end)
 end
 
+--- Returns an Observable that produces a single value representing the number of values produced
+-- by the source value that satisfy an optional predicate.
+-- @arg {function=} predicate - The predicate used to match values.
+function Observable:count(predicate)
+  predicate = predicate or util.constant(true)
+
+  return Observable.create(function(observer)
+    local count = 0
+
+    local function onNext(...)
+      if predicate(...) then
+        count = count + 1
+      end
+    end
+
+    local function onError(e)
+      return observer:onError(e)
+    end
+
+    local function onComplete()
+      observer:onNext(count)
+      observer:onComplete()
+    end
+
+    return self:subscribe(onNext, onError, onComplete)
+  end)
+end
+
 --- Returns a new Observable that produces the values from the original with duplicates removed.
 -- @returns {Observable}
 function Observable:distinct()

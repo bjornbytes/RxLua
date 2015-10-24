@@ -24,6 +24,7 @@ RxLua
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
+  - [count](#countpredicate)
   - [distinct](#distinct)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [filter](#filterpredicate)
@@ -269,6 +270,16 @@ Returns a new Observable that produces the values produced by all the specified 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `sources` | Observable... |  | The Observables to concatenate. |
+
+---
+
+#### `:count(predicate)`
+
+Returns an Observable that produces a single value representing the number of values produced by the source value that satisfy an optional predicate.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `predicate` | function (optional) |  | The predicate used to match values. |
 
 ---
 

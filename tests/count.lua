@@ -1,0 +1,17 @@
+describe('count', function()
+  it('passes through errors', function()
+    local observable = Rx.Observable.create(function(observer) observer:onError() end)
+    expect(observable.subscribe).to.fail()
+    expect(observable:count().subscribe).to.fail()
+  end)
+
+  it('produces a single value representing the number of elements produced by the source', function()
+    local observable = Rx.Observable.fromRange(5):count()
+    expect(observable).to.produce(5)
+  end)
+
+  it('uses the predicate to filter for values if it is specified', function()
+    local observable = Rx.Observable.fromRange(5):count(function(x) return x > 3 end)
+    expect(observable).to.produce(2)
+  end)
+end)

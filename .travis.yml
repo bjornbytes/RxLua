@@ -1,7 +1,11 @@
 language: c
 
 before_install:
-    - sudo apt-get install lua5.1 -y
+  - sudo apt-get install lua5.1 -y
 
 script:
-    - lua tests/runner.lua
+  - lua tests/runner.lua
+
+branches:
+  only:
+    - master

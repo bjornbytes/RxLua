@@ -4,16 +4,16 @@ describe('Observer', function()
       expect(Rx.Observer.create()).to.be.an(Rx.Observer)
     end)
 
-    it('assigns onNext, onError, and onComplete', function()
+    it('assigns onNext, onError, and onCompleted', function()
       local function onNext() end
       local function onError() end
-      local function onComplete() end
+      local function onCompleted() end
 
-      local observer = Rx.Observer.create(onNext, onError, onComplete)
+      local observer = Rx.Observer.create(onNext, onError, onCompleted)
 
       expect(observer._onNext).to.equal(onNext)
       expect(observer._onError).to.equal(onError)
-      expect(observer._onComplete).to.equal(onComplete)
+      expect(observer._onCompleted).to.equal(onCompleted)
     end)
 
     it('initializes stopped to false', function()
@@ -68,24 +68,24 @@ describe('Observer', function()
     end)
   end)
 
-  describe('onComplete', function()
-    it('calls _onComplete with no arguments', function()
+  describe('onCompleted', function()
+    it('calls _onCompleted with no arguments', function()
       local observer = Rx.Observer.create()
-      local function run() observer:onComplete(1, 2, 3) end
-      expect(spy(observer, '_onComplete', run)).to.equal({{}})
+      local function run() observer:onCompleted(1, 2, 3) end
+      expect(spy(observer, '_onCompleted', run)).to.equal({{}})
     end)
 
     it('sets stopped to true', function()
       local observer = Rx.Observer.create()
-      observer:onComplete()
+      observer:onCompleted()
       expect(observer.stopped).to.equal(true)
     end)
 
-    it('does not call _onComplete if stopped is already true', function()
+    it('does not call _onCompleted if stopped is already true', function()
       local observer = Rx.Observer.create()
       observer.stopped = true
-      local function run() observer:onComplete() end
-      expect(#spy(observer, '_onComplete', run)).to.equal(0)
+      local function run() observer:onCompleted() end
+      expect(#spy(observer, '_onCompleted', run)).to.equal(0)
     end)
   end)
 end)

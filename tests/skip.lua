@@ -27,10 +27,10 @@ describe('skip', function()
 
   it('completes and does not fail if it skips over more values than were produced', function()
     local observable = Rx.Observable.fromValue(3):skip(5)
-    local onNext, onError, onComplete = observableSpy(observable)
+    local onNext, onError, onCompleted = observableSpy(observable)
     expect(#onNext).to.equal(0)
     expect(#onError).to.equal(0)
-    expect(#onComplete).to.equal(1)
+    expect(#onCompleted).to.equal(1)
   end)
 
   it('produces the elements it did not skip over', function()

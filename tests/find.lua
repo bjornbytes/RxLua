@@ -16,7 +16,7 @@ describe('find', function()
     local observable = Rx.Observable.create(function(observer)
       observer:onNext(1, 2, 3)
       observer:onNext(4, 5, 6)
-      observer:onComplete()
+      observer:onCompleted()
     end)
 
     observable:find(predicate):subscribe()

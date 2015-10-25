@@ -5,13 +5,13 @@ RxLua
   - [create](#createaction)
   - [unsubscribe](#unsubscribe)
 - [Observer](#observer)
-  - [create](#createonnext-onerror-oncomplete)
+  - [create](#createonnext-onerror-oncompleted)
   - [onNext](#onnextvalues)
   - [onError](#onerrormessage)
-  - [onComplete](#oncomplete)
+  - [onCompleted](#oncompleted)
 - [Observable](#observable)
   - [create](#createsubscribe)
-  - [subscribe](#subscribeonnext-onerror-oncomplete)
+  - [subscribe](#subscribeonnext-onerror-oncompleted)
   - [empty](#empty)
   - [never](#never)
   - [throw](#throwmessage)
@@ -47,7 +47,7 @@ RxLua
   - [take](#taken)
   - [takeUntil](#takeuntilother)
   - [takeWhile](#takewhilepredicate)
-  - [tap](#taponnext-onerror-oncomplete)
+  - [tap](#taponnext-onerror-oncompleted)
   - [unpack](#unpack)
   - [unwrap](#unwrap)
   - [window](#windowsize)
@@ -63,13 +63,13 @@ RxLua
   - [isEmpty](#isempty)
 - [Subject](#subject)
   - [create](#create)
-  - [subscribe](#subscribeonnext-onerror-oncomplete)
+  - [subscribe](#subscribeonnext-onerror-oncompleted)
   - [onNext](#onnextvalues)
   - [onError](#onerrormessage)
-  - [onComplete](#oncomplete)
+  - [onCompleted](#oncompleted)
 - [BehaviorSubject](#behaviorsubject)
   - [create](#createvalue)
-  - [subscribe](#subscribeonnext-onerror-oncomplete)
+  - [subscribe](#subscribeonnext-onerror-oncompleted)
   - [onNext](#onnextvalues)
   - [getValue](#getvalue)
 
@@ -99,7 +99,7 @@ Observers are simple objects that receive values from Observables.
 
 ---
 
-#### `.create(onNext, onError, onComplete)`
+#### `.create(onNext, onError, onCompleted)`
 
 Creates a new Observer.
 
@@ -107,7 +107,7 @@ Creates a new Observer.
 |------|------|---------|-------------|
 | `onNext` | function (optional) |  | Called when the Observable produces a value. |
 | `onError` | function (optional) |  | Called when the Observable terminates due to an error. |
-| `onComplete` | function (optional) |  | Called when the Observable completes normally. |
+| `onCompleted` | function (optional) |  | Called when the Observable completes normally. |
 
 ---
 
@@ -131,7 +131,7 @@ Notify the Observer that an error has occurred.
 
 ---
 
-#### `:onComplete()`
+#### `:onCompleted()`
 
 Notify the Observer that the sequence has completed and will produce no more values.
 
@@ -151,7 +151,7 @@ Creates a new Observable.
 
 ---
 
-#### `:subscribe(onNext, onError, onComplete)`
+#### `:subscribe(onNext, onError, onCompleted)`
 
 Shorthand for creating an Observer and passing it to this Observable's subscription function.
 
@@ -159,7 +159,7 @@ Shorthand for creating an Observer and passing it to this Observable's subscript
 |------|------|---------|-------------|
 | `onNext` | function |  | Called when the Observable produces a value. |
 | `onError` | function |  | Called when the Observable terminates due to an error. |
-| `onComplete` | function |  | Called when the Observable completes normally. |
+| `onCompleted` | function |  | Called when the Observable completes normally. |
 
 ---
 
@@ -476,7 +476,7 @@ Returns a new Observable that produces elements until the predicate returns fals
 
 ---
 
-#### `:tap(onNext, onError, onComplete)`
+#### `:tap(onNext, onError, onCompleted)`
 
 Runs a function each time this Observable has activity. Similar to subscribe but does not create a subscription.
 
@@ -484,7 +484,7 @@ Runs a function each time this Observable has activity. Similar to subscribe but
 |------|------|---------|-------------|
 | `onNext` | function (optional) |  | Run when the Observable produces values. |
 | `onError` | function (optional) |  | Run when the Observable encounters a problem. |
-| `onComplete` | function (optional) |  | Run when the Observable completes. |
+| `onCompleted` | function (optional) |  | Run when the Observable completes. |
 
 ---
 
@@ -601,7 +601,7 @@ Creates a new Subject.
 
 ---
 
-#### `:subscribe(onNext, onError, onComplete)`
+#### `:subscribe(onNext, onError, onCompleted)`
 
 Creates a new Observer and attaches it to the Subject.
 
@@ -609,7 +609,7 @@ Creates a new Observer and attaches it to the Subject.
 |------|------|---------|-------------|
 | `onNext` | function|table |  | A function called when the Subject produces a value or an existing Observer to attach to the Subject. |
 | `onError` | function |  | Called when the Subject terminates due to an error. |
-| `onComplete` | function |  | Called when the Subject completes normally. |
+| `onCompleted` | function |  | Called when the Subject completes normally. |
 
 ---
 
@@ -633,7 +633,7 @@ Signal to all Observers that an error has occurred.
 
 ---
 
-#### `:onComplete()`
+#### `:onCompleted()`
 
 Signal to all Observers that the Subject will not produce any more values.
 
@@ -653,7 +653,7 @@ Creates a new BehaviorSubject.
 
 ---
 
-#### `:subscribe(onNext, onError, onComplete)`
+#### `:subscribe(onNext, onError, onCompleted)`
 
 Creates a new Observer and attaches it to the Subject. Immediately broadcasts the most recent value to the Observer.
 
@@ -661,7 +661,7 @@ Creates a new Observer and attaches it to the Subject. Immediately broadcasts th
 |------|------|---------|-------------|
 | `onNext` | function |  | Called when the Subject produces a value. |
 | `onError` | function |  | Called when the Subject terminates due to an error. |
-| `onComplete` | function |  | Called when the Subject completes normally. |
+| `onCompleted` | function |  | Called when the Subject completes normally. |
 
 ---
 

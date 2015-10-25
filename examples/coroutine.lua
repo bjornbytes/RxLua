@@ -1,4 +1,5 @@
 local Rx = require 'rx'
+local scheduler = Rx.CooperativeScheduler.create()
 
 -- Cheer someone on using functional reactive programming
 
@@ -8,12 +9,12 @@ local observable = Rx.Observable.fromCoroutine(function()
   end
 
   return 'who do we appreciate'
-end)
+end, scheduler)
 
 observable
   :map(function(value) return value .. '!' end)
   :subscribe(print)
 
 repeat
-  Rx.scheduler:update()
-until Rx.scheduler:isEmpty()
+  scheduler:update()
+until scheduler:isEmpty()

@@ -1264,7 +1264,9 @@ end
 -- if nothing has been emitted yet.
 -- @returns {*...}
 function BehaviorSubject:getValue()
-  return self.value and util.unpack(self.value)
+  if self.value then
+    return util.unpack(self.value)
+  end
 end
 
 return {

@@ -47,13 +47,13 @@ Observer.__tostring = util.constant('Observer')
 --- Creates a new Observer.
 -- @arg {function=} onNext - Called when the Observable produces a value.
 -- @arg {function=} onError - Called when the Observable terminates due to an error.
--- @arg {function=} onComplete - Called when the Observable completes normally.
+-- @arg {function=} onCompleted - Called when the Observable completes normally.
 -- @returns {Observer}
-function Observer.create(onNext, onError, onComplete)
+function Observer.create(onNext, onError, onCompleted)
   local self = {
     _onNext = onNext or util.noop,
     _onError = onError or error,
-    _onComplete = onComplete or util.noop,
+    _onCompleted = onCompleted or util.noop,
     stopped = false
   }
 
@@ -78,10 +78,10 @@ function Observer:onError(message)
 end
 
 --- Notify the Observer that the sequence has completed and will produce no more values.
-function Observer:onComplete()
+function Observer:onCompleted()
   if not self.stopped then
     self.stopped = true
-    self._onComplete()
+    self._onCompleted()
   end
 end
 
@@ -105,19 +105,19 @@ end
 --- Shorthand for creating an Observer and passing it to this Observable's subscription function.
 -- @arg {function} onNext - Called when the Observable produces a value.
 -- @arg {function} onError - Called when the Observable terminates due to an error.
--- @arg {function} onComplete - Called when the Observable completes normally.
-function Observable:subscribe(onNext, onError, onComplete)
+-- @arg {function} onCompleted - Called when the Observable completes normally.
+function Observable:subscribe(onNext, onError, onCompleted)
   if type(onNext) == 'table' then
     return self._subscribe(onNext)
   else
-    return self._subscribe(Observer.create(onNext, onError, onComplete))
+    return self._subscribe(Observer.create(onNext, onError, onCompleted))
   end
 end
 
 --- Returns an Observable that immediately completes without producing a value.
 function Observable:empty()
   return Observable.create(function(observer)
-    observer:onComplete()
+    observer:onCompleted()
   end)
 end
 
@@ -139,7 +139,7 @@ end
 function Observable.fromValue(value)
   return Observable.create(function(observer)
     observer:onNext(value)
-    observer:onComplete()
+    observer:onCompleted()
   end)
 end
 
@@ -161,7 +161,7 @@ function Observable.fromRange(initial, limit, step)
       observer:onNext(i)
     end
 
-    observer:onComplete()
+    observer:onCompleted()
   end)
 end
 
@@ -177,7 +177,7 @@ function Observable.fromTable(t, iterator, keys)
       observer:onNext(value, keys and key or nil)
     end
 
-    observer:onComplete()
+    observer:onCompleted()
   end)
 end
 
@@ -198,7 +198,7 @@ function Observable.fromCoroutine(thread, scheduler)
         end
 
         if coroutine.status(thread) == 'dead' then
-          return observer:onComplete()
+          return observer:onCompleted()
         end
 
         coroutine.yield()
@@ -216,9 +216,9 @@ function Observable:dump(name, formatter)
 
   local onNext = function(...) print(name .. 'onNext: ' .. formatter(...)) end
   local onError = function(e) print(name .. 'onError: ' .. e) end
-  local onComplete = function() print(name .. 'onComplete') end
+  local onCompleted = function() print(name .. 'onCompleted') end
 
-  return self:subscribe(onNext, onError, onComplete)
+  return self:subscribe(onNext, onError, onCompleted)
 end
 
 --- Determine whether all items emitted by an Observable meet some criteria.
@@ -230,7 +230,7 @@ function Observable:all(predicate)
     local function onNext(...)
       if not predicate(...) then
         observer:onNext(false)
-        observer:onComplete()
+        observer:onCompleted()
       end
     end
 
@@ -238,12 +238,12 @@ function Observable:all(predicate)
       return observer:onError(e)
     end
 
-    local function onComplete()
+    local function onCompleted()
       observer:onNext(true)
-      return observer:onComplete()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -283,18 +283,18 @@ function Observable:combineLatest(...)
       return observer:onError(e)
     end
 
-    local function onComplete(i)
+    local function onCompleted(i)
       return function()
         table.insert(completed, i)
 
         if #completed == #sources then
-          observer:onComplete()
+          observer:onCompleted()
         end
       end
     end
 
     for i = 1, #sources do
-      sources[i]:subscribe(onNext(i), onError, onComplete(i))
+      sources[i]:subscribe(onNext(i), onError, onCompleted(i))
     end
   end)
 end
@@ -323,12 +323,12 @@ function Observable:concat(other, ...)
       return observer:onError(message)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
     local function chain()
-      return other:concat(util.unpack(others)):subscribe(onNext, onError, onComplete)
+      return other:concat(util.unpack(others)):subscribe(onNext, onError, onCompleted)
     end
 
     return self:subscribe(onNext, onError, chain)
@@ -354,12 +354,12 @@ function Observable:count(predicate)
       return observer:onError(e)
     end
 
-    local function onComplete()
+    local function onCompleted()
       observer:onNext(count)
-      observer:onComplete()
+      observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -381,11 +381,11 @@ function Observable:distinct()
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -412,11 +412,11 @@ function Observable:distinctUntilChanged(comparator)
       return observer:onError(onError)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -437,11 +437,11 @@ function Observable:filter(predicate)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete(e)
+    local function onCompleted()
+      return observer:onCompleted(e)
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -455,7 +455,7 @@ function Observable:find(predicate)
     local function onNext(...)
       if predicate(...) then
         observer:onNext(...)
-        return observer:onComplete()
+        return observer:onCompleted()
       end
     end
 
@@ -463,11 +463,11 @@ function Observable:find(predicate)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -494,11 +494,11 @@ function Observable:flatten()
       observable:subscribe(innerOnNext, onError, util.noop)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -518,15 +518,15 @@ function Observable:last()
       return observer:onError(e)
     end
 
-    local function onComplete()
+    local function onCompleted()
       if not empty then
         observer:onNext(util.unpack(value or {}))
       end
 
-      return observer:onComplete()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -545,11 +545,11 @@ function Observable:map(callback)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -576,18 +576,18 @@ function Observable:merge(...)
       return observer:onError(message)
     end
 
-    local function onComplete(i)
+    local function onCompleted(i)
       return function()
         sources[i] = nil
 
         if not next(sources) then
-          observer:onComplete()
+          observer:onCompleted()
         end
       end
     end
 
     for i = 1, #sources do
-      sources[i]:subscribe(onNext, onError, onComplete(i))
+      sources[i]:subscribe(onNext, onError, onCompleted(i))
     end
   end)
 end
@@ -630,11 +630,11 @@ function Observable:pluck(key, ...)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end):pluck(...)
 end
 
@@ -663,12 +663,12 @@ function Observable:reduce(accumulator, seed)
       return observer:onError(e)
     end
 
-    local function onComplete()
+    local function onCompleted()
       observer:onNext(result)
-      return observer:onComplete()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -690,11 +690,11 @@ function Observable:reject(predicate)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete(e)
+    local function onCompleted()
+      return observer:onCompleted(e)
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -720,11 +720,11 @@ function Observable:skip(n)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -753,13 +753,13 @@ function Observable:skipUntil(other)
       end
     end
 
-    local function onComplete()
+    local function onCompleted()
       if triggered then
-        observer:onComplete()
+        observer:onCompleted()
       end
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -786,11 +786,11 @@ function Observable:skipWhile(predicate)
       return observer:onError(message)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -802,7 +802,7 @@ function Observable:take(n)
 
   return Observable.create(function(observer)
     if n <= 0 then
-      observer:onComplete()
+      observer:onCompleted()
       return
     end
 
@@ -814,7 +814,7 @@ function Observable:take(n)
       i = i + 1
 
       if i > n then
-        observer:onComplete()
+        observer:onCompleted()
       end
     end
 
@@ -822,11 +822,11 @@ function Observable:take(n)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -843,13 +843,13 @@ function Observable:takeUntil(other)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    other:subscribe(onComplete, onComplete, onComplete)
+    other:subscribe(onCompleted, onCompleted, onCompleted)
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -869,7 +869,7 @@ function Observable:takeWhile(predicate)
         if taking then
           return observer:onNext(...)
         else
-          return observer:onComplete()
+          return observer:onCompleted()
         end
       end
     end
@@ -878,11 +878,11 @@ function Observable:takeWhile(predicate)
       return observer:onError(message)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -890,12 +890,12 @@ end
 -- create a subscription.
 -- @arg {function=} onNext - Run when the Observable produces values.
 -- @arg {function=} onError - Run when the Observable encounters a problem.
--- @arg {function=} onComplete - Run when the Observable completes.
+-- @arg {function=} onCompleted - Run when the Observable completes.
 -- @returns {Observable}
-function Observable:tap(_onNext, _onError, _onComplete)
+function Observable:tap(_onNext, _onError, _onCompleted)
   _onNext = _onNext or util.noop
   _onError = _onError or util.noop
-  _onComplete = _onComplete or util.noop
+  _onCompleted = _onCompleted or util.noop
 
   return Observable.create(function(observer)
     local function onNext(...)
@@ -908,12 +908,12 @@ function Observable:tap(_onNext, _onError, _onComplete)
       return observer:onError(message)
     end
 
-    local function onComplete()
-      _onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      _onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -939,11 +939,11 @@ function Observable:unwrap()
       return observer:onError(message)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -968,11 +968,11 @@ function Observable:window(size)
       return observer:onError(message)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -1001,15 +1001,15 @@ function Observable:with(...)
       return observer:onError(e)
     end
 
-    local function onComplete()
-      return observer:onComplete()
+    local function onCompleted()
+      return observer:onCompleted()
     end
 
     for i = 1, #sources do
       sources[i]:subscribe(setLatest(i), util.noop, util.noop)
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -1042,12 +1042,12 @@ function Observable:wrap(size)
       return observer:onError(message)
     end
 
-    local function onComplete()
+    local function onCompleted()
       emit()
-      return observer:onComplete()
+      return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onComplete)
+    return self:subscribe(onNext, onError, onCompleted)
   end)
 end
 
@@ -1169,14 +1169,14 @@ end
 -- @arg {function|table} onNext|observer - A function called when the Subject produces a value or
 --                                         an existing Observer to attach to the Subject.
 -- @arg {function} onError - Called when the Subject terminates due to an error.
--- @arg {function} onComplete - Called when the Subject completes normally.
-function Subject:subscribe(onNext, onError, onComplete)
+-- @arg {function} onCompleted - Called when the Subject completes normally.
+function Subject:subscribe(onNext, onError, onCompleted)
   local observer
 
   if type(onNext) == 'table' then
     observer = onNext
   else
-    observer = Observer.create(onNext, onError, onComplete)
+    observer = Observer.create(onNext, onError, onCompleted)
   end
 
   table.insert(self.observers, observer)
@@ -1205,10 +1205,10 @@ function Subject:onError(message)
 end
 
 --- Signal to all Observers that the Subject will not produce any more values.
-function Subject:onComplete()
+function Subject:onCompleted()
   if not self.stopped then
     for i = 1, #self.observers do
-      self.observers[i]:onComplete()
+      self.observers[i]:onCompleted()
     end
 
     self.stopped = true
@@ -1244,9 +1244,9 @@ end
 -- value to the Observer.
 -- @arg {function} onNext - Called when the Subject produces a value.
 -- @arg {function} onError - Called when the Subject terminates due to an error.
--- @arg {function} onComplete - Called when the Subject completes normally.
-function BehaviorSubject:subscribe(onNext, onError, onComplete)
-  local observer = Observer.create(onNext, onError, onComplete)
+-- @arg {function} onCompleted - Called when the Subject completes normally.
+function BehaviorSubject:subscribe(onNext, onError, onCompleted)
+  local observer = Observer.create(onNext, onError, onCompleted)
   Subject.subscribe(self, observer)
   if self.value then
     observer:onNext(unpack(self.value))

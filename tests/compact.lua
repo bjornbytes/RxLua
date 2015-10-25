@@ -12,7 +12,7 @@ describe('compact', function()
       observer:onNext(false)
       observer:onNext('')
       observer:onNext(0)
-      observer:onComplete()
+      observer:onCompleted()
     end)
 
     expect(observable:compact()).to.produce(true, '', 0)

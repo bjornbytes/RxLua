@@ -9,13 +9,13 @@ Observer.__tostring = util.constant('Observer')
 --- Creates a new Observer.
 -- @arg {function=} onNext - Called when the Observable produces a value.
 -- @arg {function=} onError - Called when the Observable terminates due to an error.
--- @arg {function=} onComplete - Called when the Observable completes normally.
+-- @arg {function=} onCompleted - Called when the Observable completes normally.
 -- @returns {Observer}
-function Observer.create(onNext, onError, onComplete)
+function Observer.create(onNext, onError, onCompleted)
   local self = {
     _onNext = onNext or util.noop,
     _onError = onError or error,
-    _onComplete = onComplete or util.noop,
+    _onCompleted = onCompleted or util.noop,
     stopped = false
   }
 
@@ -40,10 +40,10 @@ function Observer:onError(message)
 end
 
 --- Notify the Observer that the sequence has completed and will produce no more values.
-function Observer:onComplete()
+function Observer:onCompleted()
   if not self.stopped then
     self.stopped = true
-    self._onComplete()
+    self._onCompleted()
   end
 end
 

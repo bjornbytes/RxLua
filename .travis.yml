@@ -1,11 +1,14 @@
 language: c
+sudo: false
 
-before_install:
-  - sudo apt-get install lua5.1 -y
-
-script:
-  - lua tests/runner.lua
+addons:
+  apt:
+    packages:
+    - lua5.1
 
 branches:
   only:
     - master
+
+script:
+  - lua tests/runner.lua

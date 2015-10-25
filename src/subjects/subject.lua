@@ -24,14 +24,14 @@ end
 -- @arg {function|table} onNext|observer - A function called when the Subject produces a value or
 --                                         an existing Observer to attach to the Subject.
 -- @arg {function} onError - Called when the Subject terminates due to an error.
--- @arg {function} onComplete - Called when the Subject completes normally.
-function Subject:subscribe(onNext, onError, onComplete)
+-- @arg {function} onCompleted - Called when the Subject completes normally.
+function Subject:subscribe(onNext, onError, onCompleted)
   local observer
 
   if type(onNext) == 'table' then
     observer = onNext
   else
-    observer = Observer.create(onNext, onError, onComplete)
+    observer = Observer.create(onNext, onError, onCompleted)
   end
 
   table.insert(self.observers, observer)
@@ -60,10 +60,10 @@ function Subject:onError(message)
 end
 
 --- Signal to all Observers that the Subject will not produce any more values.
-function Subject:onComplete()
+function Subject:onCompleted()
   if not self.stopped then
     for i = 1, #self.observers do
-      self.observers[i]:onComplete()
+      self.observers[i]:onCompleted()
     end
 
     self.stopped = true

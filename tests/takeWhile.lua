@@ -19,6 +19,6 @@ describe('takeWhile', function()
   it('produces no values if the predicate never returns true', function()
     local function isEven(x) return x % 2 == 0 end
     local observable = Rx.Observable.fromTable({1, 3, 5}):takeWhile(isEven)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 end)

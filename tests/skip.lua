@@ -22,7 +22,7 @@ describe('skip', function()
 
   it('produces no values if it skips over all of the values of the original', function()
     local observable = Rx.Observable.fromTable({1, 2}, ipairs):skip(2)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 
   it('completes and does not fail if it skips over more values than were produced', function()

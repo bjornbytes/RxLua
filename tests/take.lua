@@ -7,12 +7,12 @@ describe('take', function()
 
   it('produces nothing if the count is zero', function()
     local observable = Rx.Observable.fromValue(3):take(0)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 
   it('produces nothing if the count is less than zero', function()
     local observable = Rx.Observable.fromValue(3):take(-3)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 
   it('takes one element if no count is specified', function()

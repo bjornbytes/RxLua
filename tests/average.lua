@@ -9,6 +9,6 @@ describe('average', function()
   end)
 
   it('produces nothing if there are no values to average', function()
-    expect(Rx.Observable.empty():average()).to.produce({})
+    expect(Rx.Observable.empty():average()).to.produce.nothing()
   end)
 end)

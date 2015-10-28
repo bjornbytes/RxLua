@@ -19,6 +19,6 @@ describe('skipWhile', function()
   it('produces no values if the predicate never returns false', function()
     local function isEven(x) return x % 2 == 0 end
     local observable = Rx.Observable.fromTable({2, 4, 6}):skipWhile(isEven)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 end)

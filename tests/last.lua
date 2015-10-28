@@ -7,7 +7,7 @@ describe('last', function()
 
   it('produces no elements if its parent produces no elements', function()
     local observable = Rx.Observable.create(function(observer) return observer:onCompleted() end):last()
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 
   it('produces the last element of its parent and immediately completes', function()

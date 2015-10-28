@@ -31,6 +31,6 @@ describe('find', function()
 
   it('completes after its parent completes if no value satisfied the predicate', function()
     local observable = Rx.Observable.fromRange(5):find(function() return false end)
-    expect(observable).to.produce({})
+    expect(observable).to.produce.nothing()
   end)
 end)

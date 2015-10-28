@@ -163,19 +163,19 @@ Shorthand for creating an Observer and passing it to this Observable's subscript
 
 ---
 
-#### `:empty()`
+#### `.empty()`
 
 Returns an Observable that immediately completes without producing a value.
 
 ---
 
-#### `:never()`
+#### `.never()`
 
 Returns an Observable that never produces values and never completes.
 
 ---
 
-#### `:throw(message)`
+#### `.throw(message)`
 
 Returns an Observable that immediately produces an error.
 

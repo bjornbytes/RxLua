@@ -115,19 +115,19 @@ function Observable:subscribe(onNext, onError, onCompleted)
 end
 
 --- Returns an Observable that immediately completes without producing a value.
-function Observable:empty()
+function Observable.empty()
   return Observable.create(function(observer)
     observer:onCompleted()
   end)
 end
 
 --- Returns an Observable that never produces values and never completes.
-function Observable:never()
+function Observable.never()
   return Observable.create(function(observer) end)
 end
 
 --- Returns an Observable that immediately produces an error.
-function Observable:throw(message)
+function Observable.throw(message)
   return Observable.create(function(observer)
     observer:onError(message)
   end)
@@ -1264,9 +1264,7 @@ end
 -- if nothing has been emitted yet.
 -- @returns {*...}
 function BehaviorSubject:getValue()
-  if self.value then
-    return util.unpack(self.value)
-  end
+  return self.value and util.unpack(self.value)
 end
 
 return {

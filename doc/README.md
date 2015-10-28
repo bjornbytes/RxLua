@@ -24,6 +24,7 @@ RxLua
   - [amb](#ambobservables)
   - [average](#average)
   - [buffer](#buffersize)
+  - [catch](#catchhandler)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -271,6 +272,16 @@ Returns an Observable that buffers values from the original and produces them as
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | number |  | The size of the buffer. |
+
+---
+
+#### `:catch(handler)`
+
+Returns an Observable that intercepts any errors from the previous and replace them with values produced by a new Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `handler` | function|Observable |  | An Observable or a function that returns an Observable to replace the source Observable in the event of an error. |
 
 ---
 

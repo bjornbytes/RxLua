@@ -28,6 +28,7 @@ RxLua
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
+  - [contains](#containsvalue)
   - [count](#countpredicate)
   - [distinct](#distinct)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
@@ -309,6 +310,16 @@ Returns a new Observable that produces the values produced by all the specified 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `sources` | Observable... |  | The Observables to concatenate. |
+
+---
+
+#### `:contains(value)`
+
+Returns a new Observable that produces a single boolean value representing whether or not the specified value was produced by the original.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | * |  | The value to search for.  == is used for equality testing. |
 
 ---
 

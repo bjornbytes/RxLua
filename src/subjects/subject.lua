@@ -1,4 +1,5 @@
 local Observable = require 'observable'
+local Subscription = require 'subscription'
 local util = require 'util'
 
 --- @class Subject
@@ -35,6 +36,15 @@ function Subject:subscribe(onNext, onError, onCompleted)
   end
 
   table.insert(self.observers, observer)
+
+  return Subscription.create(function()
+    for i = 1, #self.observers do
+      if self.observers[i] == observer then
+        table.remove(self.observers, i)
+        return
+      end
+    end
+  end)
 end
 
 --- Pushes zero or more values to the Subject. They will be broadcasted to all Observers.

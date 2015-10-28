@@ -21,6 +21,7 @@ RxLua
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [dump](#dumpname-formatter)
   - [all](#allpredicate)
+  - [amb](#ambobservables)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -243,6 +244,16 @@ Determine whether all items emitted by an Observable meet some criteria.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function (optional) | identity | The predicate used to evaluate objects. |
+
+---
+
+#### `.amb(observables)`
+
+Given a set of Observables, produces values from only the first one to produce a value.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `observables` | Observable... |  |  |
 
 ---
 

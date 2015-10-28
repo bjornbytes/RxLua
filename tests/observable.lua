@@ -178,6 +178,7 @@ describe('Observable', function()
   end)
 
   dofile('tests/all.lua')
+  dofile('tests/amb.lua')
   dofile('tests/combineLatest.lua')
   dofile('tests/compact.lua')
   dofile('tests/concat.lua')

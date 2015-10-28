@@ -9,7 +9,8 @@ local files = {
   'src/schedulers/immediatescheduler.lua',
   'src/schedulers/cooperativescheduler.lua',
   'src/subjects/subject.lua',
-  'src/subjects/behaviorsubject.lua'
+  'src/subjects/behaviorsubject.lua',
+  'src/aliases.lua'
 }
 
 local header = [[

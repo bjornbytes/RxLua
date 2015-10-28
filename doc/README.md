@@ -23,6 +23,7 @@ RxLua
   - [all](#allpredicate)
   - [amb](#ambobservables)
   - [average](#average)
+  - [buffer](#buffersize)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -54,7 +55,6 @@ RxLua
   - [unwrap](#unwrap)
   - [window](#windowsize)
   - [with](#withsources)
-  - [wrap](#wrapsize)
 - [ImmediateScheduler](#immediatescheduler)
   - [create](#create)
   - [schedule](#scheduleaction)
@@ -261,6 +261,16 @@ Given a set of Observables, produces values from only the first one to produce a
 #### `:average()`
 
 Returns an Observable that produces the average of all values produced by the original.
+
+---
+
+#### `:buffer(size)`
+
+Returns an Observable that buffers values from the original and produces them as multiple values.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | number |  | The size of the buffer. |
 
 ---
 
@@ -535,16 +545,6 @@ Returns an Observable that produces values from the original along with the most
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `sources` | Observable... |  | The Observables to include the most recent values from. |
-
----
-
-#### `:wrap(size)`
-
-Returns an Observable that buffers values from the original and produces them as multiple values.
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `size` | number |  | The size of the buffer. |
 
 # ImmediateScheduler
 

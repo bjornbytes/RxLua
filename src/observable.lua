@@ -238,6 +238,44 @@ function Observable:average()
   end)
 end
 
+--- Returns an Observable that buffers values from the original and produces them as multiple
+-- values.
+-- @arg {number} size - The size of the buffer.
+function Observable:buffer(size)
+  return Observable.create(function(observer)
+    local buffer = {}
+
+    local function emit()
+      if #buffer > 0 then
+        observer:onNext(util.unpack(buffer))
+        buffer = {}
+      end
+    end
+
+    local function onNext(...)
+      local values = {...}
+      for i = 1, #values do
+        table.insert(buffer, values[i])
+        if #buffer >= size then
+          emit()
+        end
+      end
+    end
+
+    local function onError(message)
+      emit()
+      return observer:onError(message)
+    end
+
+    local function onCompleted()
+      emit()
+      return observer:onCompleted()
+    end
+
+    return self:subscribe(onNext, onError, onCompleted)
+  end)
+end
+
 --- Returns a new Observable that runs a combinator function on the most recent values from a set
 -- of Observables whenever any of them produce a new value. The results of the combinator function
 -- are produced by the new Observable.
@@ -998,44 +1036,6 @@ function Observable:with(...)
 
     for i = 1, #sources do
       sources[i]:subscribe(setLatest(i), util.noop, util.noop)
-    end
-
-    return self:subscribe(onNext, onError, onCompleted)
-  end)
-end
-
---- Returns an Observable that buffers values from the original and produces them as multiple
--- values.
--- @arg {number} size - The size of the buffer.
-function Observable:wrap(size)
-  return Observable.create(function(observer)
-    local buffer = {}
-
-    local function emit()
-      if #buffer > 0 then
-        observer:onNext(util.unpack(buffer))
-        buffer = {}
-      end
-    end
-
-    local function onNext(...)
-      local values = {...}
-      for i = 1, #values do
-        table.insert(buffer, values[i])
-        if #buffer >= size then
-          emit()
-        end
-      end
-    end
-
-    local function onError(message)
-      emit()
-      return observer:onError(message)
-    end
-
-    local function onCompleted()
-      emit()
-      return observer:onCompleted()
     end
 
     return self:subscribe(onNext, onError, onCompleted)

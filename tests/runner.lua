@@ -56,7 +56,8 @@ if arg[1] then
 else
   local files = {
     'observer',
-    'observable'
+    'observable',
+    'subscription'
   }
 
   for i, file in ipairs(files) do

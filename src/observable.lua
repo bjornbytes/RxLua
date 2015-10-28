@@ -211,6 +211,33 @@ function Observable.amb(a, b, ...)
   end):amb(...)
 end
 
+--- Returns an Observable that produces the average of all values produced by the original.
+-- @returns {Observable}
+function Observable:average()
+  return Observable.create(function(observer)
+    local sum, count = 0, 0
+
+    local function onNext(value)
+      sum = sum + value
+      count = count + 1
+    end
+
+    local function onError(e)
+      observer:onError(e)
+    end
+
+    local function onCompleted()
+      if count > 0 then
+        observer:onNext(sum / count)
+      end
+
+      observer:onCompleted()
+    end
+
+    return self:subscribe(onNext, onError, onCompleted)
+  end)
+end
+
 --- Returns a new Observable that runs a combinator function on the most recent values from a set
 -- of Observables whenever any of them produce a new value. The results of the combinator function
 -- are produced by the new Observable.

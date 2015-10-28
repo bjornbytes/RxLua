@@ -22,6 +22,7 @@ RxLua
   - [dump](#dumpname-formatter)
   - [all](#allpredicate)
   - [amb](#ambobservables)
+  - [average](#average)
   - [combineLatest](#combinelatestobservables-combinator)
   - [compact](#compact)
   - [concat](#concatsources)
@@ -254,6 +255,12 @@ Given a set of Observables, produces values from only the first one to produce a
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `observables` | Observable... |  |  |
+
+---
+
+#### `:average()`
+
+Returns an Observable that produces the average of all values produced by the original.
 
 ---
 

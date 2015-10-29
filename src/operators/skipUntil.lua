@@ -34,4 +34,3 @@ function Observable:skipUntil(other)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

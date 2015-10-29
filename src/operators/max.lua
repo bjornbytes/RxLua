@@ -5,4 +5,3 @@ local Observable = require 'observable'
 function Observable:max()
   return self:reduce(math.max)
 end
-

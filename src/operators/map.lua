@@ -23,4 +23,3 @@ function Observable:map(callback)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

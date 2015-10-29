@@ -52,4 +52,3 @@ function Observable:combineLatest(...)
     end
   end)
 end
-

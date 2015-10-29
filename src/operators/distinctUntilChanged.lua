@@ -31,4 +31,3 @@ function Observable:distinctUntilChanged(comparator)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

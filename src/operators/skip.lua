@@ -29,4 +29,3 @@ function Observable:skip(n)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

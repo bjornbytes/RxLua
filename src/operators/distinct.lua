@@ -25,4 +25,3 @@ function Observable:distinct()
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

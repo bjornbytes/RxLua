@@ -6,4 +6,3 @@ local util = require 'util'
 function Observable:pack()
   return self:map(util.pack)
 end
-

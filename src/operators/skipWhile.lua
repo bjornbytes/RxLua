@@ -31,4 +31,3 @@ function Observable:skipWhile(predicate)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

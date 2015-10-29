@@ -8,4 +8,3 @@ local Observable = require 'observable'
 function Observable:partition(predicate)
   return self:filter(predicate), self:reject(predicate)
 end
-

@@ -26,4 +26,3 @@ function Observable:average()
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

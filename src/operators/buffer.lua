@@ -38,4 +38,3 @@ function Observable:buffer(size)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

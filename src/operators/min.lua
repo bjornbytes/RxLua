@@ -5,4 +5,3 @@ local Observable = require 'observable'
 function Observable:min()
   return self:reduce(math.min)
 end
-

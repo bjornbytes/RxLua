@@ -38,4 +38,3 @@ function Observable:catch(handler)
     return subscription
   end)
 end
-

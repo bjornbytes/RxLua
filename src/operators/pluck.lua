@@ -24,4 +24,3 @@ function Observable:pluck(key, ...)
     return self:subscribe(onNext, onError, onCompleted)
   end):pluck(...)
 end
-

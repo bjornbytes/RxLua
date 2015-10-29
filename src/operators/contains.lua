@@ -40,4 +40,3 @@ function Observable:contains(value)
     return subscription
   end)
 end
-

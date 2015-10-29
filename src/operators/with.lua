@@ -37,4 +37,3 @@ function Observable:with(...)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

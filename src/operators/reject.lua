@@ -26,4 +26,3 @@ function Observable:reject(predicate)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

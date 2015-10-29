@@ -48,4 +48,3 @@ function Observable.amb(a, b, ...)
     end)
   end):amb(...)
 end
-

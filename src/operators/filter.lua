@@ -25,4 +25,3 @@ function Observable:filter(predicate)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

@@ -23,4 +23,3 @@ function Observable:unwrap()
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

@@ -26,4 +26,3 @@ function Observable:all(predicate)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

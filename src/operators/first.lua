@@ -5,4 +5,3 @@ local Observable = require 'observable'
 function Observable:first()
   return self:take(1)
 end
-

@@ -22,4 +22,3 @@ function Observable:takeUntil(other)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

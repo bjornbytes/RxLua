@@ -30,4 +30,3 @@ function Observable:concat(other, ...)
     return self:subscribe(onNext, onError, chain)
   end)
 end
-

@@ -32,4 +32,3 @@ function Observable:merge(...)
     end
   end)
 end
-

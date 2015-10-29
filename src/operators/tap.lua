@@ -31,4 +31,3 @@ function Observable:tap(_onNext, _onError, _onCompleted)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

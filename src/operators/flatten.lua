@@ -25,4 +25,3 @@ function Observable:flatten()
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

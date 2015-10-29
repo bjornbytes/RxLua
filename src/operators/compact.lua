@@ -6,4 +6,3 @@ local util = require 'util'
 function Observable:compact()
   return self:filter(util.identity)
 end
-

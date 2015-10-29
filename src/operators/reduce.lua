@@ -33,4 +33,3 @@ function Observable:reduce(accumulator, seed)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

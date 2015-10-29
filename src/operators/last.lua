@@ -28,4 +28,3 @@ function Observable:last()
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

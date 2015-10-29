@@ -29,4 +29,3 @@ function Observable:window(size)
     return self:subscribe(onNext, onError, onCompleted)
   end)
 end
-

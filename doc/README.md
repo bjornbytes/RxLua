@@ -36,6 +36,7 @@ RxLua
   - [filter](#filterpredicate)
   - [find](#findpredicate)
   - [first](#first)
+  - [flatMap](#flatmapcallback)
   - [flatten](#flatten)
   - [last](#last)
   - [map](#mapcallback)
@@ -383,6 +384,16 @@ Returns a new Observable that produces the first value of the original that sati
 #### `:first()`
 
 Returns a new Observable that only produces the first result of the original.
+
+---
+
+#### `:flatMap(callback)`
+
+Returns a new Observable that transform the items emitted by an Observable into Observables, then flatten the emissions from those into a single Observable
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `callback` | function |  | The function to transform values from the original Observable. |
 
 ---
 

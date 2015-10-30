@@ -30,6 +30,7 @@ RxLua
   - [concat](#concatsources)
   - [contains](#containsvalue)
   - [count](#countpredicate)
+  - [defaultIfEmpty](#defaultifemptyvalues)
   - [distinct](#distinct)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [filter](#filterpredicate)
@@ -330,6 +331,16 @@ Returns an Observable that produces a single value representing the number of va
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function (optional) |  | The predicate used to match values. |
+
+---
+
+#### `:defaultIfEmpty(values)`
+
+Returns a new Observable that produces a default set of items if the source Observable produces no values.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  | Zero or more values to produce if the source completes without emitting anything. |
 
 ---
 

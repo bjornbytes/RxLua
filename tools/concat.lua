@@ -16,6 +16,7 @@ local files = {
   'src/operators/concat.lua',
   'src/operators/contains.lua',
   'src/operators/count.lua',
+  'src/operators/defaultIfEmpty.lua',
   'src/operators/distinct.lua',
   'src/operators/distinctUntilChanged.lua',
   'src/operators/filter.lua',

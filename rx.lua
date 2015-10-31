@@ -1018,6 +1018,13 @@ function Observable:skipWhile(predicate)
   end)
 end
 
+--- Returns an Observable that produces a single value representing the sum of the values produced
+-- by the original.
+-- @returns {Observable}
+function Observable:sum()
+  return self:reduce(function(x, y) return x + y end, 0)
+end
+
 --- Returns a new Observable that only produces the first n results of the original.
 -- @arg {number=1} n - The number of elements to produce before completing.
 -- @returns {Observable}

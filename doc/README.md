@@ -50,6 +50,7 @@ RxLua
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
   - [skipWhile](#skipwhilepredicate)
+  - [sum](#sum)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
   - [takeWhile](#takewhilepredicate)
@@ -504,6 +505,12 @@ Returns a new Observable that skips elements until the predicate returns falsy f
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to continue skipping values. |
+
+---
+
+#### `:sum()`
+
+Returns an Observable that produces a single value representing the sum of the values produced by the original.
 
 ---
 

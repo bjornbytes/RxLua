@@ -19,6 +19,7 @@ RxLua
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
+  - [defer](#deferfactory)
   - [dump](#dumpname-formatter)
   - [all](#allpredicate)
   - [amb](#ambobservables)
@@ -228,6 +229,16 @@ Creates an Observable that produces values when the specified coroutine yields.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `coroutine` | thread |  |  |
+
+---
+
+#### `.defer(factory)`
+
+Creates an Observable that creates a new Observable for each observer using a factory function.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `factory` | function |  | A function that returns an Observable. |
 
 ---
 

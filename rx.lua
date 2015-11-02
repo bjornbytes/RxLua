@@ -207,6 +207,18 @@ function Observable.fromCoroutine(thread, scheduler)
   end)
 end
 
+--- Creates an Observable that creates a new Observable for each observer using a factory function.
+-- @arg {function} factory - A function that returns an Observable.
+-- @returns {Observable}
+function Observable.defer(fn)
+  return setmetatable({
+    subscribe = function(_, ...)
+      local observable = fn()
+      return observable:subscribe(...)
+    end
+  }, Observable)
+end
+
 --- Subscribes to this Observable and prints values it produces.
 -- @arg {string=} name - Prefixes the printed messages with a name.
 -- @arg {function=tostring} formatter - A function that formats one or more values to be printed.

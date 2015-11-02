@@ -174,6 +174,42 @@ describe('Observable', function()
     end)
   end)
 
+  describe('defer', function()
+    it('returns an Observable', function()
+      expect(Rx.Observable.defer()).to.be.an(Rx.Observable)
+    end)
+
+    it('fails if no factory is specified', function()
+      expect(Rx.Observable.defer().subscribe).to.fail()
+    end)
+
+    it('fails if the factory does not return an Observable', function()
+      expect(Rx.Observable.defer(function() return nil end).subscribe).to.fail()
+    end)
+
+    it('uses the factory function to create a new Observable for each subscriber', function()
+      local i = 0
+      local function factory()
+        i = i + 1
+        return Rx.Observable.fromRange(i, 3)
+      end
+      expect(Rx.Observable.defer(factory)).to.produce(1, 2, 3)
+      expect(Rx.Observable.defer(factory)).to.produce(2, 3)
+      expect(Rx.Observable.defer(factory)).to.produce(3)
+    end)
+
+    it('returns Observables that return subscriptions from their subscribe function', function()
+      local subscription = Rx.Subscription.create()
+      local function factory()
+        return Rx.Observable.create(function()
+          return subscription
+        end)
+      end
+
+      expect(Rx.Observable.defer(factory):subscribe()).to.equal(subscription)
+    end)
+  end)
+
   describe('dump', function()
   end)
 

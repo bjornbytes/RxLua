@@ -19,6 +19,7 @@ local files = {
   'src/operators/defaultIfEmpty.lua',
   'src/operators/distinct.lua',
   'src/operators/distinctUntilChanged.lua',
+  'src/operators/elementAt.lua',
   'src/operators/filter.lua',
   'src/operators/find.lua',
   'src/operators/first.lua',

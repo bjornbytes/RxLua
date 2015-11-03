@@ -34,6 +34,7 @@ RxLua
   - [defaultIfEmpty](#defaultifemptyvalues)
   - [distinct](#distinct)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
+  - [elementAt](#elementatindex)
   - [filter](#filterpredicate)
   - [find](#findpredicate)
   - [first](#first)
@@ -370,6 +371,16 @@ Returns an Observable that only produces values from the original if they are di
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `comparator` | function |  | A function used to compare 2 values. If unspecified, == is used. |
+
+---
+
+#### `:elementAt(index)`
+
+Returns an Observable that produces the nth element produced by the source Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `index` | number |  | The index of the item, with an index of 1 representing the first. |
 
 ---
 

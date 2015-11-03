@@ -39,6 +39,7 @@ RxLua
   - [find](#findpredicate)
   - [first](#first)
   - [flatMap](#flatmapcallback)
+  - [flatMapLatest](#flatmaplatestcallback)
   - [flatten](#flatten)
   - [last](#last)
   - [map](#mapcallback)
@@ -417,6 +418,16 @@ Returns a new Observable that transform the items emitted by an Observable into 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `callback` | function |  | The function to transform values from the original Observable. |
+
+---
+
+#### `:flatMapLatest(callback)`
+
+Returns a new Observable that uses a callback to create Observables from the values produced by the source, then produces values from the most recent of these Observables.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `callback` | function (optional) | identity | The function used to convert values to Observables. |
 
 ---
 

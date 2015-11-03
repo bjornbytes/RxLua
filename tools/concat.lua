@@ -24,6 +24,7 @@ local files = {
   'src/operators/find.lua',
   'src/operators/first.lua',
   'src/operators/flatMap.lua',
+  'src/operators/flatMapLatest.lua',
   'src/operators/flatten.lua',
   'src/operators/last.lua',
   'src/operators/map.lua',

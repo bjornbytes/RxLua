@@ -25,6 +25,11 @@ Documentation
 
 See [here](doc).
 
+Contributing
+---
+
+See [here](doc/CONTRIBUTING.md).
+
 Tests
 ---
 

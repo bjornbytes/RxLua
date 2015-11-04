@@ -21,7 +21,7 @@ function Observable:distinctUntilChanged(comparator)
     end
 
     local function onError(message)
-      return observer:onError(onError)
+      return observer:onError(message)
     end
 
     local function onCompleted()

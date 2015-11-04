@@ -645,7 +645,7 @@ function Observable:distinctUntilChanged(comparator)
     end
 
     local function onError(message)
-      return observer:onError(onError)
+      return observer:onError(message)
     end
 
     local function onCompleted()
@@ -707,7 +707,7 @@ function Observable:filter(predicate)
     end
 
     local function onCompleted()
-      return observer:onCompleted(e)
+      return observer:onCompleted()
     end
 
     return self:subscribe(onNext, onError, onCompleted)
@@ -729,7 +729,7 @@ function Observable:find(predicate)
     end
 
     local function onError(message)
-      return observer:onError(e)
+      return observer:onError(message)
     end
 
     local function onCompleted()
@@ -1011,7 +1011,7 @@ function Observable:reject(predicate)
     end
 
     local function onCompleted()
-      return observer:onCompleted(e)
+      return observer:onCompleted()
     end
 
     return self:subscribe(onNext, onError, onCompleted)

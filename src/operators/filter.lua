@@ -19,7 +19,7 @@ function Observable:filter(predicate)
     end
 
     local function onCompleted()
-      return observer:onCompleted(e)
+      return observer:onCompleted()
     end
 
     return self:subscribe(onNext, onError, onCompleted)

@@ -16,7 +16,7 @@ function Observable:find(predicate)
     end
 
     local function onError(message)
-      return observer:onError(e)
+      return observer:onError(message)
     end
 
     local function onCompleted()

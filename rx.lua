@@ -822,6 +822,23 @@ function Observable:flatten()
   end)
 end
 
+--- Returns an Observable that terminates when the source terminates but does not produce any
+-- elements.
+-- @returns {Observable}
+function Observable:ignoreElements()
+  return Observable.create(function(observer)
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onCompleted()
+      return observer:onCompleted()
+    end
+
+    return self:subscribe(nil, onError, onCompleted)
+  end)
+end
+
 --- Returns a new Observable that only produces the last result of the original.
 -- @returns {Observable}
 function Observable:last()

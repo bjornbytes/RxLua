@@ -26,6 +26,7 @@ local files = {
   'src/operators/flatMap.lua',
   'src/operators/flatMapLatest.lua',
   'src/operators/flatten.lua',
+  'src/operators/ignoreElements.lua',
   'src/operators/last.lua',
   'src/operators/map.lua',
   'src/operators/max.lua',

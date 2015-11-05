@@ -41,6 +41,7 @@ RxLua
   - [flatMap](#flatmapcallback)
   - [flatMapLatest](#flatmaplatestcallback)
   - [flatten](#flatten)
+  - [ignoreElements](#ignoreelements)
   - [last](#last)
   - [map](#mapcallback)
   - [max](#max)
@@ -434,6 +435,12 @@ Returns a new Observable that uses a callback to create Observables from the val
 #### `:flatten()`
 
 Returns a new Observable that subscribes to the Observables produced by the original and produces their values.
+
+---
+
+#### `:ignoreElements()`
+
+Returns an Observable that terminates when the source terminates but does not produce any elements.
 
 ---
 

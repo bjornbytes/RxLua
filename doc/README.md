@@ -53,6 +53,7 @@ RxLua
   - [pluck](#pluckkeys)
   - [reduce](#reduceaccumulator-seed)
   - [reject](#rejectpredicate)
+  - [retry](#retrycount)
   - [scan](#scanaccumulator-seed)
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
@@ -539,6 +540,16 @@ Returns a new Observable that produces values from the original which do not sat
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to reject values. |
+
+---
+
+#### `:retry(count)`
+
+Returns an Observable that restarts in the event of an error.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | number (optional) |  | The maximum number of times to retry.  If left unspecified, an infinite number of retries will be attempted. |
 
 ---
 

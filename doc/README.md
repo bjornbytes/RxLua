@@ -53,6 +53,7 @@ RxLua
   - [pluck](#pluckkeys)
   - [reduce](#reduceaccumulator-seed)
   - [reject](#rejectpredicate)
+  - [scan](#scanaccumulator-seed)
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
   - [skipWhile](#skipwhilepredicate)
@@ -538,6 +539,17 @@ Returns a new Observable that produces values from the original which do not sat
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to reject values. |
+
+---
+
+#### `:scan(accumulator, seed)`
+
+Returns a new Observable that produces values computed by accumulating the results of running a function on each value produced by the original Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `accumulator` | function |  | Accumulates the values of the original Observable. Will be passed the return value of the last call as the first argument and the current values as the rest of the arguments.  Each value returned from this function will be emitted by the Observable. |
+| `seed` | * |  | A value to pass to the accumulator the first time it is run. |
 
 ---
 

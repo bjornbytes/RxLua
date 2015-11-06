@@ -37,6 +37,7 @@ local files = {
   'src/operators/pluck.lua',
   'src/operators/reduce.lua',
   'src/operators/reject.lua',
+  'src/operators/scan.lua',
   'src/operators/skip.lua',
   'src/operators/skipUntil.lua',
   'src/operators/skipWhile.lua',

@@ -20,6 +20,7 @@ RxLua
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
   - [defer](#deferfactory)
+  - [replicate](#replicatevalue-count)
   - [dump](#dumpname-formatter)
   - [all](#allpredicate)
   - [amb](#ambobservables)
@@ -243,6 +244,17 @@ Creates an Observable that creates a new Observable for each observer using a fa
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `factory` | function |  | A function that returns an Observable. |
+
+---
+
+#### `.replicate(value, count)`
+
+Returns an Observable that repeats a value a specified number of times.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | * |  | The value to repeat. |
+| `count` | number (optional) |  | The number of times to repeat the value.  If left unspecified, the value is repeated an infinite number of times. |
 
 ---
 

@@ -210,6 +210,21 @@ describe('Observable', function()
     end)
   end)
 
+  describe('replicate', function()
+    it('returns an Observable', function()
+      expect(Rx.Observable.replicate()).to.be.an(Rx.Observable)
+    end)
+
+    it('returns an Observable that produces the first argument a specified number of times', function()
+      expect(Rx.Observable.replicate(1, 3)).to.produce(1, 1, 1)
+    end)
+
+    it('produces nothing if the count is less than or equal to zero', function()
+      expect(Rx.Observable.replicate(1, 0)).to.produce.nothing()
+      expect(Rx.Observable.replicate(1, -1)).to.produce.nothing()
+    end)
+  end)
+
   describe('dump', function()
   end)
 

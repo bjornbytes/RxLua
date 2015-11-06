@@ -219,6 +219,23 @@ function Observable.defer(fn)
   }, Observable)
 end
 
+--- Returns an Observable that repeats a value a specified number of times.
+-- @arg {*} value - The value to repeat.
+-- @arg {number=} count - The number of times to repeat the value.  If left unspecified, the value
+--                        is repeated an infinite number of times.
+-- @returns {Observable}
+function Observable.replicate(value, count)
+  return Observable.create(function(observer)
+    while count == nil or count > 0 do
+      observer:onNext(value)
+      if count then
+        count = count - 1
+      end
+    end
+    observer:onCompleted()
+  end)
+end
+
 --- Subscribes to this Observable and prints values it produces.
 -- @arg {string=} name - Prefixes the printed messages with a name.
 -- @arg {function=tostring} formatter - A function that formats one or more values to be printed.

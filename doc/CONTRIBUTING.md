@@ -36,4 +36,4 @@ Aim for a consistent style.
 - Indent using two spaces.
 - Document functions using `docroc` syntax so documentation gets automatically generated.  In general this means starting your first comment with three dashes, then using `@arg` and `@returns`.
 - Tend to avoid single line `if`s (i.e. `if condition then action end`).
-- Ensure each file ends in a single trailing newline with no extra blank lines.  This helps with ensuring the base `rx.lua` file gets concatenated correctly.
+- Files should end in a single trailing newline with no extra blank lines.  This ensures that the base `rx.lua` file gets concatenated correctly.

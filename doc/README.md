@@ -58,6 +58,7 @@ RxLua
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
   - [skipWhile](#skipwhilepredicate)
+  - [startWith](#startwithvalues)
   - [sum](#sum)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
@@ -591,6 +592,16 @@ Returns a new Observable that skips elements until the predicate returns falsy f
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to continue skipping values. |
+
+---
+
+#### `:startWith(values)`
+
+Returns a new Observable that produces the specified values followed by all elements produced by the source Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  | The values to produce before the Observable begins producing values normally. |
 
 ---
 

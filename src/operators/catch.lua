@@ -4,7 +4,7 @@ local util = require 'util'
 --- Returns an Observable that intercepts any errors from the previous and replace them with values
 -- produced by a new Observable.
 -- @arg {function|Observable} handler - An Observable or a function that returns an Observable to
---                                       replace the source Observable in the event of an error.
+--                                      replace the source Observable in the event of an error.
 -- @returns {Observable}
 function Observable:catch(handler)
   handler = handler and (type(handler) == 'function' and handler or util.constant(handler))

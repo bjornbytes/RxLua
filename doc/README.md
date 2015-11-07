@@ -63,6 +63,7 @@ RxLua
   - [sum](#sum)
   - [switch](#switch)
   - [take](#taken)
+  - [takeLast](#takelastcount)
   - [takeUntil](#takeuntilother)
   - [takeWhile](#takewhilepredicate)
   - [tap](#taponnext-onerror-oncompleted)
@@ -636,6 +637,16 @@ Returns a new Observable that only produces the first n results of the original.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `n` | number (optional) | 1 | The number of elements to produce before completing. |
+
+---
+
+#### `:takeLast(count)`
+
+Returns an Observable that produces a specified number of elements from the end of a source Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | number |  | The number of elements to produce. |
 
 ---
 

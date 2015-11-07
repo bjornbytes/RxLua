@@ -47,6 +47,7 @@ local files = {
   'src/operators/sum.lua',
   'src/operators/switch.lua',
   'src/operators/take.lua',
+  'src/operators/takeLast.lua',
   'src/operators/takeUntil.lua',
   'src/operators/takeWhile.lua',
   'src/operators/tap.lua',

@@ -61,6 +61,7 @@ RxLua
   - [skipLast](#skiplastcount)
   - [startWith](#startwithvalues)
   - [sum](#sum)
+  - [switch](#switch)
   - [take](#taken)
   - [takeUntil](#takeuntilother)
   - [takeWhile](#takewhilepredicate)
@@ -619,6 +620,12 @@ Returns a new Observable that produces the specified values followed by all elem
 #### `:sum()`
 
 Returns an Observable that produces a single value representing the sum of the values produced by the original.
+
+---
+
+#### `:switch()`
+
+Given an Observable that produces Observables, returns an Observable that produces the values produced by the most recently produced Observable.
 
 ---
 

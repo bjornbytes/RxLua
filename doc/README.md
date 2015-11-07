@@ -58,6 +58,7 @@ RxLua
   - [skip](#skipn)
   - [skipUntil](#skipuntilother)
   - [skipWhile](#skipwhilepredicate)
+  - [skipLast](#skiplastcount)
   - [startWith](#startwithvalues)
   - [sum](#sum)
   - [take](#taken)
@@ -592,6 +593,16 @@ Returns a new Observable that skips elements until the predicate returns falsy f
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to continue skipping values. |
+
+---
+
+#### `:skipLast(count)`
+
+Returns an Observable that omits a specified number of values from the end of the original Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | number |  | The number of items to omit from the end. |
 
 ---
 

@@ -55,6 +55,7 @@ local files = {
   'src/operators/unwrap.lua',
   'src/operators/window.lua',
   'src/operators/with.lua',
+  'src/operators/zip.lua',
   'src/schedulers/immediatescheduler.lua',
   'src/schedulers/cooperativescheduler.lua',
   'src/subjects/subject.lua',

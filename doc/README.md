@@ -56,9 +56,9 @@ RxLua
   - [retry](#retrycount)
   - [scan](#scanaccumulator-seed)
   - [skip](#skipn)
+  - [skipLast](#skiplastcount)
   - [skipUntil](#skipuntilother)
   - [skipWhile](#skipwhilepredicate)
-  - [skipLast](#skiplastcount)
   - [startWith](#startwithvalues)
   - [sum](#sum)
   - [switch](#switch)
@@ -578,6 +578,16 @@ Returns a new Observable that skips over a specified number of values produced b
 
 ---
 
+#### `:skipLast(count)`
+
+Returns an Observable that omits a specified number of values from the end of the original Observable.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | number |  | The number of items to omit from the end. |
+
+---
+
 #### `:skipUntil(other)`
 
 Returns a new Observable that skips over values produced by the original until the specified Observable produces a value.
@@ -595,16 +605,6 @@ Returns a new Observable that skips elements until the predicate returns falsy f
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function |  | The predicate used to continue skipping values. |
-
----
-
-#### `:skipLast(count)`
-
-Returns an Observable that omits a specified number of values from the end of the original Observable.
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `count` | number |  | The number of items to omit from the end. |
 
 ---
 

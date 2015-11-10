@@ -1151,6 +1151,38 @@ function Observable:skip(n)
   end)
 end
 
+--- Returns an Observable that omits a specified number of values from the end of the original
+-- Observable.
+-- @arg {number} count - The number of items to omit from the end.
+-- @returns {Observable}
+function Observable:skipLast(count)
+  local buffer = {}
+  return Observable.create(function(observer)
+    local function emit()
+      if #buffer > count and buffer[1] then
+        local values = table.remove(buffer, 1)
+        observer:onNext(util.unpack(values))
+      end
+    end
+
+    local function onNext(...)
+      emit()
+      table.insert(buffer, util.pack(...))
+    end
+
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onCompleted()
+      emit()
+      return observer:onCompleted()
+    end
+
+    return self:subscribe(onNext, onError, onCompleted)
+  end)
+end
+
 --- Returns a new Observable that skips over values produced by the original until the specified
 -- Observable produces a value.
 -- @arg {Observable} other - The Observable that triggers the production of values.
@@ -1210,38 +1242,6 @@ function Observable:skipWhile(predicate)
     end
 
     local function onCompleted()
-      return observer:onCompleted()
-    end
-
-    return self:subscribe(onNext, onError, onCompleted)
-  end)
-end
-
---- Returns an Observable that omits a specified number of values from the end of the original
--- Observable.
--- @arg {number} count - The number of items to omit from the end.
--- @returns {Observable}
-function Observable:skipLast(count)
-  local buffer = {}
-  return Observable.create(function(observer)
-    local function emit()
-      if #buffer > count and buffer[1] then
-        local values = table.remove(buffer, 1)
-        observer:onNext(util.unpack(values))
-      end
-    end
-
-    local function onNext(...)
-      emit()
-      table.insert(buffer, util.pack(...))
-    end
-
-    local function onError(message)
-      return observer:onError(message)
-    end
-
-    local function onCompleted()
-      emit()
       return observer:onCompleted()
     end
 
@@ -1546,6 +1546,70 @@ function Observable:with(...)
     end
 
     return self:subscribe(onNext, onError, onCompleted)
+  end)
+end
+
+--- Returns an Observable that merges the values produced by the source Observables by grouping them
+-- by their index.  The first onNext event contains the first value of all of the sources, the
+-- second onNext event contains the second value of all of the sources, and so on.  onNext is called
+-- a number of times equal to the number of values produced by the Observable that produces the
+-- fewest number of values.
+-- @arg {Observable...} sources - The Observables to zip.
+-- @returns {Observable}
+function Observable.zip(...)
+  local sources = util.pack(...)
+  local count = #sources
+
+  return Observable.create(function(observer)
+    local values = {}
+    local active = {}
+    for i = 1, count do
+      values[i] = {n = 0}
+      active[i] = true
+    end
+
+    local function onNext(i)
+      return function(value)
+        table.insert(values[i], value)
+        values[i].n = values[i].n + 1
+
+        local ready = true
+        for i = 1, count do
+          if values[i].n == 0 then
+            ready = false
+            break
+          end
+        end
+
+        if ready then
+          local payload = {}
+
+          for i = 1, count do
+            payload[i] = table.remove(values[i], 1)
+            values[i].n = values[i].n - 1
+          end
+
+          observer:onNext(util.unpack(payload))
+        end
+      end
+    end
+
+    local function onError(message)
+      return observer:onError(message)
+    end
+
+    local function onCompleted(i)
+      return function()
+        active[i] = nil
+        if not next(active) or values[i].n == 0 then
+          return observer:onCompleted()
+        end
+      end
+    end
+
+    for i = 1, count do
+      sources[i]:subscribe(onNext(i), onError, onCompleted(i))
+    end
   end)
 end
 

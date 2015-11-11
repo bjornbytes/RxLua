@@ -71,6 +71,7 @@ RxLua
   - [unwrap](#unwrap)
   - [window](#windowsize)
   - [with](#withsources)
+  - [zip](#zipsources)
 - [ImmediateScheduler](#immediatescheduler)
   - [create](#create)
   - [schedule](#scheduleaction)
@@ -80,6 +81,12 @@ RxLua
   - [update](#updatedelta)
   - [isEmpty](#isempty)
 - [Subject](#subject)
+  - [create](#create)
+  - [subscribe](#subscribeonnext-onerror-oncompleted)
+  - [onNext](#onnextvalues)
+  - [onError](#onerrormessage)
+  - [onCompleted](#oncompleted)
+- [AsyncSubject](#asyncsubject)
   - [create](#create)
   - [subscribe](#subscribeonnext-onerror-oncompleted)
   - [onNext](#onnextvalues)
@@ -712,6 +719,16 @@ Returns an Observable that produces values from the original along with the most
 |------|------|---------|-------------|
 | `sources` | Observable... |  | The Observables to include the most recent values from. |
 
+---
+
+#### `.zip(sources)`
+
+Returns an Observable that merges the values produced by the source Observables by grouping them by their index.  The first onNext event contains the first value of all of the sources, the second onNext event contains the second value of all of the sources, and so on.  onNext is called a number of times equal to the number of values produced by the Observable that produces the fewest number of values.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `sources` | Observable... |  | The Observables to zip. |
+
 # ImmediateScheduler
 
 Schedules Observables by running all operations immediately.
@@ -820,6 +837,54 @@ Signal to all Observers that an error has occurred.
 #### `:onCompleted()`
 
 Signal to all Observers that the Subject will not produce any more values.
+
+# AsyncSubject
+
+AsyncSubjects are subjects that produce either no values or a single value.  If multiple values are produced via onNext, only the last one is used.  If onError is called, then no value is produced and onError is called on any subscribed Observers.  If an Observer subscribes and the AsyncSubject has already terminated, the Observer will immediately receive the value or the error.
+
+---
+
+#### `.create()`
+
+Creates a new AsyncSubject.
+
+---
+
+#### `:subscribe(onNext, onError, onCompleted)`
+
+Creates a new Observer and attaches it to the AsyncSubject.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function|table |  | A function called when the AsyncSubject produces a value or an existing Observer to attach to the AsyncSubject. |
+| `onError` | function |  | Called when the AsyncSubject terminates due to an error. |
+| `onCompleted` | function |  | Called when the AsyncSubject completes normally. |
+
+---
+
+#### `:onNext(values)`
+
+Pushes zero or more values to the AsyncSubject.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  |  |
+
+---
+
+#### `:onError(message)`
+
+Signal to all Observers that an error has occurred.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `message` | string (optional) |  | A string describing what went wrong. |
+
+---
+
+#### `:onCompleted()`
+
+Signal to all Observers that the AsyncSubject will not produce any more values.
 
 # BehaviorSubject
 

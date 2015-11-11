@@ -59,6 +59,7 @@ local files = {
   'src/schedulers/immediatescheduler.lua',
   'src/schedulers/cooperativescheduler.lua',
   'src/subjects/subject.lua',
+  'src/subjects/asyncsubject.lua',
   'src/subjects/behaviorsubject.lua',
   'src/aliases.lua'
 }
@@ -78,6 +79,7 @@ local footer = [[return {
   ImmediateScheduler = ImmediateScheduler,
   CooperativeScheduler = CooperativeScheduler,
   Subject = Subject,
+  AsyncSubject = AsyncSubject,
   BehaviorSubject = BehaviorSubject
 }]]
 

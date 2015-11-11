@@ -57,7 +57,8 @@ else
   local files = {
     'observer',
     'observable',
-    'subscription'
+    'subscription',
+    'asyncsubject'
   }
 
   for i, file in ipairs(files) do

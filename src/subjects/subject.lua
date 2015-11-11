@@ -1,4 +1,5 @@
 local Observable = require 'observable'
+local Observer = require 'observer'
 local Subscription = require 'subscription'
 local util = require 'util'
 
@@ -29,7 +30,7 @@ end
 function Subject:subscribe(onNext, onError, onCompleted)
   local observer
 
-  if type(onNext) == 'table' then
+  if util.isa(onNext, Observer) then
     observer = onNext
   else
     observer = Observer.create(onNext, onError, onCompleted)

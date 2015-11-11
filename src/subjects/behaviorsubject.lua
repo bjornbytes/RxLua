@@ -1,4 +1,5 @@
 local Subject = require 'subjects/subject'
+local Observer = require 'observer'
 local util = require 'util'
 
 --- @class BehaviorSubject
@@ -30,8 +31,16 @@ end
 -- @arg {function} onError - Called when the Subject terminates due to an error.
 -- @arg {function} onCompleted - Called when the Subject completes normally.
 function BehaviorSubject:subscribe(onNext, onError, onCompleted)
-  local observer = Observer.create(onNext, onError, onCompleted)
+  local observer
+
+  if util.isa(onNext, Observer) then
+    observer = onNext
+  else
+    observer = Observer.create(onNext, onError, onCompleted)
+  end
+
   Subject.subscribe(self, observer)
+
   if self.value then
     observer:onNext(unpack(self.value))
   end

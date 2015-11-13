@@ -908,13 +908,13 @@ Creates a new BehaviorSubject.
 
 #### `:subscribe(onNext, onError, onCompleted)`
 
-Creates a new Observer and attaches it to the Subject. Immediately broadcasts the most recent value to the Observer.
+Creates a new Observer and attaches it to the BehaviorSubject. Immediately broadcasts the most recent value to the Observer.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `onNext` | function |  | Called when the Subject produces a value. |
-| `onError` | function |  | Called when the Subject terminates due to an error. |
-| `onCompleted` | function |  | Called when the Subject completes normally. |
+| `onNext` | function |  | Called when the BehaviorSubject produces a value. |
+| `onError` | function |  | Called when the BehaviorSubject terminates due to an error. |
+| `onCompleted` | function |  | Called when the BehaviorSubject completes normally. |
 
 ---
 
@@ -930,7 +930,7 @@ Pushes zero or more values to the BehaviorSubject. They will be broadcasted to a
 
 #### `:getValue()`
 
-Returns the last value emitted by the Subject, or the initial value passed to the constructor if nothing has been emitted yet.
+Returns the last value emitted by the BehaviorSubject, or the initial value passed to the constructor if nothing has been emitted yet.
 
 # ReplaySubject
 

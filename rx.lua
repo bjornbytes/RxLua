@@ -1897,7 +1897,7 @@ BehaviorSubject.__tostring = util.constant('BehaviorSubject')
 
 --- Creates a new BehaviorSubject.
 -- @arg {*...} value - The initial values.
--- @returns {Subject}
+-- @returns {BehaviorSubject}
 function BehaviorSubject.create(...)
   local self = {
     observers = {},
@@ -1911,11 +1911,11 @@ function BehaviorSubject.create(...)
   return setmetatable(self, BehaviorSubject)
 end
 
---- Creates a new Observer and attaches it to the Subject. Immediately broadcasts the most recent
--- value to the Observer.
--- @arg {function} onNext - Called when the Subject produces a value.
--- @arg {function} onError - Called when the Subject terminates due to an error.
--- @arg {function} onCompleted - Called when the Subject completes normally.
+--- Creates a new Observer and attaches it to the BehaviorSubject. Immediately broadcasts the most
+-- recent value to the Observer.
+-- @arg {function} onNext - Called when the BehaviorSubject produces a value.
+-- @arg {function} onError - Called when the BehaviorSubject terminates due to an error.
+-- @arg {function} onCompleted - Called when the BehaviorSubject completes normally.
 function BehaviorSubject:subscribe(onNext, onError, onCompleted)
   local observer
 
@@ -1928,7 +1928,7 @@ function BehaviorSubject:subscribe(onNext, onError, onCompleted)
   local subscription = Subject.subscribe(self, observer)
 
   if self.value then
-    observer:onNext(unpack(self.value))
+    observer:onNext(util.unpack(self.value))
   end
 
   return subscription
@@ -1941,8 +1941,8 @@ function BehaviorSubject:onNext(...)
   return Subject.onNext(self, ...)
 end
 
---- Returns the last value emitted by the Subject, or the initial value passed to the constructor
--- if nothing has been emitted yet.
+--- Returns the last value emitted by the BehaviorSubject, or the initial value passed to the
+-- constructor if nothing has been emitted yet.
 -- @returns {*...}
 function BehaviorSubject:getValue()
   if self.value ~= nil then

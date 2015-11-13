@@ -61,6 +61,7 @@ local files = {
   'src/subjects/subject.lua',
   'src/subjects/asyncsubject.lua',
   'src/subjects/behaviorsubject.lua',
+  'src/subjects/replaysubject.lua',
   'src/aliases.lua'
 }
 
@@ -80,7 +81,8 @@ local footer = [[return {
   CooperativeScheduler = CooperativeScheduler,
   Subject = Subject,
   AsyncSubject = AsyncSubject,
-  BehaviorSubject = BehaviorSubject
+  BehaviorSubject = BehaviorSubject,
+  ReplaySubject = ReplaySubject
 }]]
 
 local output = ''

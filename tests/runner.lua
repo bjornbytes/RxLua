@@ -60,7 +60,8 @@ else
     'subscription',
     'subject',
     'asyncsubject',
-    'behaviorsubject'
+    'behaviorsubject',
+    'replaysubject'
   }
 
   for i, file in ipairs(files) do

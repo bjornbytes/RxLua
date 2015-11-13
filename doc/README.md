@@ -97,6 +97,10 @@ RxLua
   - [subscribe](#subscribeonnext-onerror-oncompleted)
   - [onNext](#onnextvalues)
   - [getValue](#getvalue)
+- [ReplaySubject](#replaysubject)
+  - [create](#createbuffersize)
+  - [subscribe](#subscribeonnext-onerror-oncompleted)
+  - [onNext](#onnextvalues)
 
 # Subscription
 
@@ -927,4 +931,40 @@ Pushes zero or more values to the BehaviorSubject. They will be broadcasted to a
 #### `:getValue()`
 
 Returns the last value emitted by the Subject, or the initial value passed to the constructor if nothing has been emitted yet.
+
+# ReplaySubject
+
+A Subject that provides new Subscribers with some or all of the most recently produced values upon subscription.
+
+---
+
+#### `.create(bufferSize)`
+
+Creates a new ReplaySubject.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `bufferSize` | number (optional) |  | The number of values to send to new subscribers. If nil, an infinite buffer is used (note that this could lead to memory issues). |
+
+---
+
+#### `:subscribe(onNext, onError, onCompleted)`
+
+Creates a new Observer and attaches it to the ReplaySubject. Immediately broadcasts the most contents of the buffer to the Observer.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `onNext` | function |  | Called when the ReplaySubject produces a value. |
+| `onError` | function |  | Called when the ReplaySubject terminates due to an error. |
+| `onCompleted` | function |  | Called when the ReplaySubject completes normally. |
+
+---
+
+#### `:onNext(values)`
+
+Pushes zero or more values to the ReplaySubject. They will be broadcasted to all Observers.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `values` | *... |  |  |
 

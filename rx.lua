@@ -1925,11 +1925,13 @@ function BehaviorSubject:subscribe(onNext, onError, onCompleted)
     observer = Observer.create(onNext, onError, onCompleted)
   end
 
-  Subject.subscribe(self, observer)
+  local subscription = Subject.subscribe(self, observer)
 
   if self.value then
     observer:onNext(unpack(self.value))
   end
+
+  return subscription
 end
 
 --- Pushes zero or more values to the BehaviorSubject. They will be broadcasted to all Observers.
@@ -1943,8 +1945,12 @@ end
 -- if nothing has been emitted yet.
 -- @returns {*...}
 function BehaviorSubject:getValue()
-  return self.value and util.unpack(self.value)
+  if self.value ~= nil then
+    return util.unpack(self.value)
+  end
 end
+
+BehaviorSubject.__call = BehaviorSubject.onNext
 
 Observable.wrap = Observable.buffer
 Observable['repeat'] = Observable.replicate

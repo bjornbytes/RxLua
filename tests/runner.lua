@@ -58,7 +58,9 @@ else
     'observer',
     'observable',
     'subscription',
-    'asyncsubject'
+    'subject',
+    'asyncsubject',
+    'behaviorsubject'
   }
 
   for i, file in ipairs(files) do

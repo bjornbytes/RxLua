@@ -28,7 +28,9 @@ function Observable:flatMapLatest(callback)
         innerSubscription:unsubscribe()
       end
 
-      innerSubscription = callback(...):subscribe(onNext, onError)
+      return util.tryWithObserver(observer, function(...)
+        innerSubscription = callback(...):subscribe(onNext, onError)
+      end, ...)
     end
 
     local subscription = self:subscribe(subscribeInner, onError, onCompleted)

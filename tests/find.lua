@@ -5,6 +5,12 @@ describe('find', function()
     expect(observable:find().subscribe).to.fail()
   end)
 
+  it('calls onError if the predicate errors', function()
+    local onError = spy()
+    Rx.Observable.fromValue(3):find(error):subscribe(nil, onError, nil)
+    expect(#onError).to.equal(1)
+  end)
+
   it('uses the identity function as a predicate if none is specified', function()
     local observable = Rx.Observable.fromTable({false, false, true, true, false}):find()
     expect(observable).to.produce(true)

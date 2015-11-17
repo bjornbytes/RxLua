@@ -28,4 +28,11 @@ describe('catch', function()
     local handler = function() return Rx.Observable.empty() end
     expect(Rx.Observable.throw():catch(handler)).to.produce.nothing()
   end)
+
+  it('calls onError if the supplied function errors', function()
+    local handler = error
+    local onError = spy()
+    Rx.Observable.throw():catch(handler):subscribe(nil, onError, nil)
+    expect(#onError).to.equal(1)
+  end)
 end)

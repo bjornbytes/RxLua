@@ -21,12 +21,12 @@ function Observable:catch(handler)
         return observer:onCompleted()
       end
 
-      local continue = handler(e)
-      if continue then
+      local success, continue = pcall(handler, e)
+      if success and continue then
         if subscription then subscription:unsubscribe() end
         continue:subscribe(observer)
       else
-        observer:onError(e)
+        observer:onError(success and e or continue)
       end
     end
 

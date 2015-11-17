@@ -14,17 +14,26 @@ function Observable:tap(_onNext, _onError, _onCompleted)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      _onNext(...)
+      util.tryWithObserver(observer, function(...)
+        _onNext(...)
+      end, ...)
+
       return observer:onNext(...)
     end
 
     local function onError(message)
-      _onError(message)
+      util.tryWithObserver(observer, function()
+        _onError(message)
+      end)
+
       return observer:onError(message)
     end
 
     local function onCompleted()
-      _onCompleted()
+      util.tryWithObserver(observer, function()
+        _onCompleted()
+      end)
+
       return observer:onCompleted()
     end
 

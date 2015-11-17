@@ -3,6 +3,12 @@ describe('flatMapLatest', function()
     expect(Rx.Observable.throw():flatMapLatest()).to.fail()
   end)
 
+  it('produces an error if the callback errors', function()
+    local onError = spy()
+    Rx.Observable.fromRange(3):flatMapLatest(error):subscribe(nil, onError, nil)
+    expect(#onError).to.equal(1)
+  end)
+
   it('unsubscribes from the source and the projected observable', function()
     local outerUnsubscribe = spy()
     local outerSubscription = Rx.Subscription.create(outerUnsubscribe)

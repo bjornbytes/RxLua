@@ -11,9 +11,11 @@ function Observable:count(predicate)
     local count = 0
 
     local function onNext(...)
-      if predicate(...) then
-        count = count + 1
-      end
+      util.tryWithObserver(observer, function(...)
+        if predicate(...) then
+          count = count + 1
+        end
+      end, ...)
     end
 
     local function onError(e)

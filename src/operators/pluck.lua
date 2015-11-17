@@ -8,6 +8,10 @@ local Observable = require 'observable'
 function Observable:pluck(key, ...)
   if not key then return self end
 
+  if type(key) ~= 'string' and type(key) ~= 'number' then
+    return Observable.throw('pluck key must be a string')
+  end
+
   return Observable.create(function(observer)
     local function onNext(t)
       return observer:onNext(t[key])

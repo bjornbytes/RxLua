@@ -9,10 +9,12 @@ function Observable:find(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if predicate(...) then
-        observer:onNext(...)
-        return observer:onCompleted()
-      end
+      util.tryWithObserver(observer, function(...)
+        if predicate(...) then
+          observer:onNext(...)
+          return observer:onCompleted()
+        end
+      end, ...)
     end
 
     local function onError(message)

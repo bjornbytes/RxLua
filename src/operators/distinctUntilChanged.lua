@@ -13,11 +13,14 @@ function Observable:distinctUntilChanged(comparator)
     local currentValue = nil
 
     local function onNext(value, ...)
-      if first or not comparator(value, currentValue) then
-        observer:onNext(value, ...)
-        currentValue = value
-        first = false
-      end
+      local values = util.pack(...)
+      util.tryWithObserver(observer, function()
+        if first or not comparator(value, currentValue) then
+          observer:onNext(value, util.unpack(values))
+          currentValue = value
+          first = false
+        end
+      end)
     end
 
     local function onError(message)

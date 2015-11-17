@@ -12,7 +12,9 @@ function Observable:skipWhile(predicate)
 
     local function onNext(...)
       if skipping then
-        skipping = predicate(...)
+        util.tryWithObserver(observer, function(...)
+          skipping = predicate(...)
+        end, ...)
       end
 
       if not skipping then

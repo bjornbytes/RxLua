@@ -13,6 +13,11 @@ util.constant = function(x) return function() return x end end
 util.isa = function(object, class)
   return type(object) == 'table' and getmetatable(object).__index == class
 end
+util.tryWithObserver = function(observer, fn, ...)
+  return xpcall(fn, function(...)
+    return observer:onError(...)
+  end, ...)
+end
 
 --- @class Subscription
 -- @description A handle representing the link between an Observer and an Observable, as well as any
@@ -260,10 +265,12 @@ function Observable:all(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if not predicate(...) then
-        observer:onNext(false)
-        observer:onCompleted()
-      end
+      util.tryWithObserver(observer, function(...)
+        if not predicate(...) then
+          observer:onNext(false)
+          observer:onCompleted()
+        end
+      end, ...)
     end
 
     local function onError(e)
@@ -413,12 +420,12 @@ function Observable:catch(handler)
         return observer:onCompleted()
       end
 
-      local continue = handler(e)
-      if continue then
+      local success, continue = pcall(handler, e)
+      if success and continue then
         if subscription then subscription:unsubscribe() end
         continue:subscribe(observer)
       else
-        observer:onError(e)
+        observer:onError(success and e or continue)
       end
     end
 
@@ -458,7 +465,9 @@ function Observable:combineLatest(...)
         pending[i] = nil
 
         if not next(pending) then
-          observer:onNext(combinator(util.unpack(latest)))
+          util.tryWithObserver(observer, function()
+            observer:onNext(combinator(util.unpack(latest)))
+          end)
         end
       end
     end
@@ -569,9 +578,11 @@ function Observable:count(predicate)
     local count = 0
 
     local function onNext(...)
-      if predicate(...) then
-        count = count + 1
-      end
+      util.tryWithObserver(observer, function(...)
+        if predicate(...) then
+          count = count + 1
+        end
+      end, ...)
     end
 
     local function onError(e)
@@ -657,11 +668,14 @@ function Observable:distinctUntilChanged(comparator)
     local currentValue = nil
 
     local function onNext(value, ...)
-      if first or not comparator(value, currentValue) then
-        observer:onNext(value, ...)
-        currentValue = value
-        first = false
-      end
+      local values = util.pack(...)
+      util.tryWithObserver(observer, function()
+        if first or not comparator(value, currentValue) then
+          observer:onNext(value, util.unpack(values))
+          currentValue = value
+          first = false
+        end
+      end)
     end
 
     local function onError(message)
@@ -717,9 +731,11 @@ function Observable:filter(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if predicate(...) then
-        return observer:onNext(...)
-      end
+      util.tryWithObserver(observer, function(...)
+        if predicate(...) then
+          return observer:onNext(...)
+        end
+      end, ...)
     end
 
     local function onError(e)
@@ -742,10 +758,12 @@ function Observable:find(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if predicate(...) then
-        observer:onNext(...)
-        return observer:onCompleted()
-      end
+      util.tryWithObserver(observer, function(...)
+        if predicate(...) then
+          observer:onNext(...)
+          return observer:onCompleted()
+        end
+      end, ...)
     end
 
     local function onError(message)
@@ -801,7 +819,9 @@ function Observable:flatMapLatest(callback)
         innerSubscription:unsubscribe()
       end
 
-      innerSubscription = callback(...):subscribe(onNext, onError)
+      return util.tryWithObserver(observer, function(...)
+        innerSubscription = callback(...):subscribe(onNext, onError)
+      end, ...)
     end
 
     local subscription = self:subscribe(subscribeInner, onError, onCompleted)
@@ -895,7 +915,9 @@ function Observable:map(callback)
     callback = callback or util.identity
 
     local function onNext(...)
-      return observer:onNext(callback(...))
+      return util.tryWithObserver(observer, function(...)
+        return observer:onNext(callback(...))
+      end, ...)
     end
 
     local function onError(e)
@@ -978,6 +1000,10 @@ end
 function Observable:pluck(key, ...)
   if not key then return self end
 
+  if type(key) ~= 'string' and type(key) ~= 'number' then
+    return Observable.throw('pluck key must be a string')
+  end
+
   return Observable.create(function(observer)
     local function onNext(t)
       return observer:onNext(t[key])
@@ -1012,7 +1038,9 @@ function Observable:reduce(accumulator, seed)
         result = ...
         first = false
       else
-        result = accumulator(result, ...)
+        return util.tryWithObserver(observer, function(...)
+          result = accumulator(result, ...)
+        end, ...)
       end
     end
 
@@ -1038,9 +1066,11 @@ function Observable:reject(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if not predicate(...) then
-        return observer:onNext(...)
-      end
+      util.tryWithObserver(observer, function(...)
+        if not predicate(...) then
+          return observer:onNext(...)
+        end
+      end, ...)
     end
 
     local function onError(e)
@@ -1107,8 +1137,10 @@ function Observable:scan(accumulator, seed)
         result = ...
         first = false
       else
-        result = accumulator(result, ...)
-        observer:onNext(result)
+        return util.tryWithObserver(observer, function(...)
+          result = accumulator(result, ...)
+          observer:onNext(result)
+        end, ...)
       end
     end
 
@@ -1232,7 +1264,9 @@ function Observable:skipWhile(predicate)
 
     local function onNext(...)
       if skipping then
-        skipping = predicate(...)
+        util.tryWithObserver(observer, function(...)
+          skipping = predicate(...)
+        end, ...)
       end
 
       if not skipping then
@@ -1403,7 +1437,9 @@ function Observable:takeWhile(predicate)
 
     local function onNext(...)
       if taking then
-        taking = predicate(...)
+        util.tryWithObserver(observer, function(...)
+          taking = predicate(...)
+        end, ...)
 
         if taking then
           return observer:onNext(...)
@@ -1438,17 +1474,26 @@ function Observable:tap(_onNext, _onError, _onCompleted)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      _onNext(...)
+      util.tryWithObserver(observer, function(...)
+        _onNext(...)
+      end, ...)
+
       return observer:onNext(...)
     end
 
     local function onError(message)
-      _onError(message)
+      util.tryWithObserver(observer, function()
+        _onError(message)
+      end)
+
       return observer:onError(message)
     end
 
     local function onCompleted()
-      _onCompleted()
+      util.tryWithObserver(observer, function()
+        _onCompleted()
+      end)
+
       return observer:onCompleted()
     end
 

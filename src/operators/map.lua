@@ -9,7 +9,9 @@ function Observable:map(callback)
     callback = callback or util.identity
 
     local function onNext(...)
-      return observer:onNext(callback(...))
+      return util.tryWithObserver(observer, function(...)
+        return observer:onNext(callback(...))
+      end, ...)
     end
 
     local function onError(e)

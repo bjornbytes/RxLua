@@ -10,9 +10,11 @@ function Observable:reject(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if not predicate(...) then
-        return observer:onNext(...)
-      end
+      util.tryWithObserver(observer, function(...)
+        if not predicate(...) then
+          return observer:onNext(...)
+        end
+      end, ...)
     end
 
     local function onError(e)

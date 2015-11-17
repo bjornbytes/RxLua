@@ -12,7 +12,9 @@ function Observable:takeWhile(predicate)
 
     local function onNext(...)
       if taking then
-        taking = predicate(...)
+        util.tryWithObserver(observer, function(...)
+          taking = predicate(...)
+        end, ...)
 
         if taking then
           return observer:onNext(...)

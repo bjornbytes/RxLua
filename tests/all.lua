@@ -1,8 +1,13 @@
 describe('all', function()
   it('passes through errors', function()
-    local observable = Rx.Observable.create(function(observer) observer:onError() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:all().subscribe).to.fail()
+    expect(Rx.Observable.throw():all().subscribe).to.fail()
+  end)
+
+  it('calls onError if the predicate errors', function()
+    local observable = Rx.Observable.fromRange(3):all(error)
+    local onError = spy()
+    observable:subscribe(nil, onError, nil)
+    expect(#onError).to.equal(1)
   end)
 
   it('produces true if all elements satisfy the predicate', function()

@@ -8,10 +8,12 @@ function Observable:all(predicate)
 
   return Observable.create(function(observer)
     local function onNext(...)
-      if not predicate(...) then
-        observer:onNext(false)
-        observer:onCompleted()
-      end
+      util.tryWithObserver(observer, function(...)
+        if not predicate(...) then
+          observer:onNext(false)
+          observer:onCompleted()
+        end
+      end, ...)
     end
 
     local function onError(e)

@@ -9,5 +9,10 @@ util.constant = function(x) return function() return x end end
 util.isa = function(object, class)
   return type(object) == 'table' and getmetatable(object).__index == class
 end
+util.tryWithObserver = function(observer, fn, ...)
+  return xpcall(fn, function(...)
+    return observer:onError(...)
+  end, ...)
+end
 
 return util

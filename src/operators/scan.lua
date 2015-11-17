@@ -1,4 +1,5 @@
 local Observable = require 'observable'
+local util = require 'util'
 
 --- Returns a new Observable that produces values computed by accumulating the results of running a
 -- function on each value produced by the original Observable.
@@ -18,8 +19,10 @@ function Observable:scan(accumulator, seed)
         result = ...
         first = false
       else
-        result = accumulator(result, ...)
-        observer:onNext(result)
+        return util.tryWithObserver(observer, function(...)
+          result = accumulator(result, ...)
+          observer:onNext(result)
+        end, ...)
       end
     end
 

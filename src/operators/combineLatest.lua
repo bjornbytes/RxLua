@@ -28,7 +28,9 @@ function Observable:combineLatest(...)
         pending[i] = nil
 
         if not next(pending) then
-          observer:onNext(combinator(util.unpack(latest)))
+          util.tryWithObserver(observer, function()
+            observer:onNext(combinator(util.unpack(latest)))
+          end)
         end
       end
     end

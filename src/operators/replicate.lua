@@ -1,2 +1,0 @@
-local Observable = require 'observable'
-

@@ -21,7 +21,7 @@ function Observable:contains(value)
       for i = 1, #args do
         if args[i] == value then
           observer:onNext(true)
-        if subscription then subscription:unsubscribe() end
+          if subscription then subscription:unsubscribe() end
           return observer:onCompleted()
         end
       end

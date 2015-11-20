@@ -1,4 +1,4 @@
--- RxLua v0.0.1
+-- RxLua v0.0.2
 -- https://github.com/bjornbytes/rxlua
 -- MIT License
 

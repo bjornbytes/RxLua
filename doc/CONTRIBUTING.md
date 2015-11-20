@@ -11,9 +11,10 @@ Tooling
 
 There are a number of scripts in the `tools` folder that automate certain tasks.  In general, they are run using `lua tools/<file>.lua` from the project root and take no arguments.
 
-- Everything in the `src` directory is concatenated into a single `rx.lua` file in the project root.  The file `tools/concat.lua` does this concatenation.  It strips out both the requires at the top of files and the return values at the bottom.
+- Everything in the `src` directory is concatenated into a single `rx.lua` file in the project root.  The file `tools/build.lua` does this concatenation.  It strips out both the requires at the top of files and the return values at the bottom.
+  - If you want to create a luvit build with additional features, you can run `lua tools/build.lua luvit`.
 - The documentation in `doc/README.md` is automatically generated based on comments in the source.  The file `tools/update_documentation.lua` performs this generation.  Internally it uses `docroc`, which is a library that parses Lua comments and returns them in a table.  From here, `update_documentation` converts the table to markdown and writes it to the `doc` directory.
-- Currently, you should run both of these scripts and include an updated `rx.lua` and `doc/README.md` as part of a pull request.  If you've added a new file you'll have to add it (alphabetized) to the file list in `tools/concat.lua`.
+- Currently, you should run both of these scripts and include an updated `rx.lua` and `doc/README.md` as part of a pull request.  If you've added a new file you'll have to add it (alphabetized) to the file list in `tools/build.lua`.
 
 Tests
 ---

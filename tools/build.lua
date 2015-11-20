@@ -1,5 +1,6 @@
--- Horrible script to concatenate everything in /src into a single rx.lua file.
--- Usage: lua tools/concat.lua [dest=rx.lua]
+--- Horrible script to concatenate everything in /src into a single rx.lua file.
+-- @usage lua tools/build.lua [distribution=base]
+-- @arg {string='base'} distribution - Type of distribution to build, either 'base' or 'luvit'.
 
 local files = {
   'src/util.lua',
@@ -66,9 +67,19 @@ local files = {
 }
 
 local header = [[
--- RxLua v0.0.1
+-- RxLua v0.0.2
 -- https://github.com/bjornbytes/rxlua
 -- MIT License
+
+]]
+
+local exports = [[
+exports.name = 'bjornbytes/rx'
+exports.version = '0.0.2'
+exports.description = 'Reactive Extensions for Lua'
+exports.license = 'MIT'
+exports.author = { url = 'https://github.com/bjornbytes' }
+exports.homepage = 'https://github.com/bjornbytes/rxlua'
 
 ]]
 
@@ -104,8 +115,22 @@ for _, filename in ipairs(files) do
   output = output .. str .. '\n\n'
 end
 
-local outputFile = arg[1] or 'rx.lua'
-local file = io.open(outputFile, 'w')
+local distribution = arg[1] or 'base'
+local destination, components
+
+if distribution == 'base' then
+  destination = 'rx.lua'
+  components = { header, output, footer }
+elseif distribution == 'luvit' then
+  destination = 'rx-luvit.lua'
+  components = { header, exports, output, footer }
+else
+  error('Invalid distribution specified.')
+end
+
+local file = io.open(destination, 'w')
+
 if file then
-  file:write(header .. output .. footer)
+  file:write(table.concat(components, ''))
+  file:close()
 end

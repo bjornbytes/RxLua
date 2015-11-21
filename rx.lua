@@ -1694,7 +1694,7 @@ CooperativeScheduler.__tostring = util.constant('CooperativeScheduler')
 
 --- Creates a new CooperativeScheduler.
 -- @arg {number=0} currentTime - A time to start the scheduler at.
--- @returns {Scheduler.CooperativeScheduler}
+-- @returns {CooperativeScheduler}
 function CooperativeScheduler.create(currentTime)
   local self = {
     tasks = {},
@@ -1704,11 +1704,13 @@ function CooperativeScheduler.create(currentTime)
   return setmetatable(self, CooperativeScheduler)
 end
 
---- Schedules a function to be run after an optional delay.
+--- Schedules a function to be run after an optional delay.  Returns a subscription that will stop
+-- the action from running.
 -- @arg {function} action - The function to execute. Will be converted into a coroutine. The
 --                          coroutine may yield execution back to the scheduler with an optional
 --                          number, which will put it to sleep for a time period.
--- @arg {number=0} delay - Delay execution of the action by a time period.
+-- @arg {number=0} delay - Delay execution of the action by a virtual time period.
+-- @returns {Subscription}
 function CooperativeScheduler:schedule(action, delay)
   local task = {
     thread = coroutine.create(action),

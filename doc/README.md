@@ -80,6 +80,9 @@ RxLua
   - [schedule](#scheduleaction-delay)
   - [update](#updatedelta)
   - [isEmpty](#isempty)
+- [TimeoutScheduler](#timeoutscheduler)
+  - [create](#create)
+  - [schedule](#scheduleaction-delay)
 - [Subject](#subject)
   - [create](#create)
   - [subscribe](#subscribeonnext-onerror-oncompleted)
@@ -771,12 +774,12 @@ Creates a new CooperativeScheduler.
 
 #### `:schedule(action, delay)`
 
-Schedules a function to be run after an optional delay.
+Schedules a function to be run after an optional delay.  Returns a subscription that will stop the action from running.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `action` | function |  | The function to execute. Will be converted into a coroutine. The coroutine may yield execution back to the scheduler with an optional number, which will put it to sleep for a time period. |
-| `delay` | number (optional) | 0 | Delay execution of the action by a time period. |
+| `delay` | number (optional) | 0 | Delay execution of the action by a virtual time period. |
 
 ---
 
@@ -793,6 +796,27 @@ Triggers an update of the CooperativeScheduler. The clock will be advanced and t
 #### `:isEmpty()`
 
 Returns whether or not the CooperativeScheduler's queue is empty.
+
+# TimeoutScheduler
+
+A scheduler that uses luvit's timer library to schedule events on an event loop.
+
+---
+
+#### `.create()`
+
+Creates a new TimeoutScheduler.
+
+---
+
+#### `:schedule(action, delay)`
+
+Schedules an action to run at a future point in time.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `action` | function |  | The action to run. |
+| `delay` | number (optional) | 0 | The delay, in milliseconds. |
 
 # Subject
 

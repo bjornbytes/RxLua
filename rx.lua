@@ -604,6 +604,31 @@ function Observable:count(predicate)
   end)
 end
 
+function Observable:debounce(time, scheduler)
+  time = time or 0
+
+  return Observable.create(function(observer)
+    local function debounce(key)
+      local debounced
+      return function(...)
+        local value = util.pack(...)
+
+        if debounced then
+          debounced:unsubscribe()
+        end
+
+        local values = util.pack(...)
+
+        debounced = scheduler:schedule(function()
+          return observer[key](observer, util.unpack(values))
+        end, time)
+      end
+    end
+
+    local subscription = self:subscribe(debounce('onNext'), debounce('onError'), debounce('onCompleted'))
+  end)
+end
+
 --- Returns a new Observable that produces a default set of items if the source Observable produces
 -- no values.
 -- @arg {*...} values - Zero or more values to produce if the source completes without emitting
@@ -636,8 +661,13 @@ function Observable:defaultIfEmpty(...)
   end)
 end
 
+--- Returns a new Observable that produces the values of the original delayed by a time period.
+-- @arg {number|function} time - An amount in milliseconds to delay by, or a function which returns
+--                                this value.
+-- @arg {Scheduler} scheduler - The scheduler to run the Observable on.
+-- @returns {Observable}
 function Observable:delay(time, scheduler)
-  local time = type(time) ~= 'function' and util.constant(time) or time
+  time = type(time) ~= 'function' and util.constant(time) or time
 
   return Observable.create(function(observer)
     local actions = {}
@@ -1807,10 +1837,10 @@ end
 -- @arg {function} action - The action to run.
 -- @arg {number=0} delay - The delay, in milliseconds.
 -- @returns {Subscription}
-function TimeoutScheduler:schedule(action, delay)
+function TimeoutScheduler:schedule(action, delay, ...)
   local timer = require 'timer'
   local subscription
-  local handle = timer.setTimeout(delay, action)
+  local handle = timer.setTimeout(delay, action, ...)
   return Subscription.create(function()
     timer.clearTimeout(handle)
   end)

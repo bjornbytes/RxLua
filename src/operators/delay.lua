@@ -3,12 +3,12 @@ local Subscription = require 'Subscription'
 local util = require 'util'
 
 --- Returns a new Observable that produces the values of the original delayed by a time period.
--- @arg {number|function} delay - An amount in milliseconds to delay by, or a function which returns
+-- @arg {number|function} time - An amount in milliseconds to delay by, or a function which returns
 --                                this value.
 -- @arg {Scheduler} scheduler - The scheduler to run the Observable on.
 -- @returns {Observable}
-function Observable:delay(delay, scheduler)
-  delay = type(delay) ~= 'function' and util.constant(delay) or delay
+function Observable:delay(time, scheduler)
+  time = type(time) ~= 'function' and util.constant(time) or time
 
   return Observable.create(function(observer)
     local actions = {}
@@ -18,7 +18,7 @@ function Observable:delay(delay, scheduler)
         local arg = util.pack(...)
         local handle = scheduler:schedule(function()
           observer[key](observer, util.unpack(arg))
-        end, delay())
+        end, time())
         table.insert(actions, handle)
       end
     end

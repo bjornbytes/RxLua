@@ -33,6 +33,7 @@ RxLua
   - [contains](#containsvalue)
   - [count](#countpredicate)
   - [defaultIfEmpty](#defaultifemptyvalues)
+  - [delay](#delaytime-scheduler)
   - [distinct](#distinct)
   - [distinctUntilChanged](#distinctuntilchangedcomparator)
   - [elementAt](#elementatindex)
@@ -389,6 +390,17 @@ Returns a new Observable that produces a default set of items if the source Obse
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `values` | *... |  | Zero or more values to produce if the source completes without emitting anything. |
+
+---
+
+#### `:delay(time, scheduler)`
+
+Returns a new Observable that produces the values of the original delayed by a time period.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `time` | number|function |  | An amount in milliseconds to delay by, or a function which returns this value. |
+| `scheduler` | Scheduler |  | The scheduler to run the Observable on. |
 
 ---
 

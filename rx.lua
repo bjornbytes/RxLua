@@ -608,7 +608,7 @@ function Observable:debounce(time, scheduler)
   time = time or 0
 
   return Observable.create(function(observer)
-    local function debounce(key)
+    local function wrap(key)
       local debounced
       return function(...)
         local value = util.pack(...)
@@ -625,7 +625,11 @@ function Observable:debounce(time, scheduler)
       end
     end
 
-    local subscription = self:subscribe(debounce('onNext'), debounce('onError'), debounce('onCompleted'))
+    local subscription = self:subscribe(wrap('onNext'), wrap('onError'), wrap('onCompleted'))
+
+    return Subscription.create(function()
+
+    end)
   end)
 end
 

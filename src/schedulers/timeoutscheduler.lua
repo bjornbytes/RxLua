@@ -16,10 +16,10 @@ end
 -- @arg {function} action - The action to run.
 -- @arg {number=0} delay - The delay, in milliseconds.
 -- @returns {Subscription}
-function TimeoutScheduler:schedule(action, delay)
+function TimeoutScheduler:schedule(action, delay, ...)
   local timer = require 'timer'
   local subscription
-  local handle = timer.setTimeout(delay, action)
+  local handle = timer.setTimeout(delay, action, ...)
   return Subscription.create(function()
     timer.clearTimeout(handle)
   end)

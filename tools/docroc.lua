@@ -1,4 +1,4 @@
--- docroc - Lua documentation generator
+-- docroc v0.1.0 - Lua documentation generator
 -- https://github.com/bjornbytes/docroc
 -- License - MIT, see LICENSE for details.
 
@@ -21,7 +21,7 @@ function docroc.process(filename)
       local processor = docroc.processors[name]
       local tag = processor and processor(body) or {}
       tag.tag = name
-      tag.raw = body
+      tag.text = body
       tags[name] = tags[name] or {}
       table.insert(tags[name], tag)
       table.insert(tags, tag)
@@ -37,12 +37,6 @@ function docroc.process(filename)
 end
 
 docroc.processors = {
-  description = function(body)
-    return {
-      text = body
-    }
-  end,
-
   arg = function(body)
     local name = body:match('^%s*(%w+)') or body:match('^%s*%b{}%s*(%w+)')
     local description = body:match('%-%s*(.*)$')
@@ -74,12 +68,6 @@ docroc.processors = {
     return {
       type = type,
       description = description
-    }
-  end,
-
-  class = function(body)
-    return {
-      name = body
     }
   end
 }

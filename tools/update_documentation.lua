@@ -11,7 +11,7 @@ for _, comment in ipairs(comments) do
   local tags = comment.tags
 
   if tags.class then
-    local class = tags.class[1].name
+    local class = tags.class[1].text
     io.write('- [' .. class .. '](#' .. class:lower() .. ')\n')
   else
     local context = comment.context:match('function.-([:%.].+)')
@@ -40,7 +40,7 @@ for _, comment in ipairs(comments) do
   local tags = comment.tags
 
   if tags.class then
-    io.write('# ' .. tags.class[1].name .. '\n\n')
+    io.write('# ' .. tags.class[1].text .. '\n\n')
     if tags.description then
       io.write(tags.description[1].text .. '\n\n')
     end

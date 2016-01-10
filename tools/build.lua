@@ -41,6 +41,7 @@ local files = {
   'src/operators/reduce.lua',
   'src/operators/reject.lua',
   'src/operators/retry.lua',
+  'src/operators/sample.lua',
   'src/operators/scan.lua',
   'src/operators/skip.lua',
   'src/operators/skipLast.lua',

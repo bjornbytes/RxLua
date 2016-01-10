@@ -55,6 +55,7 @@ RxLua
   - [reduce](#reduceaccumulator-seed)
   - [reject](#rejectpredicate)
   - [retry](#retrycount)
+  - [sample](#samplesampler)
   - [scan](#scanaccumulator-seed)
   - [skip](#skipn)
   - [skipLast](#skiplastcount)
@@ -580,6 +581,16 @@ Returns an Observable that restarts in the event of an error.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `count` | number (optional) |  | The maximum number of times to retry.  If left unspecified, an infinite number of retries will be attempted. |
+
+---
+
+#### `:sample(sampler)`
+
+Returns a new Observable that produces its most recent value every time the specified observable produces a value.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `sampler` | Observable |  | The Observable that is used to sample values from this Observable. |
 
 ---
 

@@ -19,6 +19,7 @@ RxLua
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
+  - [fromFileByLine](#fromfilebylinefilename)
   - [defer](#deferfactory)
   - [replicate](#replicatevalue-count)
   - [dump](#dumpname-formatter)
@@ -256,6 +257,16 @@ Creates an Observable that produces values when the specified coroutine yields.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `coroutine` | thread |  |  |
+
+---
+
+#### `.fromFileByLine(filename)`
+
+Creates an Observable that produces values from a file, line by line.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `filename` | string |  | The name of the file used to create the Observable |
 
 ---
 
@@ -1014,4 +1025,3 @@ Pushes zero or more values to the ReplaySubject. They will be broadcasted to all
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `values` | *... |  |  |
-

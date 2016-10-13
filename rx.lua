@@ -265,7 +265,7 @@ end
 -- @returns {Observable}
 function Observable.fromFileByLine(filename)
   return Observable.create(function(observer)
-    local f = io.open(filename, "rb")
+    local f = io.open(filename, 'r')
     if f
     then
       f:close()

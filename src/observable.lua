@@ -165,4 +165,24 @@ function Observable:dump(name, formatter)
   return self:subscribe(onNext, onError, onCompleted)
 end
 
+--- Creates an Observable that produces values from a file, line by line.
+-- @arg {string} filename - The name of the file used to create the Observable
+-- @returns {Observable}
+function Observable.fromFileByLine(filename)
+  return Observable.create(function(observer)
+    local f = io.open(filename, 'r')
+    if f
+    then
+      f:close()
+      for line in io.lines(filename) do
+        observer:onNext(line)
+      end
+
+      return observer:onCompleted()
+    else
+      return observer:onError(filename)
+    end
+  end)
+end
+
 return Observable

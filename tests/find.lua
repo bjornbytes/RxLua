@@ -1,13 +1,13 @@
 describe('find', function()
   it('produces an error if its parent errors', function()
-    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    local observable = Rx.Observable.of(''):map(function(x) return x() end)
     expect(observable.subscribe).to.fail()
     expect(observable:find().subscribe).to.fail()
   end)
 
   it('calls onError if the predicate errors', function()
     local onError = spy()
-    Rx.Observable.fromValue(3):find(error):subscribe(nil, onError, nil)
+    Rx.Observable.of(3):find(error):subscribe(nil, onError, nil)
     expect(#onError).to.equal(1)
   end)
 

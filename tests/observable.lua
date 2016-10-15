@@ -14,14 +14,14 @@ describe('Observable', function()
 
   describe('subscribe', function()
     it('passes the first argument to _subscribe if it is a table', function()
-      local observable = Rx.Observable.fromValue()
+      local observable = Rx.Observable.of()
       local observer = Rx.Observer.create()
       local function run() observable:subscribe(observer) end
       expect(spy(observable, '_subscribe', run)).to.equal({{observer}})
     end)
 
     it('creates a new Observer using the first three arguments and passes it to _subscribe if the first argument is not a table', function()
-      local observable = Rx.Observable.fromValue()
+      local observable = Rx.Observable.of()
       local a, b, c = function() end, function() end, function() end
       local function run() observable:subscribe(a, b, c) end
       local observer = spy(observable, '_subscribe', run)[1][1]
@@ -59,15 +59,20 @@ describe('Observable', function()
     end)
   end)
 
-  describe('fromValue', function()
-    it('returns an Observable that produces the first argument and completes', function()
-      local observable = Rx.Observable.fromValue(1, 2, 3)
-      expect(observable).to.produce(1)
+  describe('of', function()
+    it('returns an Observable that produces the supplied arguments and completes', function()
+      local observable = Rx.Observable.of(1, 2, 3)
+      expect(observable).to.produce(1, 2, 3)
     end)
 
-    it('returns an Observable that produces nil and completes if no arguments are passed', function()
-      local observable = Rx.Observable.fromValue()
+    it('returns an Observable that produces nil and completes if nil is passed', function()
+      local observable = Rx.Observable.of(nil)
       expect(observable).to.produce(nil)
+    end)
+
+    it('returns an Observable that produces nothing if no arguments are passed', function()
+      local observable = Rx.Observable.of()
+      expect(observable).to.produce.nothing()
     end)
   end)
 

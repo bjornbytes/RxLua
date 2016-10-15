@@ -1,6 +1,6 @@
 describe('reduce', function()
   it('fails if the first argument is not a function', function()
-    local observable = Rx.Observable.fromValue(0)
+    local observable = Rx.Observable.of(0)
     expect(observable:reduce()).to.fail()
     expect(observable:reduce(1)).to.fail()
     expect(observable:reduce('')).to.fail()
@@ -10,7 +10,7 @@ describe('reduce', function()
 
   it('uses the seed as the initial value to the accumulator', function()
     local accumulator = spy()
-    Rx.Observable.fromValue(3):reduce(accumulator, 4):subscribe()
+    Rx.Observable.of(3):reduce(accumulator, 4):subscribe()
     expect(accumulator[1]).to.equal({4, 3})
   end)
 

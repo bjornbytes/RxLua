@@ -22,7 +22,7 @@ describe('concat', function()
 
   it('should error if any of the sources error', function()
     local badObservable = Rx.Observable.create(function(observer) observer:onError('oh no') end)
-    local observable = Rx.Observable.fromValue(1):concat(Rx.Observable.fromValue(2), badObservable)
+    local observable = Rx.Observable.of(1):concat(Rx.Observable.of(2), badObservable)
     expect(observable.subscribe).to.fail()
   end)
 

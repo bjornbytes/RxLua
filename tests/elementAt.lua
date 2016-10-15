@@ -11,16 +11,16 @@ describe('elementAt', function()
   end)
 
   it('errors if no index is specified', function()
-    expect(Rx.Observable.fromValue(1):elementAt().subscribe).to.fail()
+    expect(Rx.Observable.of(1):elementAt().subscribe).to.fail()
   end)
 
   it('produces no values if the specified index is less than one', function()
-    expect(Rx.Observable.fromValue(1):elementAt(0)).to.produce.nothing()
-    expect(Rx.Observable.fromValue(1):elementAt(-1)).to.produce.nothing()
+    expect(Rx.Observable.of(1):elementAt(0)).to.produce.nothing()
+    expect(Rx.Observable.of(1):elementAt(-1)).to.produce.nothing()
   end)
 
   it('produces no values if the specified index is greater than the number of elements produced by the source', function()
-    expect(Rx.Observable.fromValue(1):elementAt(2)).to.produce.nothing()
+    expect(Rx.Observable.of(1):elementAt(2)).to.produce.nothing()
   end)
 
   it('produces all values produced by the source at the specified index', function()

@@ -1,6 +1,6 @@
 describe('partition', function()
   it('errors when its parent errors', function()
-    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    local observable = Rx.Observable.of(''):map(function(x) return x() end)
     expect(observable.subscribe).to.fail()
     expect(observable:partition().subscribe).to.fail()
   end)

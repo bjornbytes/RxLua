@@ -21,10 +21,10 @@ describe('all', function()
   end)
 
   it('uses the identity function as a predicate if none is specified', function()
-    local observable = Rx.Observable.fromValue(false):all()
+    local observable = Rx.Observable.of(false):all()
     expect(observable).to.produce({{false}})
 
-    observable = Rx.Observable.fromValue(true):all()
+    observable = Rx.Observable.of(true):all()
     expect(observable).to.produce({{true}})
   end)
 end)

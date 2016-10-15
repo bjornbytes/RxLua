@@ -5,7 +5,7 @@ describe('distinct', function()
   end)
 
   it('produces an error if its parent errors', function()
-    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    local observable = Rx.Observable.of(''):map(function(x) return x() end)
     expect(observable.subscribe).to.fail()
     expect(observable:distinct().subscribe).to.fail()
   end)

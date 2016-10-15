@@ -1,6 +1,6 @@
 describe('distinctUntilChanged', function()
   it('produces an error if its parent errors', function()
-    local observable = Rx.Observable.fromValue(''):map(function(x) return x() end)
+    local observable = Rx.Observable.of(''):map(function(x) return x() end)
     expect(observable.subscribe).to.fail()
     expect(observable:distinctUntilChanged().subscribe).to.fail()
   end)
@@ -12,7 +12,7 @@ describe('distinctUntilChanged', function()
     end)
 
     it('produces the first value if it is nil', function()
-      local observable = Rx.Observable.fromValue(nil):distinctUntilChanged()
+      local observable = Rx.Observable.of(nil):distinctUntilChanged()
       expect(observable).to.produce({{}})
     end)
 
@@ -29,7 +29,7 @@ describe('distinctUntilChanged', function()
     end)
 
     it('produces the first value if it is nil', function()
-      local observable = Rx.Observable.fromValue(nil):distinctUntilChanged(function(x, y) return true end)
+      local observable = Rx.Observable.of(nil):distinctUntilChanged(function(x, y) return true end)
       expect(observable).to.produce({{}})
     end)
 

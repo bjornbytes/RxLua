@@ -1,6 +1,6 @@
 describe('flatMap', function()
   it('produces an error if its parent errors', function()
-    local observable = Rx.Observable.fromValue(''):flatMap(function(x) return x() end)
+    local observable = Rx.Observable.of(''):flatMap(function(x) return x() end)
     expect(observable.subscribe).to.fail()
   end)
 

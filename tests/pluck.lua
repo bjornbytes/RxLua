@@ -1,6 +1,6 @@
 describe('pluck', function()
   it('returns the original observable if no key is specified', function()
-    local observable = Rx.Observable.fromValue(7)
+    local observable = Rx.Observable.of(7)
     expect(observable:pluck()).to.equal(observable)
   end)
 
@@ -33,6 +33,6 @@ describe('pluck', function()
 
   it('respects metatables', function()
     local t = setmetatable({}, {__index = {a = 'b'}})
-    expect(Rx.Observable.fromValue(t):pluck('a')).to.produce('b')
+    expect(Rx.Observable.of(t):pluck('a')).to.produce('b')
   end)
 end)

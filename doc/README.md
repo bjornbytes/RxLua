@@ -15,7 +15,7 @@ RxLua
   - [empty](#empty)
   - [never](#never)
   - [throw](#throwmessage)
-  - [fromValue](#fromvaluevalue)
+  - [of](#ofvalues)
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
   - [fromCoroutine](#fromcoroutinecoroutine)
@@ -216,13 +216,13 @@ Returns an Observable that immediately produces an error.
 
 ---
 
-#### `.fromValue(value)`
+#### `.of(values)`
 
-Creates an Observable that produces a single value.
+Creates an Observable that produces a set of values.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | * |  |  |
+| `values` | *... |  |  |
 
 ---
 

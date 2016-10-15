@@ -143,12 +143,17 @@ function Observable.throw(message)
   end)
 end
 
---- Creates an Observable that produces a single value.
--- @arg {*} value
+--- Creates an Observable that produces a set of values.
+-- @arg {*...} values
 -- @returns {Observable}
-function Observable.fromValue(value)
+function Observable.of(...)
+  local args = {...}
+  local argCount = select('#', ...)
   return Observable.create(function(observer)
-    observer:onNext(value)
+    for i = 1, argCount do
+      observer:onNext(args[i])
+    end
+
     observer:onCompleted()
   end)
 end

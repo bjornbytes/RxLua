@@ -58,7 +58,6 @@ Resources
 
 - [Documentation](doc)
 - [Contributor Guide](doc/CONTRIBUTING.md)
-- [Trello board](https://trello.com/b/Q9dJicKK)
 - [Rx Introduction](http://reactivex.io/intro.html)
 
 Tests

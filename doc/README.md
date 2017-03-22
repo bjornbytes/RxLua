@@ -18,7 +18,7 @@ RxLua
   - [of](#ofvalues)
   - [fromRange](#fromrangeinitial-limit-step)
   - [fromTable](#fromtabletable-iterator-keys)
-  - [fromCoroutine](#fromcoroutinecoroutine)
+  - [fromCoroutine](#fromcoroutinefn)
   - [fromFileByLine](#fromfilebylinefilename)
   - [defer](#deferfactory)
   - [replicate](#replicatevalue-count)
@@ -250,13 +250,13 @@ Creates an Observable that produces values from a table.
 
 ---
 
-#### `.fromCoroutine(coroutine)`
+#### `.fromCoroutine(fn)`
 
 Creates an Observable that produces values when the specified coroutine yields.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `coroutine` | thread |  |  |
+| `fn` | thread|function |  | A coroutine or function to use to generate values.  Note that if a coroutine is used, the values it yields will be shared by all subscribed Observers (influenced by the Scheduler), whereas a new coroutine will be created for each Observer when a function is used. |
 
 ---
 

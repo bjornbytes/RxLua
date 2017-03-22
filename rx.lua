@@ -197,11 +197,14 @@ function Observable.fromTable(t, iterator, keys)
 end
 
 --- Creates an Observable that produces values when the specified coroutine yields.
--- @arg {thread} coroutine
+-- @arg {thread|function} fn - A coroutine or function to use to generate values.  Note that if a
+--                             coroutine is used, the values it yields will be shared by all
+--                             subscribed Observers (influenced by the Scheduler), whereas a new
+--                             coroutine will be created for each Observer when a function is used.
 -- @returns {Observable}
-function Observable.fromCoroutine(thread, scheduler)
-  thread = type(thread) == 'function' and coroutine.create(thread) or thread
+function Observable.fromCoroutine(fn, scheduler)
   return Observable.create(function(observer)
+    local thread = type(fn) == 'function' and coroutine.create(fn) or fn
     return scheduler:schedule(function()
       while not observer.stopped do
         local success, value = coroutine.resume(thread)

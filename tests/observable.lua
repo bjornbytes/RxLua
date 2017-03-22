@@ -177,6 +177,40 @@ describe('Observable', function()
       until Rx.scheduler:isEmpty()
       expect(onNext).to.equal({{1}, {2}, {3}})
     end)
+
+    it('shares values among Observers when the first argument is a coroutine', function()
+      local coroutine = coroutine.create(function()
+        coroutine.yield(1)
+        coroutine.yield(2)
+        return 3
+      end)
+
+      Rx.scheduler = Rx.CooperativeScheduler.create()
+      local observable = Rx.Observable.fromCoroutine(coroutine, Rx.scheduler)
+      local onNextA = observableSpy(observable)
+      local onNextB = observableSpy(observable)
+      repeat Rx.scheduler:update()
+      until Rx.scheduler:isEmpty()
+      expect(onNextA).to.equal({{2}})
+      expect(onNextB).to.equal({{1}, {3}})
+    end)
+
+    it('uses a unique coroutine for each Observer when the first argument is a function', function()
+      local coroutine = function()
+        coroutine.yield(1)
+        coroutine.yield(2)
+        return 3
+      end
+
+      Rx.scheduler = Rx.CooperativeScheduler.create()
+      local observable = Rx.Observable.fromCoroutine(coroutine, Rx.scheduler)
+      local onNextA = observableSpy(observable)
+      local onNextB = observableSpy(observable)
+      repeat Rx.scheduler:update()
+      until Rx.scheduler:isEmpty()
+      expect(onNextA).to.equal({{1}, {2}, {3}})
+      expect(onNextB).to.equal({{1}, {2}, {3}})
+    end)
   end)
 
   describe('defer', function()

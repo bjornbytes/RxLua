@@ -73,7 +73,7 @@ for _, comment in ipairs(comments) do
         local name = arg.name
         name = '`' .. name .. '`'
         local description = arg.description or ''
-        local type = arg.type
+        local type = arg.type:gsub('|', ' or ')
         local default = ''
         if arg.optional then
           type = type .. ' (optional)'

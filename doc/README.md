@@ -256,7 +256,7 @@ Creates an Observable that produces values when the specified coroutine yields.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `fn` | thread|function |  | A coroutine or function to use to generate values.  Note that if a coroutine is used, the values it yields will be shared by all subscribed Observers (influenced by the Scheduler), whereas a new coroutine will be created for each Observer when a function is used. |
+| `fn` | thread or function |  | A coroutine or function to use to generate values.  Note that if a coroutine is used, the values it yields will be shared by all subscribed Observers (influenced by the Scheduler), whereas a new coroutine will be created for each Observer when a function is used. |
 
 ---
 
@@ -344,7 +344,7 @@ Returns an Observable that intercepts any errors from the previous and replace t
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `handler` | function|Observable |  | An Observable or a function that returns an Observable to replace the source Observable in the event of an error. |
+| `handler` | function or Observable |  | An Observable or a function that returns an Observable to replace the source Observable in the event of an error. |
 
 ---
 
@@ -411,7 +411,7 @@ Returns a new Observable that produces the values of the original delayed by a t
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `time` | number|function |  | An amount in milliseconds to delay by, or a function which returns this value. |
+| `time` | number or function |  | An amount in milliseconds to delay by, or a function which returns this value. |
 | `scheduler` | Scheduler |  | The scheduler to run the Observable on. |
 
 ---
@@ -870,7 +870,7 @@ Creates a new Observer and attaches it to the Subject.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `onNext` | function|table |  | A function called when the Subject produces a value or an existing Observer to attach to the Subject. |
+| `onNext` | function or table |  | A function called when the Subject produces a value or an existing Observer to attach to the Subject. |
 | `onError` | function |  | Called when the Subject terminates due to an error. |
 | `onCompleted` | function |  | Called when the Subject completes normally. |
 
@@ -918,7 +918,7 @@ Creates a new Observer and attaches it to the AsyncSubject.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `onNext` | function|table |  | A function called when the AsyncSubject produces a value or an existing Observer to attach to the AsyncSubject. |
+| `onNext` | function or table |  | A function called when the AsyncSubject produces a value or an existing Observer to attach to the AsyncSubject. |
 | `onError` | function |  | Called when the AsyncSubject terminates due to an error. |
 | `onCompleted` | function |  | Called when the AsyncSubject completes normally. |
 

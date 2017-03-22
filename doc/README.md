@@ -1025,3 +1025,4 @@ Pushes zero or more values to the ReplaySubject. They will be broadcasted to all
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `values` | *... |  |  |
+

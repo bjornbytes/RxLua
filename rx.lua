@@ -1871,14 +1871,14 @@ function CooperativeScheduler:update(delta)
     if self.currentTime >= task.due then
       local success, delay = coroutine.resume(task.thread)
 
-      if success then
-        task.due = math.max(task.due + (delay or 0), self.currentTime)
-      else
-        error(delay)
-      end
-
       if coroutine.status(task.thread) == 'dead' then
         table.remove(self.tasks, i)
+      else
+        task.due = math.max(task.due + (delay or 0), self.currentTime)
+      end
+
+      if not success then
+        error(delay)
       end
     end
   end

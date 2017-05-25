@@ -1865,7 +1865,8 @@ end
 function CooperativeScheduler:update(delta)
   self.currentTime = self.currentTime + (delta or 0)
 
-  for i = #self.tasks, 1, -1 do
+  local i = 1
+  while i <= #self.tasks do
     local task = self.tasks[i]
 
     if self.currentTime >= task.due then
@@ -1875,11 +1876,14 @@ function CooperativeScheduler:update(delta)
         table.remove(self.tasks, i)
       else
         task.due = math.max(task.due + (delay or 0), self.currentTime)
+        i = i + 1
       end
 
       if not success then
         error(delay)
       end
+    else
+      i = i + 1
     end
   end
 end

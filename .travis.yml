@@ -1,18 +1,26 @@
-language: c
-sudo: false
+language: python
+sudo: required
+dist: trusty
 
-addons:
-  apt:
-    packages:
-    - lua5.1
-    - lua5.2
-    - luajit
+env:
+  - LUA="lua 5.1"
+  - LUA="lua 5.2"
+  - LUA="lua 5.3"
+  - LUA="luajit 2.0"
+  - LUA="luajit 2.1"
 
-branches:
-  only:
-    - master
+before_install:
+  - pip install hererocks
+  - hererocks here -r^ --$LUA
+  - source here/bin/activate
+
+install:
+  - luarocks make
+  - luarocks install luacov-coveralls
 
 script:
-  - lua5.1 tests/runner.lua
-  - lua5.2 tests/runner.lua
-  - luajit-2.0.0-beta9 tests/runner.lua
+  - lua -v
+  - lua -lluacov tests/runner.lua
+
+after_success:
+  - luacov-coveralls

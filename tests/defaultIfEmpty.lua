@@ -1,6 +1,7 @@
 describe('defaultIfEmpty', function()
   it('errors if the source errors', function()
-    expect(Rx.Observable.throw():defaultIfEmpty(1).subscribe).to.fail()
+    local _, onError = observableSpy(Rx.Observable.throw():defaultIfEmpty(1))
+    expect(#onError).to.equal(1)
   end)
 
   it('produces the values from the source unchanged if at least one value is produced', function()

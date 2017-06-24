@@ -17,9 +17,8 @@ describe('filter', function()
   end)
 
   it('errors when its parent errors', function()
-    local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:filter().subscribe).to.fail()
+    local _, onError = observableSpy(Rx.Observable.throw():filter())
+    expect(#onError).to.equal(1)
   end)
 
   it('calls onError if the predicate errors', function()

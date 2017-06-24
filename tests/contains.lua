@@ -1,6 +1,7 @@
 describe('contains', function()
   it('errors when its parent errors', function()
-    expect(Rx.Observable.throw():contains(1).subscribe).to.fail()
+    local _, onError = observableSpy(Rx.Observable.throw():contains(1))
+    expect(#onError).to.equal(1)
   end)
 
   it('returns false if the source Observable produces no values', function()

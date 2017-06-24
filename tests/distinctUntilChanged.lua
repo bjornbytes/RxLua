@@ -1,8 +1,7 @@
 describe('distinctUntilChanged', function()
   it('produces an error if its parent errors', function()
-    local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:distinctUntilChanged().subscribe).to.fail()
+    local _, onError = observableSpy(Rx.Observable.throw():distinctUntilChanged())
+    expect(#onError).to.equal(1)
   end)
 
   describe('with the default comparator', function()

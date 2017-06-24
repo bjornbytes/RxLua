@@ -1,4 +1,9 @@
 describe('concat', function()
+  it('produces an error if its parent errors', function()
+    local _, onError = observableSpy(Rx.Observable.throw():concat())
+    expect(#onError).to.equal(1)
+  end)
+
   it('returns the first argument if it is the only argument', function()
     local observable = Rx.Observable.fromRange(1, 3):concat()
     expect(observable).to.produce(1, 2, 3)

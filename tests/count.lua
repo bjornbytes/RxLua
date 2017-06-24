@@ -1,8 +1,7 @@
 describe('count', function()
   it('passes through errors', function()
-    local observable = Rx.Observable.create(function(observer) observer:onError() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:count().subscribe).to.fail()
+    local _, onError = observableSpy(Rx.Observable.throw():count())
+    expect(#onError).to.equal(1)
   end)
 
   it('produces a single value representing the number of elements produced by the source', function()

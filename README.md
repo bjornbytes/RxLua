@@ -1,4 +1,4 @@
-RxLua [![Build Status](https://travis-ci.org/bjornbytes/RxLua.svg)](https://travis-ci.org/bjornbytes/RxLua)
+RxLua [![Build Status](https://travis-ci.org/bjornbytes/RxLua.svg)](https://travis-ci.org/bjornbytes/RxLua) [![Coverage Status](https://coveralls.io/repos/github/bjornbytes/RxLua/badge.svg?branch=master)](https://coveralls.io/github/bjornbytes/RxLua?branch=master)
 ===
 
 [Reactive Extensions](http://reactivex.io) for Lua.

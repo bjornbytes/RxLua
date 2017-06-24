@@ -10,6 +10,11 @@ describe('all', function()
     expect(#onError).to.equal(1)
   end)
 
+  it('produces an error if the parent errors', function()
+    local _, onError = observableSpy(Rx.Observable.throw():all(function(x) return x end))
+    expect(#onError).to.equal(1)
+  end)
+
   it('produces true if all elements satisfy the predicate', function()
     local observable = Rx.Observable.fromRange(5):all(function(x) return x < 10 end)
     expect(observable).to.produce({{true}})

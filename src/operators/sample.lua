@@ -16,7 +16,9 @@ function Observable:sample(sampler)
     end
 
     local function onNext()
-      return observer:onNext(util.unpack(latest))
+      if #latest > 0 then
+        return observer:onNext(util.unpack(latest))
+      end
     end
 
     local function onError(message)

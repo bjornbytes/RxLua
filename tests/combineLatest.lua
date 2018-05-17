@@ -4,6 +4,25 @@ describe('combineLatest', function()
     expect(observable).to.produce(1, 2, 3, 4, 5)
   end)
 
+  it('unsubscribes from the combined source observables', function()
+    local unsubscribeA = spy()
+    local subscriptionA = Rx.Subscription.create(unsubscribeA)
+    local observableA = Rx.Observable.create(function(observer)
+      return subscriptionA
+    end)
+
+    local unsubscribeB = spy()
+    local subscriptionB = Rx.Subscription.create(unsubscribeB)
+    local observableB = Rx.Observable.create(function(observer)
+      return subscriptionB
+    end)
+
+    local subscription = Rx.Observable.combineLatest(observableA, observableB):subscribe()
+    subscription:unsubscribe()
+    expect(#unsubscribeA).to.equal(1)
+    expect(#unsubscribeB).to.equal(1)
+  end)
+
   it('calls the combinator function with all values produced from all input observables once they have all produced a value', function()
     local observableA = Rx.Observable.of('a')
     local observableB = Rx.Observable.of('b')

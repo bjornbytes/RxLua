@@ -488,6 +488,7 @@ function Observable:combineLatest(...)
     local latest = {}
     local pending = {util.unpack(sources)}
     local completed = {}
+    local subscription = {}
 
     local function onNext(i)
       return function(value)
@@ -517,8 +518,14 @@ function Observable:combineLatest(...)
     end
 
     for i = 1, #sources do
-      sources[i]:subscribe(onNext(i), onError, onCompleted(i))
+      subscription[i] = sources[i]:subscribe(onNext(i), onError, onCompleted(i))
     end
+
+    return Subscription.create(function ()
+      for i = 1, #subscription do
+        if subscription[i] then subscription[i]:unsubscribe() end
+      end
+    end)
   end)
 end
 

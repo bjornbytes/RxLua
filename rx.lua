@@ -1049,6 +1049,8 @@ function Observable:merge(...)
   table.insert(sources, 1, self)
 
   return Observable.create(function(observer)
+    local subscriptions = {}
+
     local function onNext(...)
       return observer:onNext(...)
     end
@@ -1068,8 +1070,14 @@ function Observable:merge(...)
     end
 
     for i = 1, #sources do
-      sources[i]:subscribe(onNext, onError, onCompleted(i))
+      subscriptions[i] = sources[i]:subscribe(onNext, onError, onCompleted(i))
     end
+
+    return Subscription.create(function ()
+      for i = 1, #sources do
+        if subscriptions[i] then subscriptions[i]:unsubscribe() end
+      end
+    end)
   end)
 end
 

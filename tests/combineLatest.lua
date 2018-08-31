@@ -5,10 +5,8 @@ describe('combineLatest', function()
   end)
 
   it('unsubscribes from the combined source observables', function()
-    local unsubscribeA = spy()
-    local subscriptionA = Rx.Subscription.create(unsubscribeA)
     local observableA = Rx.Observable.create(function(observer)
-      return subscriptionA
+      return nil
     end)
 
     local unsubscribeB = spy()
@@ -19,7 +17,6 @@ describe('combineLatest', function()
 
     local subscription = Rx.Observable.combineLatest(observableA, observableB):subscribe()
     subscription:unsubscribe()
-    expect(#unsubscribeA).to.equal(1)
     expect(#unsubscribeB).to.equal(1)
   end)
 

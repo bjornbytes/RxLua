@@ -55,7 +55,7 @@ function Observable:combineLatest(...)
     end
 
     return Subscription.create(function ()
-      for i = 1, #subscription do
+      for i = 1, #sources do
         if subscription[i] then subscription[i]:unsubscribe() end
       end
     end)

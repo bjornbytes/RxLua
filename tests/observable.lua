@@ -213,6 +213,36 @@ describe('Observable', function()
     end)
   end)
 
+  describe('fromFileByLine', function()
+    local oldIO = _G['io']
+    _G['io'] = {}
+
+    it('returns an observable', function()
+      expect(Rx.Observable.fromFileByLine('file.txt')).to.be.an(Rx.Observable)
+    end)
+
+    it('errors if the file does not exist', function()
+      io.open = function() return nil end
+      expect(Rx.Observable.fromFileByLine('file.txt').subscribe).to.fail()
+    end)
+
+    it('returns an Observable that produces the lines of the file', function()
+      io.open = function() return { close = function() end } end
+      io.lines = function()
+        local lines = { 'line1', 'line2', 'line3' }
+        local i = 0
+        return function()
+          i = i + 1
+          return lines[i]
+        end
+      end
+
+      expect(Rx.Observable.fromFileByLine('file.txt')).to.produce('line1', 'line2', 'line3')
+    end)
+
+    io = oldIO
+  end)
+
   describe('defer', function()
     it('returns an Observable', function()
       expect(Rx.Observable.defer()).to.be.an(Rx.Observable)

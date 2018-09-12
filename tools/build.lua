@@ -71,7 +71,7 @@ local files = {
 }
 
 local header = [[
--- RxLua v0.0.2
+-- RxLua v0.0.3
 -- https://github.com/bjornbytes/rxlua
 -- MIT License
 
@@ -79,7 +79,7 @@ local header = [[
 
 local exports = [[
 exports.name = 'bjornbytes/rx'
-exports.version = '0.0.2'
+exports.version = '0.0.3'
 exports.description = 'Reactive Extensions for Lua'
 exports.license = 'MIT'
 exports.author = { url = 'https://github.com/bjornbytes' }

@@ -16,6 +16,12 @@ Copy the `rx.lua` file into your project and require it:
 local rx = require 'rx'
 ```
 
+You can also install RxLua using luarocks:
+
+```sh
+luarocks install bjornbytes/rxlua
+```
+
 #### Luvit
 
 Install using `lit`:

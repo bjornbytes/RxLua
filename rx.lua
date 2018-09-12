@@ -230,10 +230,10 @@ end
 -- @returns {Observable}
 function Observable.fromFileByLine(filename)
   return Observable.create(function(observer)
-    local f = io.open(filename, 'r')
-    if f
-    then
-      f:close()
+    local file = io.open(filename, 'r')
+    if file then
+      file:close()
+
       for line in io.lines(filename) do
         observer:onNext(line)
       end

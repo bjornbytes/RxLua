@@ -9,6 +9,7 @@ function Observable:merge(...)
   table.insert(sources, 1, self)
 
   return Observable.create(function(observer)
+    local completed = {}
     local subscriptions = {}
 
     local function onNext(...)
@@ -21,9 +22,9 @@ function Observable:merge(...)
 
     local function onCompleted(i)
       return function()
-        sources[i] = nil
+        table.insert(completed, i)
 
-        if not next(sources) then
+        if #completed == #sources then
           observer:onCompleted()
         end
       end

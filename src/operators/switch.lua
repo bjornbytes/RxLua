@@ -5,7 +5,7 @@ local Observable = require 'observable'
 -- @returns {Observable}
 function Observable:switch()
   return Observable.create(function(observer)
-    local subscription
+    local innerSubscription
 
     local function onNext(...)
       return observer:onNext(...)
@@ -20,13 +20,22 @@ function Observable:switch()
     end
 
     local function switch(source)
+      if innerSubscription then
+        innerSubscription:unsubscribe()
+      end
+
+      innerSubscription = source:subscribe(onNext, onError, nil)
+    end
+
+    local subscription = self:subscribe(switch, onError, onCompleted)
+    return Subscription.create(function()
+      if innerSubscription then
+        innerSubscription:unsubscribe()
+      end
+
       if subscription then
         subscription:unsubscribe()
       end
-
-      subscription = source:subscribe(onNext, onError, nil)
-    end
-
-    return self:subscribe(switch, onError, onCompleted)
+    end)
   end)
 end

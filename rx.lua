@@ -1718,6 +1718,7 @@ function Observable:with(...)
 
   return Observable.create(function(observer)
     local latest = setmetatable({}, {__len = util.constant(#sources)})
+    local subscriptions = {}
 
     local function setLatest(i)
       return function(value)
@@ -1738,10 +1739,15 @@ function Observable:with(...)
     end
 
     for i = 1, #sources do
-      sources[i]:subscribe(setLatest(i), util.noop, util.noop)
+      subscriptions[i] = sources[i]:subscribe(setLatest(i), util.noop, util.noop)
     end
 
-    return self:subscribe(onNext, onError, onCompleted)
+    subscriptions[#sources + 1] = self:subscribe(onNext, onError, onCompleted)
+    return Subscription.create(function ()
+      for i = 1, #sources + 1 do
+        if subscriptions[i] then subscriptions[i]:unsubscribe() end
+      end
+    end)
   end)
 end
 

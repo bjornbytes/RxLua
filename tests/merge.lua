@@ -20,6 +20,20 @@ describe('merge', function()
     expect(#unsubscribeB).to.equal(1)
   end)
 
+  it('unsubscribes from all input observables included completed', function()
+    local observableA = Rx.Observable.empty()
+
+    local unsubscribeB = spy()
+    local subscriptionB = Rx.Subscription.create(unsubscribeB)
+    local observableB = Rx.Observable.create(function(observer)
+      return subscriptionB
+    end)
+
+    local subscription = observableA:merge(Rx.Observable.empty(), observableB):subscribe()
+    subscription:unsubscribe()
+    expect(#unsubscribeB).to.equal(1)
+  end)
+
   it('produces values from all input observables, in order', function()
     local observableA = Rx.Subject.create()
     local observableB = Rx.Subject.create()

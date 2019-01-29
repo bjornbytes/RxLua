@@ -2,6 +2,12 @@ local Observable = require 'observable'
 local Subscription = require 'subscription'
 local util = require 'util'
 
+--- Returns a new throttled Observable that waits to produce values until a timeout has expired, at
+-- which point it produces the latest value from the source Observable.  Whenever the source
+-- Observable produces a value, the timeout is reset.
+-- @arg {number|function} time - An amount in milliseconds to wait before producing the last value.
+-- @arg {Scheduler} scheduler - The scheduler to run the Observable on.
+-- @returns {Observable}
 function Observable:debounce(time, scheduler)
   time = time or 0
 

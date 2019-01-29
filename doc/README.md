@@ -33,6 +33,7 @@ RxLua
   - [concat](#concatsources)
   - [contains](#containsvalue)
   - [count](#countpredicate)
+  - [debounce](#debouncetime-scheduler)
   - [defaultIfEmpty](#defaultifemptyvalues)
   - [delay](#delaytime-scheduler)
   - [distinct](#distinct)
@@ -392,6 +393,17 @@ Returns an Observable that produces a single value representing the number of va
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `predicate` | function (optional) |  | The predicate used to match values. |
+
+---
+
+#### `:debounce(time, scheduler)`
+
+Returns a new throttled Observable that waits to produce values until a timeout has expired, at which point it produces the latest value from the source Observable.  Whenever the source Observable produces a value, the timeout is reset.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `time` | number or function |  | An amount in milliseconds to wait before producing the last value. |
+| `scheduler` | Scheduler |  | The scheduler to run the Observable on. |
 
 ---
 

@@ -6,6 +6,8 @@ local util = require 'util'
 -- @returns {Observable}
 function Observable:flatten()
   return Observable.create(function(observer)
+    local subscriptions = {}
+
     local function onError(message)
       return observer:onError(message)
     end
@@ -15,13 +17,19 @@ function Observable:flatten()
         observer:onNext(...)
       end
 
-      observable:subscribe(innerOnNext, onError, util.noop)
+      local subscription = observable:subscribe(innerOnNext, onError, util.noop)
+      subscriptions[#subscriptions + 1] = subscription
     end
 
     local function onCompleted()
       return observer:onCompleted()
     end
 
-    return self:subscribe(onNext, onError, onCompleted)
+    subscriptions[#subscriptions + 1] = self:subscribe(onNext, onError, onCompleted)
+    return Subscription.create(function ()
+      for i = 1, #subscriptions do
+        subscriptions[i]:unsubscribe()
+      end
+    end)
   end)
 end

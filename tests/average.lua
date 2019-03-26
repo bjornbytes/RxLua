@@ -1,7 +1,6 @@
 describe('average', function()
   it('errors when its parent errors', function()
-    local _, onError = observableSpy(Rx.Observable.throw():average())
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():average()).to.produce.error()
   end)
 
   it('produces a single value representing the average of the values produced by the source', function()

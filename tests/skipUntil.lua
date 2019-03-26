@@ -1,8 +1,9 @@
 describe('skipUntil', function()
   it('produces an error if its parent errors', function()
+    local trigger = Rx.Observable.of()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:skipUntil(1).subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:skipUntil(trigger)).to.produce.error()
   end)
 
   it('fails if the first argument is not an Observable', function()

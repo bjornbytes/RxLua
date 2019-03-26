@@ -1,8 +1,8 @@
 describe('take', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:take(1).subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:take(1)).to.produce.error()
   end)
 
   it('produces nothing if the count is zero', function()

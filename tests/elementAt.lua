@@ -1,7 +1,6 @@
 describe('elementAt', function()
   it('errors when its parent errors', function()
-    local _, onError = observableSpy(Rx.Observable:throw():elementAt(0))
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable:throw():elementAt(0)).to.produce.error()
   end)
 
   it('chains subscriptions', function()
@@ -22,7 +21,7 @@ describe('elementAt', function()
   end)
 
   it('errors if no index is specified', function()
-    expect(Rx.Observable.of(1):elementAt().subscribe).to.fail()
+    expect(function () Rx.Observable.of(1):elementAt() end).to.fail()
   end)
 
   it('produces no values if the specified index is less than one', function()

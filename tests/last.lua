@@ -1,8 +1,8 @@
 describe('last', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:last().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:last()).to.produce.error()
   end)
 
   it('produces no elements if its parent produces no elements', function()

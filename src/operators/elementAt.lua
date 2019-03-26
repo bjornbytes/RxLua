@@ -4,6 +4,10 @@ local Observable = require 'observable'
 -- @arg {number} index - The index of the item, with an index of 1 representing the first.
 -- @returns {Observable}
 function Observable:elementAt(index)
+  if not index or type(index) ~= 'number' then
+    error('Expected a number')
+  end
+
   return Observable.create(function(observer)
     local subscription
     local i = 1

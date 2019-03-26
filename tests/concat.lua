@@ -1,7 +1,6 @@
 describe('concat', function()
   it('produces an error if its parent errors', function()
-    local _, onError = observableSpy(Rx.Observable.throw():concat())
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():concat()).to.produce.error()
   end)
 
   it('returns the first argument if it is the only argument', function()
@@ -28,7 +27,7 @@ describe('concat', function()
   it('should error if any of the sources error', function()
     local badObservable = Rx.Observable.create(function(observer) observer:onError('oh no') end)
     local observable = Rx.Observable.of(1):concat(Rx.Observable.of(2), badObservable)
-    expect(observable.subscribe).to.fail()
+    expect(observable).to.produce.error()
   end)
 
   it('should complete once the rightmost observable completes', function()

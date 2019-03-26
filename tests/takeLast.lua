@@ -1,10 +1,10 @@
 describe('takeLast', function()
   it('produces an error if its parent errors', function()
-    expect(Rx.Observable.throw():takeLast(1).subscribe).to.fail()
+    expect(Rx.Observable.throw():takeLast(1)).to.produce.error()
   end)
 
   it('produces an error if the count is not specified', function()
-    expect(Rx.Observable.fromRange(3):takeLast().subscribe).to.fail()
+    expect(function () Rx.Observable.fromRange(3):takeLast() end).to.fail()
   end)
 
   it('produces nothing if the count is zero', function()

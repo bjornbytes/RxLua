@@ -1,11 +1,10 @@
 describe('buffer', function()
   it('produces an error if its parent errors', function()
-    local _, onError = observableSpy(Rx.Observable.throw():buffer())
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():buffer(1)).to.produce.error()
   end)
 
   it('fails if size is not specified', function()
-    expect(Rx.Observable.fromRange(5):buffer().subscribe).to.fail()
+    expect(function () Rx.Observable.fromRange(5):buffer() end).to.fail()
   end)
 
   it('produces values wrapped to the specified width', function()

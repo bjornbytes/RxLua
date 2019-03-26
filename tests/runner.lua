@@ -16,6 +16,7 @@ end
 
 lust.paths['produce'] = {
   'nothing',
+  'error',
   f = function(observable, ...)
     local args = {...}
     local values
@@ -44,6 +45,15 @@ lust.paths['nothing'] = {
     expect(#onNext).to.equal(0)
     expect(#onError).to.equal(0)
     expect(#onCompleted).to.equal(1)
+    return true
+  end
+}
+
+lust.paths['error'] = {
+  f = function(observable)
+    local _, onError = observableSpy(observable)
+    expect(observable).to.be.an(Rx.Observable)
+    expect(#onError).to.equal(1)
     return true
   end
 }

@@ -1,6 +1,6 @@
 describe('startWith', function()
   it('produces errors emitted by the source', function()
-    expect(Rx.Observable.throw():startWith(1).subscribe).to.fail()
+    expect(Rx.Observable.throw():startWith(1)).to.produce.error()
   end)
 
   it('produces all specified elements in a single onNext before producing values normally', function()

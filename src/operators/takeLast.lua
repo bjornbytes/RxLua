@@ -6,6 +6,10 @@ local util = require 'util'
 -- @arg {number} count - The number of elements to produce.
 -- @returns {Observable}
 function Observable:takeLast(count)
+  if not count or type(count) ~= 'number' then
+    error('Expected a number')
+  end
+
   return Observable.create(function(observer)
     local buffer = {}
 

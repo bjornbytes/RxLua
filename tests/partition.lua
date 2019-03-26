@@ -1,8 +1,8 @@
 describe('partition', function()
   it('errors when its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:partition().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:partition()).to.produce.error()
   end)
 
   it('uses the identity function as the predicate if none is specified', function()

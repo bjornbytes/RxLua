@@ -25,6 +25,7 @@ Tests
 - To run a specific test file, run `lua tests/runner.lua average` to just run the tests in `tests/average.lua`.
 - In addition to lust's default operators, there are also a few additional utilities available via `runner.lua`:
   - `expect(Observable).to.produce(...)` will assert that the Observable produces the specified values, in order.  If you need to assert against multiple values emitted by a single `onNext`, you can pass in a table (i.e. `{{1, 2, 3}, {4, 5, 6}}` to check that an Observable calls `onNext` twice with 3 values each).
+  - `expect(Observable).to.produce.error()` will assert that the Observable produces an error.
   - There is also `expect(Observable).to.produce.nothing()`.
   - `local onNext, onError, onCompleted = observableSpy(observable)` will create three spies for each of the three events.  You can read more about spies on lust's README.
 

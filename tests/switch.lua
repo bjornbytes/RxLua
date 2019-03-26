@@ -1,6 +1,6 @@
 describe('switch', function()
   it('errors when the source errors', function()
-    expect(Rx.Observable.throw():switch().subscribe).to.fail()
+    expect(Rx.Observable.throw():switch()).to.produce.error()
   end)
 
   it('errors when an Observable produced by the source errors', function()
@@ -9,7 +9,7 @@ describe('switch', function()
       observer:onCompleted()
     end)
 
-    expect(observable:switch().subscribe).to.fail()
+    expect(observable:switch()).to.produce.error()
   end)
 
   it('produces the values produced by the latest Observable produced by the source', function()

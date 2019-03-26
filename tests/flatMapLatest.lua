@@ -4,9 +4,7 @@ describe('flatMapLatest', function()
   end)
 
   it('produces an error if the callback errors', function()
-    local onError = spy()
-    Rx.Observable.fromRange(3):flatMapLatest(error):subscribe(nil, onError, nil)
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.fromRange(3):flatMapLatest(error)).to.produce.error()
   end)
 
   it('unsubscribes from the source and the projected observable', function()

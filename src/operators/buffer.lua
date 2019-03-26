@@ -5,6 +5,10 @@ local util = require 'util'
 -- values.
 -- @arg {number} size - The size of the buffer.
 function Observable:buffer(size)
+  if not size or type(size) ~= 'number' then
+    error('Expected a number')
+  end
+
   return Observable.create(function(observer)
     local buffer = {}
 

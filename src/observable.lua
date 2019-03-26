@@ -154,6 +154,10 @@ end
 -- @arg {function} factory - A function that returns an Observable.
 -- @returns {Observable}
 function Observable.defer(fn)
+  if not fn or type(fn) ~= 'function' then
+    error('Expected a function')
+  end
+
   return setmetatable({
     subscribe = function(_, ...)
       local observable = fn()

@@ -1,14 +1,12 @@
 describe('find', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:find().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:find()).to.produce.error()
   end)
 
   it('calls onError if the predicate errors', function()
-    local onError = spy()
-    Rx.Observable.of(3):find(error):subscribe(nil, onError, nil)
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.of(3):find(error)).to.produce.error()
   end)
 
   it('uses the identity function as a predicate if none is specified', function()

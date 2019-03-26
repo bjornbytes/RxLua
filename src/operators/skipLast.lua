@@ -6,6 +6,10 @@ local util = require 'util'
 -- @arg {number} count - The number of items to omit from the end.
 -- @returns {Observable}
 function Observable:skipLast(count)
+  if not count or type(count) ~= 'number' then
+    error('Expected a number')
+  end
+
   local buffer = {}
   return Observable.create(function(observer)
     local function emit()

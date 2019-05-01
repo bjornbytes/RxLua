@@ -1,6 +1,6 @@
 describe('sum', function()
   it('passes through errors from the source', function()
-    expect(Rx.Observable.throw():sum().subscribe).to.fail()
+    expect(Rx.Observable.throw():sum()).to.produce.error()
   end)
 
   it('produces the sum of the numeric values from the source', function()

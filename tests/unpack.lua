@@ -1,12 +1,12 @@
 describe('unpack', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:unpack().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:unpack()).to.produce.error()
   end)
 
   it('fails if the observable produces an element that is not a table', function()
-    expect(Rx.Observable.of(3):unpack().subscribe).to.fail()
+    expect(Rx.Observable.of(3):unpack()).to.produce.error()
   end)
 
   it('produces all elements in the tables produced as multiple values', function()

@@ -1,13 +1,13 @@
 describe('min', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:min().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:min()).to.produce.error()
   end)
 
   it('produces an error if one of the values produced is a string', function()
-    local observable = Rx.Observable.of('string'):min()
-    expect(observable.subscribe).to.fail()
+    local observable = Rx.Observable.of(1, 'string'):min()
+    expect(observable).to.produce.error()
   end)
 
   it('produces the minimum of all values produced', function()

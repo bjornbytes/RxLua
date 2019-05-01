@@ -1,10 +1,10 @@
 describe('skipLast', function()
   it('produces an error if its parent errors', function()
-    expect(Rx.Observable.throw():skipLast(1).subscribe).to.fail()
+    expect(Rx.Observable.throw():skipLast(1)).to.produce.error()
   end)
 
   it('fails if the count is not specified', function()
-    expect(Rx.Observable.fromRange(3):skipLast().subscribe).to.fail()
+    expect(function () Rx.Observable.fromRange(3):skipLast() end).to.fail()
   end)
 
   it('skips the specified number of values from the end of the source Observable', function()

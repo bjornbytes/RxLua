@@ -1,8 +1,8 @@
 describe('pack', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:pack().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:pack()).to.produce.error()
   end)
 
   it('wraps elements of the source in tables', function()

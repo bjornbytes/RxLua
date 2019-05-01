@@ -1,8 +1,8 @@
 describe('compact', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:compact().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:compact()).to.produce.error()
   end)
 
   it('does not produce values that are false or nil', function()

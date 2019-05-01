@@ -1,7 +1,7 @@
 describe('flatMap', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):flatMap(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
+    expect(observable).to.produce.error()
   end)
 
   it('uses the identity function as the callback if none is specified', function()

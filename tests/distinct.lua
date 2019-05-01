@@ -5,8 +5,7 @@ describe('distinct', function()
   end)
 
   it('produces an error if its parent errors', function()
-    local _, onError = observableSpy(Rx.Observable.throw():distinct())
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():distinct()).to.produce.error()
   end)
 
   it('completes when its parent completes', function()

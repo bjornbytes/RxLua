@@ -249,15 +249,15 @@ describe('Observable', function()
 
   describe('defer', function()
     it('returns an Observable', function()
-      expect(Rx.Observable.defer()).to.be.an(Rx.Observable)
+      expect(Rx.Observable.defer(function() end)).to.be.an(Rx.Observable)
     end)
 
     it('fails if no factory is specified', function()
-      expect(Rx.Observable.defer().subscribe).to.fail()
+      expect(function () Rx.Observable.defer() end).to.fail()
     end)
 
     it('fails if the factory does not return an Observable', function()
-      expect(Rx.Observable.defer(function() return nil end).subscribe).to.fail()
+      expect(function () Rx.Observable.defer(function() end):subscribe() end).to.fail()
     end)
 
     it('uses the factory function to create a new Observable for each subscriber', function()

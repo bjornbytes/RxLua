@@ -6,6 +6,10 @@ local util = require 'util'
 --                      of the most recent values as multiple arguments to onNext.
 -- @returns {Observable}
 function Observable:window(size)
+  if not size or type(size) ~= 'number' then
+    error('Expected a number')
+  end
+
   return Observable.create(function(observer)
     local window = {}
 

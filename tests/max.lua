@@ -1,13 +1,13 @@
 describe('max', function()
   it('produces an error if its parent errors', function()
     local observable = Rx.Observable.of(''):map(function(x) return x() end)
-    expect(observable.subscribe).to.fail()
-    expect(observable:max().subscribe).to.fail()
+    expect(observable).to.produce.error()
+    expect(observable:max()).to.produce.error()
   end)
 
   it('produces an error if one of the values produced is a string', function()
-    local observable = Rx.Observable.of('string'):max()
-    expect(observable.subscribe).to.fail()
+    local observable = Rx.Observable.of(1, 'string'):max()
+    expect(observable).to.produce.error()
   end)
 
   it('produces the maximum of all values produced', function()

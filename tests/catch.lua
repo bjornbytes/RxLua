@@ -31,9 +31,7 @@ describe('catch', function()
 
   it('calls onError if the supplied function errors', function()
     local handler = error
-    local onError = spy()
-    Rx.Observable.throw():catch(handler):subscribe(nil, onError, nil)
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():catch(handler)).to.produce.error()
   end)
 
   it('calls onComplete when the parent completes', function()

@@ -1,7 +1,6 @@
 describe('count', function()
   it('passes through errors', function()
-    local _, onError = observableSpy(Rx.Observable.throw():count())
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.throw():count()).to.produce.error()
   end)
 
   it('produces a single value representing the number of elements produced by the source', function()
@@ -15,8 +14,6 @@ describe('count', function()
   end)
 
   it('calls onError if the predicate errors', function()
-    local onError = spy()
-    Rx.Observable.fromRange(3):count(error):subscribe(nil, onError, nil)
-    expect(#onError).to.equal(1)
+    expect(Rx.Observable.fromRange(3):count(error)).to.produce.error()
   end)
 end)

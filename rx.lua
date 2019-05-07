@@ -1813,6 +1813,7 @@ function Observable.zip(...)
   return Observable.create(function(observer)
     local values = {}
     local active = {}
+    local subscriptions = {}
     for i = 1, count do
       values[i] = {n = 0}
       active[i] = true
@@ -1858,8 +1859,14 @@ function Observable.zip(...)
     end
 
     for i = 1, count do
-      sources[i]:subscribe(onNext(i), onError, onCompleted(i))
+      subscriptions[i] = sources[i]:subscribe(onNext(i), onError, onCompleted(i))
     end
+
+    return Subscription.create(function()
+      for i = 1, count do
+        if subscriptions[i] then subscriptions[i]:unsubscribe() end
+      end
+    end)
   end)
 end
 

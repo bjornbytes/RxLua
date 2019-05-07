@@ -3,6 +3,25 @@ describe('zip', function()
     expect(Rx.Observable.fromRange(1, 5):zip()).to.produce(1, 2, 3, 4, 5)
   end)
 
+  it('unsubscribes from all input observables', function()
+    local unsubscribeA = spy()
+    local subscriptionA = Rx.Subscription.create(unsubscribeA)
+    local observableA = Rx.Observable.create(function(observer)
+      return subscriptionA
+    end)
+
+    local unsubscribeB = spy()
+    local subscriptionB = Rx.Subscription.create(unsubscribeB)
+    local observableB = Rx.Observable.create(function(observer)
+      return subscriptionB
+    end)
+
+    local subscription = Rx.Observable.zip(observableA, observableB):subscribe()
+    subscription:unsubscribe()
+    expect(#unsubscribeA).to.equal(1)
+    expect(#unsubscribeB).to.equal(1)
+  end)
+
   it('groups values produced by the sources by their index', function()
     local observableA = Rx.Observable.fromRange(1, 3)
     local observableB = Rx.Observable.fromRange(2, 4)

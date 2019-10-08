@@ -10,22 +10,22 @@ describe('Observer', function()
       local observer = Rx.Observer.create()
       expectObserverToBeInCleanStateAndValid(observer)
     end)
-  
+
     it('works when onNext callback parameter is passed', function()
       local observer = Rx.Observer.create(function () end)
       expectObserverToBeInCleanStateAndValid(observer)
     end)
-  
+
     it('works when onError callback parameter is passed', function()
       local observer = Rx.Observer.create(nil, function () end)
       expectObserverToBeInCleanStateAndValid(observer)
     end)
-  
+
     it('works when onComplete callback parameter is passed', function()
       local observer = Rx.Observer.create(nil, nil, function () end)
       expectObserverToBeInCleanStateAndValid(observer)
     end)
-  
+
     it('works when all callback parameters are passed', function()
       local observer = Rx.Observer.create(function () end, function () end, function () end)
       expectObserverToBeInCleanStateAndValid(observer)
@@ -51,7 +51,7 @@ describe('Observer', function()
       local observer = Rx.Observer.create()
       local errors = {}
 
-      -- would gladly use something like to_not.fail() here but it's 
+      -- would gladly use something like to_not.fail() here but it's
       -- not quite good with producing useful error messages
       local success = tryCall(function () observer:onNext() end, errors)
       tryCall(function () expect(success).to.equal(true) end, errors)

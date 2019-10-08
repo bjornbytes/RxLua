@@ -6,12 +6,16 @@ for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy', 'before', 'after'
 end
 
 observableSpy = function(observable)
-  local onNext = spy()
-  local onError = spy()
-  local onCompleted = spy()
-  local observer = Rx.Observer.create(onNext, onError, onCompleted)
+  local onNextSpy = spy()
+  local onErrorSpy = spy()
+  local onCompletedSpy = spy()
+  local observer = Rx.Observer.create(
+    function () onNextSpy() end,
+    function () onErrorSpy() end,
+    function () onCompletedSpy() end
+  )
   observable:subscribe(observer)
-  return onNext, onError, onCompleted
+  return onNextSpy, onErrorSpy, onCompletedSpy
 end
 
 lust.paths['produce'] = {

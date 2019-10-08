@@ -6,10 +6,10 @@ for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy', 'before', 'after'
 end
 
 observableSpy = function(observable)
-  local observer = Rx.Observer.create(_, function() end, _)
-  local onNext = spy(observer, '_onNext')
-  local onError = spy(observer, '_onError')
-  local onCompleted = spy(observer, '_onCompleted')
+  local onNext = spy()
+  local onError = spy()
+  local onCompleted = spy()
+  local observer = Rx.Observer.create(onNext, onError, onCompleted)
   observable:subscribe(observer)
   return onNext, onError, onCompleted
 end

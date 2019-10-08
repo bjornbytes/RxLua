@@ -17,7 +17,7 @@ end
 lust.paths['produce'] = {
   'nothing',
   'error',
-  f = function(observable, ...)
+  test = function(observable, ...)
     local args = {...}
     local values
     if type(args[1]) ~= 'table' then

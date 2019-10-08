@@ -10,8 +10,8 @@ observableSpy = function(observable)
   local onErrorSpy = spy()
   local onCompletedSpy = spy()
   local observer = Rx.Observer.create(
-    function () onNextSpy() end,
-    function () onErrorSpy() end,
+    function (...) onNextSpy(...) end,
+    function (...) onErrorSpy(...) end,
     function () onCompletedSpy() end
   )
   observable:subscribe(observer)

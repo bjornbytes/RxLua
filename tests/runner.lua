@@ -10,7 +10,7 @@ function tryCall(fn, errorsAccumulator)
   local errNum = #errorsAccumulator
 
   xpcall(fn, function (err)
-      table.insert(errorsAccumulator, err)
+    table.insert(errorsAccumulator, err)
   end)
 
   return #errorsAccumulator == errNum

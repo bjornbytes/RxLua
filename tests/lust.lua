@@ -1,11 +1,13 @@
--- lust - Lua test framework
+-- lust v0.1.0 - Lua test framework
 -- https://github.com/bjornbytes/lust
--- License - MIT, see LICENSE for details.
+-- MIT LICENSE
 
 local lust = {}
 lust.level = 0
 lust.passes = 0
 lust.errors = 0
+lust.befores = {}
+lust.afters = {}
 
 local red = string.char(27) .. '[31m'
 local green = string.char(27) .. '[32m'
@@ -16,11 +18,20 @@ function lust.describe(name, fn)
   print(indent() .. name)
   lust.level = lust.level + 1
   fn()
+  lust.befores[lust.level] = {}
+  lust.afters[lust.level] = {}
   lust.level = lust.level - 1
 end
 
 function lust.it(name, fn)
-  if type(lust.onbefore) == 'function' then lust.onbefore(name) end
+  for level = 1, lust.level do
+    if lust.befores[level] then
+      for i = 1, #lust.befores[level] do
+        lust.befores[level][i](name)
+      end
+    end
+  end
+
   local success, err = pcall(fn)
   if success then lust.passes = lust.passes + 1
   else lust.errors = lust.errors + 1 end
@@ -30,24 +41,39 @@ function lust.it(name, fn)
   if err then
     print(indent(lust.level + 1) .. red .. err .. normal)
   end
-  if type(lust.onafter) == 'function' then lust.onafter(name) end
+
+  for level = 1, lust.level do
+    if lust.afters[level] then
+      for i = 1, #lust.afters[level] do
+        lust.afters[level][i](name)
+      end
+    end
+  end
 end
 
 function lust.before(fn)
-  assert(fn == nil or type(fn) == 'function', 'Must pass nil or a function to lust.before')
-  lust.onbefore = fn
+  lust.befores[lust.level] = lust.befores[lust.level] or {}
+  table.insert(lust.befores[lust.level], fn)
 end
 
 function lust.after(fn)
-  assert(fn == nil or type(fn) == 'function', 'Must pass nil or a function to lust.after')
-  lust.onafter = fn
+  lust.afters[lust.level] = lust.afters[lust.level] or {}
+  table.insert(lust.afters[lust.level], fn)
 end
 
 -- Assertions
 local function isa(v, x)
-  if type(x) == 'string' then return type(v) == x, tostring(v) .. ' is not a ' .. x
+  if type(x) == 'string' then
+    return type(v) == x,
+      'expected ' .. tostring(v) .. ' to be a ' .. x,
+      'expected ' .. tostring(v) .. ' to not be a ' .. x
   elseif type(x) == 'table' then
-    if type(v) ~= 'table' then return false, tostring(v) .. ' is not a ' .. tostring(x) end
+    if type(v) ~= 'table' then
+      return false,
+        'expected ' .. tostring(v) .. ' to be a ' .. tostring(x),
+        'expected ' .. tostring(v) .. ' to not be a ' .. tostring(x)
+    end
+
     local seen = {}
     local meta = v
     while meta and not seen[meta] do
@@ -55,9 +81,13 @@ local function isa(v, x)
       seen[meta] = true
       meta = getmetatable(meta) and getmetatable(meta).__index
     end
-    return false, tostring(v) .. ' is not a ' .. tostring(x)
+
+    return false,
+      'expected ' .. tostring(v) .. ' to be a ' .. tostring(x),
+      'expected ' .. tostring(v) .. ' to not be a ' .. tostring(x)
   end
-  return false, 'invalid type ' .. tostring(x)
+
+  error('invalid type ' .. tostring(x))
 end
 
 local function has(t, x)
@@ -70,7 +100,6 @@ end
 local function strict_eq(t1, t2)
   if type(t1) ~= type(t2) then return false end
   if type(t1) ~= 'table' then return t1 == t2 end
-  if #t1 ~= #t2 then return false end
   for k, _ in pairs(t1) do
     if not strict_eq(t1[k], t2[k]) then return false end
   end
@@ -81,25 +110,57 @@ local function strict_eq(t1, t2)
 end
 
 local paths = {
-  [''] = {'to', 'to_not'},
-  to = {'have', 'equal', 'be', 'exist', 'fail'},
-  to_not = {'have', 'equal', 'be', 'exist', 'fail', chain = function(a) a.negate = not a.negate end},
-  be = {'a', 'an', 'truthy', 'falsy', f = function(v, x)
-    return v == x, tostring(v) .. ' and ' .. tostring(x) .. ' are not equal'
-  end},
-  a = {f = isa},
-  an = {f = isa},
-  exist = {f = function(v) return v ~= nil, tostring(v) .. ' is nil' end},
-  truthy = {f = function(v) return v, tostring(v) .. ' is not truthy' end},
-  falsy = {f = function(v) return not v, tostring(v) .. ' is not falsy' end},
-  equal = {f = function(v, x) return strict_eq(v, x), tostring(v) .. ' and ' .. tostring(x) .. ' are not strictly equal' end},
-  have = {
-    f = function(v, x)
-      if type(v) ~= 'table' then return false, 'table "' .. tostring(v) .. '" is not a table' end
-      return has(v, x), 'table "' .. tostring(v) .. '" does not have ' .. tostring(x)
+  [''] = { 'to', 'to_not' },
+  to = { 'have', 'equal', 'be', 'exist', 'fail' },
+  to_not = { 'have', 'equal', 'be', 'exist', 'fail', chain = function(a) a.negate = not a.negate end },
+  a = { test = isa },
+  an = { test = isa },
+  be = { 'a', 'an', 'truthy',
+    test = function(v, x)
+      return v == x,
+        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to be equal',
+        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to not be equal'
     end
   },
-  fail = {f = function(v) return not pcall(v), tostring(v) .. ' did not fail' end}
+  exist = {
+    test = function(v)
+      return v ~= nil,
+        'expected ' .. tostring(v) .. ' to exist',
+        'expected ' .. tostring(v) .. ' to not exist'
+    end
+  },
+  truthy = {
+    test = function(v)
+      return v,
+        'expected ' .. tostring(v) .. ' to be truthy',
+        'expected ' .. tostring(v) .. ' to not be truthy'
+    end
+  },
+  equal = {
+    test = function(v, x)
+      return strict_eq(v, x),
+        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to be exactly equal',
+        'expected ' .. tostring(v) .. ' and ' .. tostring(x) .. ' to not be exactly equal'
+    end
+  },
+  have = {
+    test = function(v, x)
+      if type(v) ~= 'table' then
+        error('expected ' .. tostring(v) .. ' to be a table')
+      end
+
+      return has(v, x),
+        'expected ' .. tostring(v) .. ' to contain ' .. tostring(x),
+        'expected ' .. tostring(v) .. ' to not contain ' .. tostring(x)
+    end
+  },
+  fail = {
+    test = function(v)
+      return not pcall(v),
+        'expected ' .. tostring(v) .. ' to fail',
+        'expected ' .. tostring(v) .. ' to not fail'
+    end
+  }
 }
 
 function lust.expect(v)
@@ -119,9 +180,12 @@ function lust.expect(v)
       return rawget(t, k)
     end,
     __call = function(t, ...)
-      if paths[t.action].f then
-        local res, err = paths[t.action].f(t.val, ...)
-        if assertion.negate then res = not res end
+      if paths[t.action].test then
+        local res, err, nerr = paths[t.action].test(t.val, ...)
+        if assertion.negate then
+          res = not res
+          err = nerr or err
+        end
         if not res then
           error(err or 'unknown failure', 2)
         end

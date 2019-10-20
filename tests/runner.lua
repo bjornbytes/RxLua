@@ -6,18 +6,22 @@ for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy', 'before', 'after'
 end
 
 observableSpy = function(observable)
-  local observer = Rx.Observer.create(_, function() end, _)
-  local onNext = spy(observer, '_onNext')
-  local onError = spy(observer, '_onError')
-  local onCompleted = spy(observer, '_onCompleted')
+  local onNextSpy = spy()
+  local onErrorSpy = spy()
+  local onCompletedSpy = spy()
+  local observer = Rx.Observer.create(
+    function (...) onNextSpy(...) end,
+    function (...) onErrorSpy(...) end,
+    function () onCompletedSpy() end
+  )
   observable:subscribe(observer)
-  return onNext, onError, onCompleted
+  return onNextSpy, onErrorSpy, onCompletedSpy
 end
 
 lust.paths['produce'] = {
   'nothing',
   'error',
-  f = function(observable, ...)
+  test = function(observable, ...)
     local args = {...}
     local values
     if type(args[1]) ~= 'table' then
@@ -39,7 +43,7 @@ lust.paths['produce'] = {
 }
 
 lust.paths['nothing'] = {
-  f = function(observable)
+  test = function(observable)
     local onNext, onError, onCompleted = observableSpy(observable)
     expect(observable).to.be.an(Rx.Observable)
     expect(#onNext).to.equal(0)
@@ -50,7 +54,7 @@ lust.paths['nothing'] = {
 }
 
 lust.paths['error'] = {
-  f = function(observable)
+  test = function(observable)
     local _, onError = observableSpy(observable)
     expect(observable).to.be.an(Rx.Observable)
     expect(#onError).to.equal(1)

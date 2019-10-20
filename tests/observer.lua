@@ -1,91 +1,168 @@
 describe('Observer', function()
+
   describe('create', function()
-    it('returns an Observer', function()
-      expect(Rx.Observer.create()).to.be.an(Rx.Observer)
+    local function expectObserverToBeInCleanStateAndValid(observer)
+      expect(observer).to.be.an(Rx.Observer)
+      expect(observer.stopped).to.equal(false)
+    end
+
+    it('works when no parameters is passed', function()
+      local observer = Rx.Observer.create()
+      expectObserverToBeInCleanStateAndValid(observer)
     end)
 
-    it('assigns onNext, onError, and onCompleted', function()
-      local function onNext() end
-      local function onError() end
-      local function onCompleted() end
-
-      local observer = Rx.Observer.create(onNext, onError, onCompleted)
-
-      expect(observer._onNext).to.equal(onNext)
-      expect(observer._onError).to.equal(onError)
-      expect(observer._onCompleted).to.equal(onCompleted)
+    it('works when onNext callback parameter is passed', function()
+      local observer = Rx.Observer.create(function () end)
+      expectObserverToBeInCleanStateAndValid(observer)
     end)
 
-    it('initializes stopped to false', function()
-      expect(Rx.Observer.create().stopped).to.equal(false)
+    it('works when onError callback parameter is passed', function()
+      local observer = Rx.Observer.create(nil, function () end)
+      expectObserverToBeInCleanStateAndValid(observer)
+    end)
+
+    it('works when onComplete callback parameter is passed', function()
+      local observer = Rx.Observer.create(nil, nil, function () end)
+      expectObserverToBeInCleanStateAndValid(observer)
+    end)
+
+    it('works when all callback parameters are passed', function()
+      local observer = Rx.Observer.create(function () end, function () end, function () end)
+      expectObserverToBeInCleanStateAndValid(observer)
     end)
   end)
 
   describe('onNext', function()
-    it('calls _onNext', function()
-      local observer = Rx.Observer.create()
-      local function run() observer:onNext() end
-      expect(#spy(observer, '_onNext', run)).to.equal(1)
+    it('calls custom onNext callback if it was provided', function()
+      local onNext = spy()
+      local observer = Rx.Observer.create(onNext, nil, nil)
+      observer:onNext()
+      expect(#onNext).to.equal(1)
     end)
 
-    it('passes all arguments to _onNext', function()
-      local observer = Rx.Observer.create()
-      local function run() observer:onNext(1, '2', 3, nil, 5) end
-      expect(spy(observer, '_onNext', run)).to.equal({{1, '2', 3, nil, 5}})
+    it('passes all arguments to custom onNext callback if it was provided', function()
+      local onNext = spy()
+      local observer = Rx.Observer.create(onNext, nil, nil)
+      observer:onNext(1, '2', 3, nil, 5, { key = 6 })
+      expect(onNext).to.equal({{1, '2', 3, nil, 5, { key = 6 }}})
     end)
 
-    it('does not call _onNext if stopped is true', function()
+    it('works and does not error when custom onNext callback was not provided', function()
       local observer = Rx.Observer.create()
-      observer.stopped = true
-      local function run() observer:onNext() end
-      expect(#spy(observer, '_onNext', run)).to.equal(0)
+      local errors = {}
+
+      -- would gladly use something like to_not.fail() here but it's
+      -- not quite good with producing useful error messages
+      local success = tryCall(function () observer:onNext() end, errors)
+      tryCall(function () expect(success).to.equal(true) end, errors)
+      throwErrorsIfAny(errors)
+    end)
+
+    describe('does not call custom onError callback', function ()
+      it('if observer already received completion notification', function()
+        local onNext = spy()
+        local observer = Rx.Observer.create(onNext, nil, nil)
+        observer:onCompleted()
+        observer:onNext()
+        expect(#onNext).to.equal(0)
+      end)
+
+      it('if observer already received error notification', function()
+        local onNext = spy()
+        local observer = Rx.Observer.create(onNext, nil, nil)
+        observer:onCompleted()
+        observer:onNext()
+        expect(#onNext).to.equal(0)
+      end)
     end)
   end)
 
   describe('onError', function()
-    it('calls _onError with the first argument it was passed', function()
-      local observer = Rx.Observer.create(_, function() end, _)
-      local function run() observer:onError('sheeit', 1) end
-      expect(spy(observer, '_onError', run)).to.equal({{'sheeit'}})
+    it('causes an error by default if custom onError callback was not provided', function()
+      local observer = Rx.Observer.create()
+      expect(function () observer:onError() end).to.fail()
     end)
 
-    it('sets stopped to true', function()
-      local observer = Rx.Observer.create(_, function() end, _)
+    it('calls custom onError callback if it was provided', function()
+      local onError = spy()
+      local observer = Rx.Observer.create(nil, onError, nil)
+      observer:onError()
+      expect(#onError).to.equal(1)
+    end)
+
+    it('passes first value from error notification to custom onError callback', function()
+      local onError = spy()
+      local observer = Rx.Observer.create(nil, onError, nil)
+      observer:onError("err msg", "excessive arg", 1)
+      expect(onError).to.equal({{"err msg"}})
+    end)
+
+    it('marks observer as stopped', function()
+      local observer = Rx.Observer.create(nil, function() end, nil)
       observer:onError()
       expect(observer.stopped).to.equal(true)
     end)
 
-    it('does not call _onError if stopped is already true', function()
-      local observer = Rx.Observer.create(_, function() end, _)
-      observer.stopped = true
-      local function run() observer:onError() end
-      expect(#spy(observer, '_onError', run)).to.equal(0)
-    end)
+    describe('does not call custom onError callback', function ()
+      it('if observer already received completion notification', function()
+        local onError = spy()
+        local observer = Rx.Observer.create(nil, onError, nil)
+        observer:onCompleted()
+        observer:onError()
+        expect(#onError).to.equal(0)
+      end)
 
-    it('causes an error by default', function()
-      local observer = Rx.Observer.create()
-      expect(observer.onError).to.fail()
+      it('if observer already received error notification', function()
+        local spyEnabled = false
+        local onError = spy()
+        local observer = Rx.Observer.create(nil,  function () if spyEnabled then onError() end end, nil)
+        observer:onError()
+        spyEnabled = true
+        observer:onError()
+        expect(#onError).to.equal(0)
+      end)
     end)
   end)
 
   describe('onCompleted', function()
-    it('calls _onCompleted with no arguments', function()
-      local observer = Rx.Observer.create()
-      local function run() observer:onCompleted(1, 2, 3) end
-      expect(spy(observer, '_onCompleted', run)).to.equal({{}})
+    it('calls custom onCompleted callback if it was provided', function()
+      local onCompleted = spy()
+      local observer = Rx.Observer.create(nil, nil, onCompleted)
+      observer:onCompleted()
+      expect(#onCompleted).to.equal(1)
     end)
 
-    it('sets stopped to true', function()
-      local observer = Rx.Observer.create()
+    it('calls custom onCompleted callback with no parameters', function()
+      local onCompleted = spy()
+      local observer = Rx.Observer.create(nil, nil, onCompleted)
+      observer:onCompleted("excessive arg", 1)
+      expect(onCompleted).to.equal({{}})
+    end)
+
+    it('marks observer as stopped', function()
+      local observer = Rx.Observer.create(nil, function() end, nil)
       observer:onCompleted()
       expect(observer.stopped).to.equal(true)
     end)
 
-    it('does not call _onCompleted if stopped is already true', function()
-      local observer = Rx.Observer.create()
-      observer.stopped = true
-      local function run() observer:onCompleted() end
-      expect(#spy(observer, '_onCompleted', run)).to.equal(0)
+    describe('does not call custom onCompleted callback', function ()
+      it('if observer already received completion notification', function()
+        local spyEnabled = false
+        local onCompleted = spy()
+        local observer = Rx.Observer.create(nil,  function () if spyEnabled then onCompleted() end end, nil)
+        observer:onCompleted()
+        spyEnabled = true
+        observer:onCompleted()
+        expect(#onCompleted).to.equal(0)
+      end)
+
+      it('if observer already received error notification', function()
+        local onCompleted = spy()
+        local observer = Rx.Observer.create(nil, function () end, onCompleted)
+        observer:onError()
+        observer:onCompleted()
+        expect(#onCompleted).to.equal(0)
+      end)
     end)
   end)
 end)

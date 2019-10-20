@@ -5,6 +5,23 @@ for _, fn in pairs({'describe', 'it', 'test', 'expect', 'spy', 'before', 'after'
   _G[fn] = lust[fn]
 end
 
+-- helper function to safely accumulate errors which will be displayed when done testing
+function tryCall(fn, errorsAccumulator)
+  local errNum = #errorsAccumulator
+
+  xpcall(fn, function (err)
+      table.insert(errorsAccumulator, err)
+  end)
+
+  return #errorsAccumulator == errNum
+end
+
+function throwErrorsIfAny(errorsAccumulator)
+  if #errorsAccumulator > 0 then
+    error(table.concat(errorsAccumulator, '\n\t' .. string.rep('\t', lust.level)))
+  end
+end
+
 observableSpy = function(observable)
   local onNextSpy = spy()
   local onErrorSpy = spy()

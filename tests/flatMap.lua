@@ -19,4 +19,17 @@ describe('flatMap', function()
 
     expect(observable).to.produce(1, 2, 3, 2, 3, 3)
   end)
+
+  it('completes after all observables produced by its parent', function()
+    s = Rx.CooperativeScheduler.create()
+    local observable = Rx.Observable.fromRange(3):flatMap(function(i)
+      return Rx.Observable.fromRange(i, 3):delay(i, s)
+    end)
+
+    local onNext, onError, onCompleted, order = observableSpy(observable)
+    repeat s:update(1)
+    until s:isEmpty()
+    expect(#onNext).to.equal(6)
+    expect(#onCompleted).to.equal(1)
+  end)
 end)

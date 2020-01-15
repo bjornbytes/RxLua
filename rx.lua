@@ -963,9 +963,17 @@ end
 function Observable:flatten()
   return Observable.create(function(observer)
     local subscriptions = {}
+    local remaining = 1
 
     local function onError(message)
       return observer:onError(message)
+    end
+
+    local function onCompleted()
+      remaining = remaining - 1
+      if remaining == 0 then
+        return observer:onCompleted()
+      end
     end
 
     local function onNext(observable)
@@ -973,12 +981,9 @@ function Observable:flatten()
         observer:onNext(...)
       end
 
-      local subscription = observable:subscribe(innerOnNext, onError, util.noop)
+      remaining = remaining + 1
+      local subscription = observable:subscribe(innerOnNext, onError, onCompleted)
       subscriptions[#subscriptions + 1] = subscription
-    end
-
-    local function onCompleted()
-      return observer:onCompleted()
     end
 
     subscriptions[#subscriptions + 1] = self:subscribe(onNext, onError, onCompleted)
